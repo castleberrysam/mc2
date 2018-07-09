@@ -1,0 +1,44 @@
+Decoding disabled when SEQ_1 = 1
+Sequencer is enabled by MC5.10/reset by ~MC5.10
+
+A = ~A8
+B = ~A9
+C = top: A10 OR A12, bot: A10 OR ~A12
+D = top: A11 OR A12, bot: A11 OR ~A12
+
+For special range (0x00-0x07):
+disabled until SEQ_2 = 1, then
+LOW_0 = 62 = 1 if A0=0, WRITE=1, MC5.10=0
+LOW_1 = 64 = 1 if A0=1, WRITE=1, MC5.10=0
+LOW_2 = 58 = 1 if A0=0, WRITE=0 or MC5.10=1
+LOW_3 = 60 = 1 if A0=1, WRITE=0 or MC5.10=1
+
+D13 = IC33B and LOW_2???
+D7 = ~46???
+
+IC33B cleared when LOW_0 and (~IC33B or ~LOW_2)???
+IC33B set when 72 goes low to high
+
+sp = 0011 = 00000 (0x00-0x07)
+12 = 0010 = 00001 (0x08-0x0f)
+10 = 0001 = 00010 (0x10-0x17)
+8  = 0000 = 00011 (0x18-0x1f)
+23 = 0111 = 00100 (0x20-0x27)
+22 = 0110 = 00101 (0x28-0x2f)
+24 = 0101 = 00110 (0x30-0x37)
+19 = 0100 = 00111 (0x38-0x3f)
+
+20 = 1001 = 01010 (0x50-0x57)
+21 = 1000 = 01011 (0x58-0x5f)
+
+na = 0011 = 10000 (0x80-0x87)
+11 = 0010 = 10001 (0x88-0x8f)
+9  = 0001 = 10010 (0x90-0x97)
+7  = 0000 = 10011 (0x98-0x9f)
+18 = 0111 = 10100 (0xa0-0xa7)
+17 = 0110 = 10101 (0xa8-0xaf)
+15 = 0101 = 10110 (0xb0-0xb7)
+13 = 0100 = 10111 (0xb8-0xbf)
+
+14 = 1001 = 11010 (0xd0-0xd7)
+16 = 1000 = 11011 (0xd8-0xdf)

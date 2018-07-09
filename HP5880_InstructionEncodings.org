@@ -1,0 +1,97 @@
+*** Max 4
+LDBI REG = BYTE
+oooo rrrr iiiiiiii
+
+MOVE DST = SRC <,FD>
+oooo rrrr ffff rrrr
+
+CALL LABEL <,I> <IF CC>
+oooo qccc iiiiiiii
+
+CBR LABEL <,I> <IF CC>
+oooo qccc iiiiiiii
+
+COP ???
+1111 ????????????
+
+*** Max 5
+LOAD CDST = LABEL <(CSRC <,FD>)>
+STOR LABEL <(CDST <,FD>)> = CSRC
+ooooo rrr ffff qrrr iiiiiiii iiiiiiii
+
+ADDI  CDST, BYTE
+SUBI  CDST, BYTE
+CMPRI CREG, BYTE
+ooooo rrr iiiiiiii
+
+ADD  CDST, SRC <,FD>
+SUBR CDST, SRC <,FD>
+AND  CDST, SRC <,FD>
+OR   CDST, SRC <,FD>
+XOR  CDST, SRC <,FD>
+CMPR CDST, SRC <,FD>
+ooooo rrr ffff rrrr
+
+SBIT CDST, SRC(K)
+RBIT CDST, SRC(K)
+CBIT CDST, SRC(K)
+TBIT CDST, SRC(K)
+ooooo rrr kkkk rrrr
+
+*** Max >5
+IBR LABEL <(REG <,FD>)>
+ooooo xxq ffff rrrr iiiiiiii iiiiiiii
+
+*** Max 8
+BR REG <,FD>
+oooo oooo ffff rrrr
+
+*** Max >8
+LOAD CDST = (CSRC)
+STOR (CDST) = CSRC
+oooo oooo xrrr xrrr
+
+LDWI CDST = WORD
+oooo oooo xxxx xrrr iiiiiiii iiiiiiii
+
+RTN  CREG
+ADDC CREG
+NEG  CREG
+CMPL CREG
+STRB CDST
+PUSH CREG
+POP  CREG
+oooo oooo xxxx xrrr
+
+LDRB CSRC <,FD>
+oooo oooo ffff xrrr
+
+SHFTL RRL, CREG <,C>
+SHFTL LSL, CREG, F
+SHFTR RRR, CREG <,C>
+SHFTR LSR, CREG, F
+oooo oooo xxxx qrrr
+
+HALT
+oooo oooo xxxx xxxx
+
+b707, b726 repeated many times
+
+| Instruction         | Encoding                                |
+| LOAD RX = I(RY, FD) | 1100 0YYY FFFF 1XXX IIII IIII IIII IIII |
+| LOAD RX = (I)       | 1100 0000 0000 0XXX IIII IIII IIII IIII |
+|                     |                                         |
+| STOR I(RY, FD) = RX | 1101 0YYY FFFF 1XXX IIII IIII IIII IIII |
+| STOR (I) = RX       | 1101 0000 0000 0XXX IIII IIII IIII IIII |
+|                     |                                         |
+| LDWI RX = I         | 1011 1000 0000 0XXX IIII IIII IIII IIII |
+|                     |                                         |
+| CBR I, Q, CC        | 1000 QCCC IIII IIII                     |
+| CALL I, Q, CC       | 1001 QCCC IIII IIII                     |
+| CMPRI RX, I         | 1010 0XXX IIII IIII                     |
+|                     |                                         |
+| RTN RX              | 1101 0001 0000 0XXX                     |
+|                     |                                         |
+| MOVE RX = RY <,FD>  | 0101 XXXX FFFF YYYY                     |
+|                     |                                         |
+| LDBI RX = I         | 1110 XXXX IIII IIII                     |

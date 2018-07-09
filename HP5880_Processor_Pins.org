@@ -1,0 +1,28 @@
+| MC5 Pin | Card Pin         | Direction | Purpose          |
+|       3 |                  | in        | /RESET           |
+|       4 | J2.12            | out       |                  |
+|       5 |                  |           |                  |
+|       6 | J1.66 OR ~J2.8   | in        |                  |
+|       7 | J2.10            |           |                  |
+|       8 |                  | in        | CLK              |
+|       9 | J1.83            | out       | BUS_CLK          |
+|      10 |                  | out       | /BUS_EN          |
+|      11 | J2.4 w clk MC5.9 | in        | Memory handshake |
+|      12 | J2.2             | out       | /ROM_CE1         |
+|      13 | J2.8             | out       |                  |
+|      31 | +5B              |           | INT?             |
+|      48 | J2.6             | out       | R/W, GND=R       |
+
+x Memory handshake (in)
+- I/O handshake (in)
+- Run/idle (in?)
+- Clock (in)
+- Interrupt acknowledge (in)
+x Power-on reset (in)
+
+- Memory request (out)
+- I/O request (out)
+- Interrupt (out)
+- Read/write (out)
+- Instruction fetch (out)
+

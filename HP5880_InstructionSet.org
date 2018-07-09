@@ -1,0 +1,119 @@
+; "All of the 34 classes of instructions are 16 bits wide with a second 16 bits optionally used for a full word of immediate data or for full-range addresses."
+
+; "The MC2 operates at clock speeds as fast as 125ns [8MHz] and uses from 4 to 12 cycles per instruction (0.5us to 1.5us)"
+
+; Instruction formats as described by HP:
+; 1. 4-bit op / 4-bit dest reg / 4-bit "field descriptor" / 4-bit source reg / optional 16-bit data or address
+; 2. 4-bit op / 4-bit condition code / 8-bit displacement
+; 3. 8-bit op / 4-bit "field descriptor" / 4-bit reg
+; 4. literal 0xf / 12-bit data; used for communicating with slave processors
+
+; "The MC2 has eight 16-bit programmable registers and an 8-bit stack pointer. In addition there is an 8-bit I/O Device Identification register."
+; "Any register may serve as a Data Counter"
+; R0: "Also Status register"
+; R0[2:0] = priority code of lower 8 bits (0-7)
+; R0[3] = zero flag of lower 8 bits
+; R0[4] = negative flag of lower 8 bits
+; R0[7] = interrupt enable
+; R0[11] = zero flag of 16 bits
+; R0[12] = negative flag of 16 bits
+; R0[13] = carry flag
+; R0[14] = overflow flag
+
+; "The Stack Pointer enables a 256-word Stack. The Stack occupies the first 256 words of read/write memory, with memory word 0 being the top of the Stack."
+
+; The I/O device identified by the Device Identification register has eight 16-bit registers. They are only usable as source operands, except with the register-register MOVE instruction."
+
+* MC2 Instruction Set Classes
+O := instruction op-code
+D := destination register
+F := field descriptor (see below)
+S := source register
+I := immediate data
+C := conditional code
+R := relative displacement
+
+Field descriptor values:
+0000 = swap bytes
+0001 = swap bytes and clear low order byte
+0010 = no operation
+0011 = clear low order byte
+0100 = swap bytes and clear high order byte
+0101 = <unknown>
+0110 = clear high order byte
+0111 = <unknown>
+1000 = <unknown>
+1001 = <unknown>
+1010 = <unknown>
+1011 = <unknown>
+1100 = move bits 12-15 to 0-3, clear bits 4-15
+1101 = move bits 8-11 to 0-3, clear bits 4-15
+1110 = move bits 4-7 to 0-3, clear bits 4-15
+1111 = clear bits 4-15
+
+** Reg-Reg and Reg-Imm
+Format: OOOO:DDDD:FFFF:SSSS<:IIIIIIIIIIIIIIII>
+
+LOAD CDST = LABEL <(CSRC <,FD>)> ; 4 bytes, [CDST] <- [LABEL + [CSRC(FD)]]
+LOAD CDST = (CSRC)               ; 2 bytes, [CDST] <- [[CSRC]]
+
+STOR LABEL <(CDST <,FD>)> = CSRC ; 4 bytes, [LABEL + [CDST(FD)]] <- [CSRC]
+STOR (CDST) = CSRC               ; 2 bytes, [[CDST]] <- [CSRC]
+
+LDWI CDST = WORD                 ; 4 bytes, [CDST] <- WORD
+
+IBR LABEL <(REG <,FD>)>          ; 4 bytes, [PC] <- [LABEL + [REG(FD)]]
+
+MOVE DST = SRC <,FD>             ; 2 bytes, sets status, [DST] <- [SRC(FD)]
+
+ADD CDST, SRC <,FD>              ; 2 bytes, sets status, [CDST] <- [SRC(FD)] + [CDST]
+SUBR CDST, SRC <,FD>             ; 2 bytes, sets status, [CDST] <- [SRC(FD)] - [CDST]
+AND CDST, SRC <,FD>              ; 2 bytes, sets status, [CDST] <- [SRC(FD)] & [CDST]
+OR CDST, SRC <,FD>               ; 2 bytes, sets status, [CDST] <- [SRC(FD)] | [CDST]
+XOR CDST, SRC <,FD>              ; 2 bytes, sets status, [CDST] <- [SRC(FD)] ^ [CDST]
+CMPR CDST, SRC <,FD>             ; 2 bytes, sets status, ([SRC(FD)] - [CDST])?
+
+SBIT CDST, SRC(K)                ; 2 bytes, sets status, [SRC<K>] <- 1, [CDST] <- [SRC]
+RBIT CDST, SRC(K)                ; 2 bytes, sets status, [SRC<K>] <- 0, [CDST] <- [SRC]
+CBIT CDST, SRC(K)                ; 2 bytes, sets status, [SRC<K>] <- ~[SRC<K>], [CDST] <- [SRC]
+TBIT CDST, SRC(K)                ; 2 bytes, sets status, [CDST] <- [SRC] & 2^K
+
+** Conditional
+Format: OOOO:CCCC:RRRRRRRR
+
+CBR LABEL <,I> <IF CC>           ; 2 bytes, [PC] <- [PC]<15,8>LABEL<7,0> or [PC] <- [[PC]<15,8>LABEL<7,0>] if I
+
+CALL LABEL <,I> <IF CC>          ; 2 bytes, sets status, [[SP]] <- [R0], [SP] <- [SP] + 1, [R0] <- [PC], [PC] <- [PC]<15,8>LABEL<7,0> or [PC] <- [[PC]<15,8>LABEL<7,0>] if I
+
+** Single Reg
+Format: OOOOOOOO:FFFF:SSSS
+
+LDBI REG = BYTE                  ; 2 bytes, sets status, [REG<7,0>] <- BYTE
+ADDI CDST, BYTE                  ; 2 bytes, sets status, [CDST] <- [CDST] + BYTE
+SUBI CDST, BYTE                  ; 2 bytes, sets status, [CDST] <- [CDST] - BYTE
+CMPRI CREG, BYTE                 ; 2 bytes, sets status, ([CREG] - BYTE)?
+
+BR REG <,FD>                     ; 2 bytes, [PC] <- [REG(FD)]
+
+RTN CREG                         ; 2 bytes, [PC] <- [CREG], [CREG] <- [[SP] - 1], [SP] <- [SP] - 1
+
+STRB CDST                        ; 2 bytes, [CDST] <- [DI]
+LDRB CSRC <,FD>                  ; 2 bytes, [DI] <- [CSRC(FD)]
+
+ADDC CREG                        ; 2 bytes, sets status, [CREG] <- [CREG] + [C]
+NEG CREG                         ; 2 bytes, sets status, [CREG] <- -[CREG]
+CMPL CREG                        ; 2 bytes, sets status, [CREG] <- ~[CREG]
+
+SHFTL RRL, CREG <,C>             ; 2 bytes, sets status, "rotate CPU register contents left one bit position, through Carry if specified"
+SHFTL LSL, CREG, F               ; 2 bytes, sets status, "shift CPU register contents left one bit position, filling bit 0 according to F"
+
+SHFTR RRR, CREG <,C>             ; 2 bytes, sets status, "rotate CPU register contents right one bit position, through Carry if specified"
+SHFTR LSR, CREG, F               ; 2 bytes, sets status, "shift CPU register contents right one bit position, filling bit 15 according to F"
+
+PUSH CREG                        ; 2 bytes, [[SP]] <- [CREG], [SP] <- [SP] + 1
+POP CREG                         ; 2 bytes, [CREG] <- [[SP] - 1], [SP] <- [SP] - 1
+
+** Co-processor
+Format: (0xF):????????????
+
+HALT                             ; 2 bytes, "CPU enters idle state"

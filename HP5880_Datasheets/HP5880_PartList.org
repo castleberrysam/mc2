@@ -1,0 +1,83 @@
+| HP Part No. | Normal Part No. | Link                                | Description                                                           |
+|   0960-0487 |                 |                                     | 11.7965MHz crystal                                                    |
+|   1810-0083 |                 |                                     | 14DIP resistor network                                                |
+|  1818-0805A |                 |                                     | MC5 ROM Board 'G1L'                                                   |
+|  1818-0806A |                 |                                     | MC5 ROM Board 'G1R'                                                   |
+|  1818-0809A |                 |                                     | MC5 ROM Board 'G3L'                                                   |
+|  1818-0810A |                 |                                     | MC5 ROM Board 'G3R'                                                   |
+|  1818-1247A |                 |                                     | MC5 ROM Board 'G2L'                                                   |
+|  1818-1248A |                 |                                     | MC5 ROM Board 'G2R'                                                   |
+|   1818-1593 | D2364           | [[./NEC_D2364_Datasheet.pdf]]           | MC5 ROM Board 'G6L'                                                   |
+|   1818-1594 | D2364           | [[./NEC_D2364_Datasheet.pdf]]           | MC5 ROM Board 'G6R'                                                   |
+|   1820-0430 | LM309K          | [[./National_LM309_Datasheet.pdf]]      | 5-volt regulator                                                      |
+|   1820-0471 | SN7406N         | [[./TI_SN7406_Datasheet.pdf]]           | Hex inverter buffers/drivers with open-collector high-voltage outputs |
+|   1820-0509 | MC1488L         | [[./ON_MC1488_Datasheet.pdf]]           | Quad line EIA-232D drivers                                            |
+|   1820-0510 | MC1489A         | [[./ON_MC1489A_Datasheet.pdf]]          | Quad line EIA-232D receivers                                          |
+|   1820-0514 | SN7426N         | [[./TI_SN74LS26_Datasheet.pdf]]         | Quadruple 2-input high-voltage interface positive-NAND gates          |
+|   1820-0668 | SN7407N         | [[./TI_SN7407_Datasheet.pdf]]           | Hex buffers/drivers with open-collector high-voltage outputs          |
+|   1820-0682 | SN74S03N        | [[./TI_SN74S03_Datasheet.pdf]]          | Quadruple 2-input positive-NAND gates with open-collector outputs     |
+|   1820-0693 | SN74S74N        | [[./TI_SN74S74_Datasheet.pdf]]          | Dual D-type positive-edge-triggered flip-flops with preset and clear  |
+|   1820-0910 | SN74LS83AN      | [[./Motorola_SN74LS83A_Datasheet.pdf]]  | 4-bit binary full adder with fast carry                               |
+|   1820-0931 | CD4029BE        | [[./TI_CD4029B_Datasheet.pdf]]          | Presettable up/down counter                                           |
+|   1820-0937 | CD4040BE        | [[./TI_CD4040B_Datasheet.pdf]]          | Ripple-carry binary counter/dividers, 12 stage                        |
+|   1820-0938 | CD4027BE        | [[./TI_CD4027B_Datasheet.pdf]]          | Dual JK master-slave flip-flop                                        |
+|   1820-0939 | CD4013BE        | [[./TI_CD4013B_Datasheet.pdf]]          | Dual D-type flip-flop                                                 |
+|   1820-0976 | CD4015BE        | [[./TI_CD4015B_Datasheet.pdf]]          | Dual 4-stage static shift register                                    |
+|   1820-1112 | SN74LS74AN      | [[./TI_SN74S74_Datasheet.pdf]]          | Dual D-type positive-edge-triggered flip-flops with preset and clear  |
+|   1820-1114 | MC14516BCP      | [[./ON_MC14516B_Datasheet.pdf]]         | Binary up/down counter                                                |
+|   1820-1144 | SN74LS02N       | [[./TI_SN74LS02_Datasheet.pdf]]         | Quadruple 2-input positive-NOR gates                                  |
+|   1820-1145 | CD4049UBE       | [[./TI_CD4049UB_Datasheet.pdf]]         | Hex inverting buffer and converter                                    |
+|   1820-1146 | CD4050BE        | [[./TI_CD4049UB_Datasheet.pdf]]         | Hex buffer and converter                                              |
+|   1820-1195 | SN74LS175N      | [[./TI_SN74LS175_Datasheet.pdf]]        | Quadruple D-type flip-flops with clear                                |
+|   1820-1197 | SN74LS00N       | [[./TI_SN74LS00_Datasheet.pdf]]         | Quadruple 2-input positive-NAND gates                                 |
+|   1820-1198 | SN74LS03N       | [[./TI_SN74LS03_Datasheet.pdf]]         | Quadruple 2-input positive-NAND gates with open-collector outputs     |
+|   1820-1199 | SN74LS04N       | [[./TI_SN74LS04_Datasheet.pdf]]         | Hex inverters                                                         |
+|   1820-1200 | SN74LS05N       | [[./TI_SN74LS05_Datasheet.pdf]]         | Hex inverters with open-collector outputs                             |
+|   1820-1201 | SN74LS08N       | [[./TI_SN74LS08_Datasheet.pdf]]         | Quadruple 2-input positive-AND gates                                  |
+|   1820-1202 | SN74LS10N       | [[./TI_SN74LS10_Datasheet.pdf]]         | Triple 3-input positive-NAND gates                                    |
+|   1820-1203 | DM74LS11N       | [[./TI_SN74LS11_Datasheet.pdf]]         | Triple 3-input positive-AND gates                                     |
+|   1820-1204 | SN74LS20N       | [[./TI_SN74LS20_Datasheet.pdf]]         | Dual 4-input positive-NAND gates                                      |
+|   1820-1208 | SN74LS32N       | [[./TI_SN74LS32_Datasheet.pdf]]         | Quadruple 2-input positive-OR gates                                   |
+|   1820-1209 | SN74LS38N       | [[./TI_SN74LS38_Datasheet.pdf]]         | Quadruple 2-input positive-NAND buffers with open-collector outputs   |
+|   1820-1216 | SN74LS138N      | [[./TI_SN74LS138_Datasheet.pdf]]        | 3-line to 8-line decoders/demultiplexers                              |
+|   1820-1217 | SN74LS151AN     | [[./TI_SN74LS151A_Datasheet.pdf]]       | 8-line to 1-line data selectors/multiplexers                          |
+|   1820-1244 | SN74LS153N      | [[./TI_SN74LS153_Datasheet.pdf]]        | Dual 4-line to 1-line data selectors/multiplexers                     |
+|   1820-1246 | SN74LS09N       | [[./TI_SN74LS09_Datasheet.pdf]]         | Quadruple 2-input positive-AND gates with open-collector outputs      |
+|   1820-1257 | SN74159N        | [[./TI_SN74159_Datasheet.pdf]]          | 4-line to 16-line decoders/demultiplexers with open-collector outputs |
+|   1820-1266 | MM80C97N        | [[./Fairchild_MM80C97_Datasheet.pdf]]   | 3-state hex buffers                                                   |
+|   1820-1278 | SN74LS191N      | [[./TI_SN74LS191_Datasheet.pdf]]        | Synchronous up/down counters with down/up mode control                |
+|   1820-1281 | DM74LS139N      | [[./Fairchild_DM74LS139_Datasheet.pdf]] | Decoder/demultiplexer                                                 |
+|   1820-1411 | 74LS75N         | [[./TI_SN7475_Datasheet.pdf]]           | 4-bit bitstable latches                                               |
+|   1820-1412 | MC14556BCP      | [[./ON_MC14555B_Datasheet.pdf]]         | Dual binary to 1-of-4 decoder/demultiplexer, inverting                |
+|   1820-1416 | 74LS14N         | [[./TI_SN74LS14_Datasheet.pdf]]         | Hex schmitt-trigger inverters                                         |
+|   1820-1420 | SN74LS92N       | [[./TI_SN74LS92_Datasheet.pdf]]         | Divide-by-12 counter (separate divide-by-2 and divide-by-6 sections)  |
+|   1820-1422 | SN74LS122N      | [[./TI_SN74LS122_Datasheet.pdf]]        | Retriggerable monostable multivibrators                               |
+|   1820-1426 | SN74LS145N      | [[./TI_SN74LS145_Datasheet.pdf]]        | BCD-to-decimal decoder/driver                                         |
+|   1820-1430 | SN74LS161AN     | [[./TI_SN74LS161A_Datasheet.pdf]]       | Synchronous 4-bit counters with direct clear                          |
+|   1820-1440 | SN74LS279AN     | [[./TI_SN74LS279A_Datasheet.pdf]]       | Quadruple SR latches                                                  |
+|   1820-1443 | SN74LS293N      | [[./TI_SN74LS293_Datasheet.pdf]]        | 4-bit binary counter (separate divide-by-2 and divide-by-8 sections)  |
+|   1820-1469 | SN74LS107AN     | [[./TI_SN74LS107A_Datasheet.pdf]]       | Dual JK flip-flops with clear                                         |
+|   1820-1478 | 74LS93N         | [[./Motorola_SN74LS93_Datasheet.pdf]]   | Decade counter; divide-by-twelve counter; 4-bit binary counter        |
+|   1820-1484 | 40098PC         | [[./Philips_HEF40098B_Datasheet.pdf]]   | 3-state hex inverting buffer                                          |
+|   1816-1530 | MB7142E         | [[./Fujitsu_MB7142E_Datasheet.pdf]]     | Schottky 32768-bit PROM, programmed as MC5 Processor Board ROM 0      |
+|   1816-1531 | MB7142E         | [[./Fujitsu_MB7142E_Datasheet.pdf]]     | Schottky 32768-bit PROM, programmed as MC5 Processor Board ROM 1      |
+|   1820-1745 | MC14001BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Quad 2-input NOR gate                                                 |
+|   1820-1747 | MC14011BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Quad 2-input NAND gate                                                |
+|   1820-1759 | DM81LS97AN      | [[./Fairchild_DM81LS97A_Datasheet.pdf]] | Tri-state octal buffers                                               |
+|   1820-1873 | DM81LS98N       | [[./National_DM81LS98A_Datasheet.pdf]]  | Tri-state octal buffers, inverting                                    |
+|   1820-1897 | CD4024BF        | [[./TI_CD4040B_Datasheet.pdf]]          | Ripple-cary binary counter/dividers, 7 stage                          |
+|   1820-1906 | MM80C98J        | [[./Fairchild_MM80C97_Datasheet.pdf]]   | 3-state hex inverters                                                 |
+|   1820-1956 | MC14042BCP      | [[./ON_MC14042B_Datasheet.pdf]]         | Quad transparent latch                                                |
+|   1820-1959 | MC14508BCP      | [[./Motorola_MC14508B_Datasheet.pdf]]   | Dual 4-bit latch                                                      |
+|   1820-1961 | MC14023BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Triple 3-input NAND gate                                              |
+|   1820-1962 | MC14028BCP      | [[./ON_MC14028B_Datasheet.pdf]]         | BCD-to-decimal decoder, binary-to-octal decoder                       |
+|   1820-1970 | MC14071BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Quad 2-input OR gate                                                  |
+|   1820-2014 | MC14069UBCP     | [[./TI_MC14069UB_Datasheet.pdf]]        | Hex inverter                                                          |
+|   1820-2031 | MC14021BCP      | [[./ON_MC14021B_Datasheet.pdf]]         | 8-bit static shift register                                           |
+|   1820-2050 | MC14555BCP      | [[./ON_MC14555B_Datasheet.pdf]]         | Dual binary to 1-of-4 decoder/demultiplexer                           |
+|   1820-2053 | 74LS154N        | [[./Fairchild_DM74LS154_Datasheet.pdf]] | 4-line to 16-line decoder/demultiplexer, inverting outputs            |
+|   1820-2102 | SN74LS373N      | [[./TI_SN74LS373_Datasheet.pdf]]        | Octal D-type transparent latches with 3-state outputs                 |
+|   1820-2204 | IM6402-1IPL     | [[./Intersil_IM6402_Datasheet.pdf]]     | UART                                                                  |
+|   1820-2206 | SN74LS640N      | [[./TI_SN74LS640_Datasheet.pdf]]        | Octal bus transcievers, inverting three-state outputs                 |
+|   1820-2855 | D8749H          | [[./Intel_D8749H_Datasheet.pdf]]        | Single-component 8-bit microcontroller                                |
+|   1820-2917 | 1AE8-6202       | Not available                       | Hewlett Packard 48-pin MC5 processor                                  |

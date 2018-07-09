@@ -1,0 +1,103 @@
+** Configuration 1
+| Slot Num | Board Name        |
+|        0 | FID               |
+|        1 | FID               |
+|        2 | ??? (black/black) |
+|        3 | 19302-60015       |
+|        4 | Data Acquisition  |
+|        5 | MC5 ROM           |
+|        6 | MC5 Processor     |
+|        7 | 16K RAM           |
+|        8 |                   |
+|        9 |                   |
+|       10 | ALS Interface     |
+|       11 |                   |
+|       12 |                   |
+|       13 | Valve Control     |
+|       14 |                   |
+|       15 |                   |
+|       16 | P/P Mainframe     |
+|       17 | PS Control        |
+** Configuration 2
+| Slot Num | Board Name       |
+|        0 | FID              |
+|        1 | FID              |
+|        2 | FID              |
+|        3 | FID              |
+|        4 | Data Acquisition |
+|        5 | MC5 ROM          |
+|        6 | MC5 Processor    |
+|        7 | 16K RAM          |
+|        8 |                  |
+|        9 |                  |
+|       10 |                  |
+|       11 |                  |
+|       12 | Valve Control    |
+|       13 | ALS Interface    |
+|       14 | Unlabeled        |
+|       15 |                  |
+|       16 | P/P Mainframe    |
+|       17 | PS Control       |
+** Configuration 3
+| Slot Num | Board Name                    |
+|        0 | FID                           |
+|        1 | FID                           |
+|        2 |                               |
+|        3 |                               |
+|        4 | Data Acquisition              |
+|        5 | MC5 ROM                       |
+|        6 | MC5 Processor                 |
+|        7 | 16K RAM                       |
+|        8 |                               |
+|        9 |                               |
+|       10 |                               |
+|       11 |                               |
+|       12 | Valve Control                 |
+|       13 | Data Communications Interface |
+|       14 | Microsal                      |
+|       15 |                               |
+|       16 | P/P Mainframe                 |
+|       17 | PS Control                    |
+** Summary
+| Slot Num | Option 1         | Option 2          | Option 3                      |
+|        0 | FID              |                   |                               |
+|        1 | FID              |                   |                               |
+|        2 | FID              | ??? (black/black) | None                          |
+|        3 | FID              | 19302-60015       | None                          |
+|        4 | Data Acquisition |                   |                               |
+|        5 | MC5 ROM          |                   |                               |
+|        6 | MC5 Processor    |                   |                               |
+|        7 | 16K RAM          |                   |                               |
+|        8 | None             |                   |                               |
+|        9 | None             |                   |                               |
+|       10 | ALS Interface    | None              |                               |
+|       11 | None             |                   |                               |
+|       12 | Valve Control    | None              |                               |
+|       13 | Valve Control    | ALS Interface     | Data Communications Interface |
+|       14 | Microsal         | Unlabeled         | None                          |
+|       15 | None             |                   |                               |
+|       16 | P/P Mainframe    |                   |                               |
+|       17 | PS Control       |                   |                               |
+** My Configuration
+| Slot Num | Board Name       |
+|        0 | (FID)            |
+|        1 | (FID)            |
+|        2 |                  |
+|        3 |                  |
+|        4 | Data Acquisition |
+|        5 | MC5 ROM          |
+|        6 | MC5 Processor    |
+|        7 | (16K RAM)        |
+|        8 |                  |
+|        9 |                  |
+|       10 |                  |
+|       11 |                  |
+|       12 |                  |
+|       13 |                  |
+|       14 |                  |
+|       15 |                  |
+|       16 | P/P Mainframe    |
+|       17 | (PS Control)     |
+
+Slots 9, 10, 11, and 12 may be intercompatible, according to the 7673 manual.
+The J2 connector on the Microsal Control board is routed to an external port only, labeled "ALS/BCD".

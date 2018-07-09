@@ -1,0 +1,4021 @@
+# 1K block header
+ffff
+0282
+3709
+1884
+0404
+3c00
+d514
+eb00
+
+# addr f008
+a301            # CMPRI R3, 01
+860e            # CBR f00e IF LE
+b003            # PUSH R3
+970f            # CALL f00f
+e701            # LDBI R7 = 01
+97c1            # CALL f0c1
+# addr f00e
+b100            # RTN R0
+
+# addr f00f
+b004            # PUSH R4
+c004 0100       # LOAD R4 = (0100)
+d429 0003       # STOR 3(R4) = R1
+d42a 0004       # STOR 4(R4) = R2
+d42b 0005       # STOR 5(R4) = R3
+d42d 0007       # STOR 7(R4) = R5
+d42e 0008       # STOR 8(R4) = R6
+d42f 0009       # STOR 9(R4) = R7
+0981
+b905            # POP R5
+d42d 0006       # STOR 6(R4) = R5
+b905            # POP R5
+d42d 0001       # STOR 1(R4) = R5
+b100            # RTN R0
+
+# addr f026
+970f            # CALL f00f
+c42e 0002       # LOAD R6 = 2(R4)
+52f6            # MOVE R2 = R6, RJ3
+a207            # CMPRI R2, 07
+822e            # CBR f02e if E
+e522            # LDBI R5 = 22
+9ffe            # CALL f52b (f0fe, I)
+# addr f02e
+0ed6
+d42e 0002       # STOR 2(R4) = R6
+cc04
+d004 0100       # STOR (0100) = R4
+97de            # CALL f0de
+
+# addr f035
+b004            # PUSH R4
+c004 0100       # LOAD R4 = (0100)
+d42a 0004       # STOR 4(R4) = R2
+d42b 0005       # STOR 5(R4) = R3
+d42d 0007       # STOR 7(R4) = R5
+d42e 0008       # STOR 8(R4) = R6
+d42f 0009       # STOR 9(R4) = R7
+3f81
+d42f 0003       # STOR 3(R4) = R7
+b907            # POP R7
+d42f 0006       # STOR 6(R4) = R7
+d428 0001       # STOR 1(R4) = R0
+b400
+c42a 0002       # LOAD R2 = 2(R4)
+5262            # MOVE R2 = R2, RJL
+1230
+d42a 0002       # STOR 2(R4) = R2
+b900            # POP R0
+b663
+5208            # MOVE R2 = R8, SWB
+53f1            # MOVE R3 = R1, RJ3
+4823
+
+e926
+
+f05f            # jump table?
+f087
+f094
+f094
+f094
+f094
+f094
+f08f
+
+# addr f05f
+b802 bfff       # LDWI R2 = bfff
+5a22            # MOVE R10 = R2
+c003 0104       # LOAD R3 = (0104)
+a301            # CMPRI R3, 01
+8286            # CBR f086 if E
+
+c007 019e       # LOAD R7 = (019e)
+0d97
+d005 019e       # STOR (019e) = R5
+c003 013c       # LOAD R3 = (013c)
+c004 013d       # LOAD R4 = (013d)
+a400            # CMPRI R4, 00
+8280            # CBR f080 if E
+cc05
+6501
+e61f            # LDBI R6 = 1f
+0625
+dc06
+7425
+cc05
+56f5            # MOVE R6 = R5, RJ3
+a607            # CMPRI R6, 07
+847d            # CBR f07d if L
+e700            # LDBI R7 = 00
+8780            # CBR f080
+
+# addr f07d
+6501
+dc05
+1725
+
+# addr f080
+b623
+5827            # MOVE R8 = R7
+b603
+c004 017f       # LOAD R4 = (017f)
+5f24            # MOVE R15 = R4
+
+# addr f086
+87bb            # CBR f0bb
+
+# addr f087
+b802 dfff       # LDWI R2 = dfff
+5a22            # MOVE R10 = R2
+c003 0104       # LOAD R3 = (0104)
+a301            # CMPRI R3, 01
+8dff            # CBR f975 (ffff, I) if LG
+87bb            # CBR f0bb
+
+# addr f08f
+5202            # MOVE R2 = R2, SWB
+53f1            # MOVE R3 = R1, RJ3
+a308            # CMPRI R3, 08
+8398            # CBR f098 if GE
+6308
+
+# addr f094
+c32a ed7e       # LOAD R2 = ed7e(R3)
+5a22            # MOVE R10 = R2
+87a5            # CBR f0a5
+
+# addr f098
+5209            # MOVE R2 = R9, SWB
+53f1            # MOVE R3 = R1, RJ3
+a308            # CMPRI R3, 08
+84a1            # CBR f0a1 if L
+5202            # MOVE R2 = R2, SWB
+53f1            # MOVE R3 = R1, RJ3
+a308            # CMPRI R3, 08
+83b7            # CBR f0b7 if GE
+6308
+
+# addr f0a1
+c32a ed7e       # LOAD R2 = ed7e(R3)
+5b22            # MOVE R11 = R2
+6310
+
+# addr f0a5
+  b000          # PUSH R0
+  c328 0102     # LOAD R0 = 0102(R3)
+  c007 0104     # LOAD R7 = (0104)
+  a701          # CMPRI R7, 01
+  82b5          # CBR f0b5 if E
+  a001          # CMPRI R0, 01
+  86b0          # CBR f0b0 if LE
+  e701          # LDBI R7 = 01
+  97c1          # CALL f0c1
+# addr f0b0
+  a000          # CMPRI R0, 00
+  85b5          # CBR f0b5 if LG
+  e51f          # LDBI R5 = 1f
+  5623          # MOVE R6 = R3
+  9ffe          # CALL f52b (fffe, I)
+  b900          # POP R0
+# addr f0b5
+87bb            # CBR f0bb
+
+# addr f0b7
+e51e            # LDBI R5 = 1e
+9ffe            # CALL f52b (fffe, I)
+a700            # CMPRI R7, 00
+81be            # CBR f0be if G
+
+# addr f0bb
+c004 0100       # LOAD R4 = (0100)
+97de            # CALL f0de
+
+# addr f0be
+c004 0100       # LOAD R4 = (0100)
+97c1            # CALL f0c1
+
+# addr f0c1
+c002 0132       # LOAD R2 = (0132)
+c22e 0002       # LOAD R6 = 2(R2)
+0ec6
+48f6
+
+# addr f0c7
+f0dc            # jump table
+f0dc
+f0dc
+f0cf
+f0dc
+f0dc
+f0dc
+f0d7
+
+# addr f0cf
+1ed6
+d22e 0002       # STOR 2(R2) = R6
+d002 0100       # STOR (0100) = R2
+b800 fe15       # LDWI R0 = fe15
+b100            # RTN R0
+
+# addr f0d7
+c22e 0009       # LOAD R6 = 9(R2)
+7726
+5422            # MOVE R4 = R2
+87e5            # CBR f0e5
+
+# addr f0dc
+e520            # LDBI R5 = 20
+9ffe            # CALL f52b (f0fe, I)
+
+# addr f0de
+c42b 0002       # LOAD R3 = 2(R4)
+b623
+c42a 0004       # LOAD R2 = 4(R4)
+c42f 0009       # LOAD R7 = 9(R4)
+# addr f0e5
+c42d 0007       # LOAD R5 = 7(R4)
+c42e 0008       # LOAD R6 = 8(R4)
+c428 0003       # LOAD R0 = 3(R4)
+2b80
+82f6            # CBR f0f6 if E
+0980
+c428 0001       # LOAD R0 = 1(R4)
+c42b 0005       # LOAD R3 = 5(R4)
+c42c 0006       # LOAD R4 = 6(R4)
+1981
+b100            # RTN R0
+
+# addr f0f6
+5120            # MOVE R1 = R0
+c428 0001       # LOAD R0 = 1(R4)
+c42b 0005       # LOAD R3 = 5(R4)
+c42c 0006       # LOAD R4 = 6(R4)
+b100            # RTN R0
+
+f52b            # function call indirection data
+f975
+
+### Start of page 1 ###
+# addr f100
+  b003          # PUSH R3
+  9ff6          # CALL e591 (f1f6, I)
+  9705          # CALL f105
+  b903          # POP R3
+b100            # RTN R0
+
+# addr f105
+  b006          # PUSH R6
+  c32e ffff     # LOAD R6 = ffff(R3)
+  c62e 0000     # LOAD R6 = 0(R6)
+  5535
+  1566
+  b906          # POP R6
+b100            # RTN R0
+
+# addr f10e
+9762            # CALL f162
+c22b 0056       # LOAD R3 = 0056(R2)
+5624            # MOVE R6 = R4
+5725            # MOVE R7 = R5
+a600            # CMPRI R6, 00
+8316            # CBR f116 IF GE
+9fff            # CALL f29c (f1ff, I)
+# addr f116
+b703
+# addr f117
+9ffe            # CALL f2a0 (f1fe, I)
+b543
+8517            # CBR f117 if LG
+
+# addr f11a
+b000            # PUSH R0
+  b006          # PUSH R6
+  b007          # PUSH R7
+  5026          # MOVE R0 = R6
+  5327          # MOVE R3 = R7
+  975d          # CALL f15d
+    b004        # PUSH R4
+    b005        # PUSH R5
+    9753        # CALL f153
+    8427        # CBR f127 IF L
+    5527        # MOVE R5 = R7
+    5426        # MOVE R4 = R6
+    872b        # CBR f12b
+    
+# addr f127
+    b905        # POP R5
+    b904        # POP R4
+  b006          # POP R6
+  b007          # POP R7
+# addr f12b
+5620            # MOVE R6 = R0
+5723            # MOVE R7 = R3
+9754            # CALL f154
+c22e 006a       # LOAD R6 = 006a(R2)
+c22f 006b       # LOAD R7 = 006b(R2)
+9753            # CALL f153
+8439            # CBR f139 IF L
+
+b904            # POP R4
+b904            # POP R4
+b904            # POP R4
+b904            # POP R4
+8747            # CBR f147
+
+5026            # MOVE R0 = R6
+5327            # MOVE R3 = R7
+b905            # POP R5
+b904            # POP R4
+b907            # POP R7
+b906            # POP R6
+9758            # CALL f158
+5420            # MOVE R4 = R0
+5523            # MOVE R5 = R3
+9759            # CALL f159
+8447            # CBR f147 IF L
+5624            # MOVE R6 = R4
+5725            # MOVE R7 = R5
+874d            # CBR f14d
+
+# addr f147
+e74a            # LDBI R7 = 4a
+9ff9            # CALL f37d (f1f9, I)
+975d            # CALL f15d
+9762            # CALL f162
+9759            # CALL f159
+9ffe            # CALL f2a0 (f1fe, I)
+# addr f14d
+d22e 006a       # STOR 006a(R2) = R6
+d22f 006b       # STOR 006b(R2) = R7
+b900            # POP R0
+b100            # RTN R0
+
+# addr f153
+9ff8            # CALL f28f (f1f8, I)
+7527
+b224
+7426
+b100            # RTN R0
+
+# addr f158
+9ff8            # CALL f28f (f1f8, I)
+# addr f159
+7725
+b226
+7624
+b100            # RTN R0
+
+# addr f15d
+c22e 0068       # LOAD R6 = 0068(R2)
+c22f 0069       # LOAD R7 = 0069(R2)
+b100            # RTN R0
+
+# addr f162
+c22c 006c       # LOAD R4 = 006c(R2)
+c22d 006d       # LOAD R5 = 006d(R2)
+b100            # RTN R0
+
+# addr f167
+c22b 0047       # LOAD R3 = 0047(R2)
+7322
+6b0a
+cb06
+6301
+cb07
+b100            # RTN R0
+
+# addr f16f
+  b003          # PUSH R3
+  9ffd          # CALL f2d8 (f1fd, I)
+  c22c 0061     # LOAD R4 = 0061(R2)
+  c22d 0062     # LOAD R5 = 0062(R2)
+  9ffa          # CALL f287 (f1fa, I)
+  9ffa          # CALL f287 (f1fa, I)
+  9753          # CALL f153
+  848d          # CBR f18d IF L
+  9ffe          # CALL f2a0 (f1fe, I)
+    b007        # PUSH R7
+    b006        # PUSH R6
+    6b07
+    9ffc        # CALL b5a3 (f1fc, I)
+    9758        # CALL f158
+      b007      # PUSH R7
+      b006      # PUSH R6
+      6303
+      9ffc      # CALL b5a3 (f1fc, I)
+      9ffb      # CALL f297 (f1fb, I)
+      b904      # POP R4
+      b905      # POP R5
+    9754        # CALL f154
+    b906        # POP R6
+    b907        # POP R7
+  9753          # CALL f153
+  848d          # CBR f18d IF L
+  e400          # LDBI R4 = 00
+  878e          # CBR f18e
+  
+# addr f18d
+  e40a          # LDBI R4 = 0a
+# addr f18e
+  b903          # POP R3
+b100            # RTN R0
+
+# addr f190
+c22b 0047       # LOAD R3 = 0047(R2)
+b000            # PUSH R0
+5423            # MOVE R4 = R3
+7322
+5723            # MOVE R7 = R3
+6302
+a431            # CMPRI R4, 31
+83b2            # CBR f1b2 IF GE
+5524            # MOVE R5 = R4
+6d05
+b545
+b545
+5025            # MOVE R0 = R5
+b335
+650b
+b005            # PUSH R5
+87b5            # CBR f1b5
+
+# addr f1a2
+5622            # MOVE R6 = R2
+6607
+5024            # MOVE R0 = R4
+e400            # LDBI R4 = 00
+b004            # PUSH R4
+b005            # PUSH R5
+2623
+82b0            # CBR f1b0 IF E
+
+# addr f1aa
+6b01
+cb05
+6b01
+cb04
+
+# addr f1ae
+632b
+87bb            # CBR f1bb
+
+# addr f1b0
+632b
+87b7            # CBR f1b7
+
+e400            # LDBI R4 = 00
+b004            # PUSH R4
+e00b            # LDBI R0 = 0b
+b007            # PUSH R7
+6b01
+
+# addr f1b7
+cb05
+6b01
+cb04
+6b01
+
+# add f1bb
+cb07
+6b01
+cb06
+
+9ff7            # CALL f284 (f1f7, I)
+b907            # POP R7
+df04
+6701
+df05
+6f03
+b007            # PUSH R7
+6801
+81b6            # CBR f1b6 IF G
+b905            # POP R5
+b904            # POP R4
+a400
+81a2            # CBR f1a2 IF G
+c22b 0047       # LOAD R3 = 0047(R2)
+a333
+84da            # CBR f1da IF L
+e407            # LDBI R4 = 07
+7422
+7322
+6301
+cb05
+5623            # MOVE R6 = R3
+6e2c
+de05
+6b01
+2426
+81d3            # CBR f1d3 IF G
+b900            # POP R0
+b100            # RTN R0
+
+6a08
+6b08
+83e1
+6218
+6318
+97ea
+ca04
+97f0
+c22c 0001
+7724
+b226
+b225
+b100
+
+b305
+b306
+b337
+b226
+b225
+b100
+a400
+83f3
+6d01
+7624
+b225
+b100
+
+e591
+f284
+f28f
+f37d
+f287
+f297
+b5a3
+f2d8
+f2a0
+
+f29c
+e611
+
+9ffc
+
+# Probably data (decreasing by 1)
+3b3a
+3938
+3736
+3534
+3332
+3130
+2f2e
+2dff
+
+b100
+
+# Thing 1
+97b7
+  b002          # PUSH R2
+  5227          # MOVE R2 = R7
+  
+  97a8
+  6a0d
+  97a8
+  6201
+  97c8
+  97be
+  97c4
+  6a07
+  97a8
+  6a03
+  97cc
+  97c4
+  97c4
+  
+  b902
+d22c 0004
+d22d 0005
+
+# Thing 2
+97b7
+  b002          # PUSH R2
+  5227          # MOVE R2 = R7
+  
+  6a04
+  97ad
+  6a09
+  97ad
+  620b
+  97d4
+  97be
+  97c4
+  6207
+  97a8
+  97c4
+  
+  b902
+d22c 005f
+d22d 0060
+
+# Thing 3
+97b7
+  b002          # PUSH R2
+  5227          # MOVE R2 = R7
+  
+  6a0c
+  97a8
+  97be
+  620b
+  97a8
+  97c4
+  
+  b902
+d22c 0053
+d22d 0054
+
+# Thing 4
+e301            # LDBI R3 = 01
+a400            # CMPRI R4, 00
+8445            # CBR f245 IF L
+978f            # CALL f28f
+# addr f245
+c22e 005f       # LOAD R6 = 005f(R2)
+c22f 0060       # LOAD R7 = 0060(R2)
+  b006          # PUSH R6
+  b007          # PUSH R7
+  9798          # CALL f298
+  844e          # CBR f24e IF L
+  e300          # LDBI R3 = 00
+# addr f24e
+  d22e 005d     # STOR 005d(R2) = R6
+  d22f 005e     # STOR 005e(R2) = R7
+  b907          # POP R7
+  b906          # POP R6
+9797            # CALL f297
+8457            # CBR f257 IF L
+e300            # LDBI R3 = 00
+# addr f257
+d22e 005b       # STOR 005b(R2) = R6
+d22f 005c       # STOR 005c(R2) = R7
+
+# addr f25b
+a300            # CMPRI R3, 00
+8283            # CBR f283 IF E
+978f            # CALL f28f
+9787            # CALL f287
+9787            # CALL f287
+9787            # CALL f287
+9787            # CALL f287
+e600            # LDBI R6 = 00
+e702            # LDBI R7 = 02
+9793            # CALL f293
+c22b 0047       # LOAD R3 = 0047(R2)
+7322
+6b0a
+  b004          # PUSH R4
+  b005          # PUSH R5
+  97d8          # CALL f2d8
+  a600          # CMPRI R6, 00
+  836f          # CBR f26f IF GE
+  979c          # CALL f29c
+  b905          # POP R5
+  b904          # POP R4
+e300            # LDBI R3 = 00
+978f            # CALL f28f
+9798            # CALL f298
+8479            # CBR f279 IF L
+6301
+a320            # CMPRI R3, 20
+8379            # CBR f279 IF GE
+8773            # CBR f273
+
+# addr f279
+c22d 004d       # LOAD R5 = 004d(R2)
+5425            # MOVE R4 = R5
+b704
+7524
+b545
+b545
+7523
+d22d 004d       # STOR 004d(2) = R5
+b100            # RTN R0
+
+# addr f284
+7527
+b224
+7426
+
+# addr f287
+a400            # CMPRI R4, 00
+848c            # CBR f28c IF L
+b544
+b565
+b100            # RTN R0
+
+# addr f28c
+b574
+b565
+b100            # RTN R0
+
+# addr f28f
+b304
+b335
+b224
+b100            # RTN R0
+
+7527
+b224
+7426
+b100            # RTN R0
+
+979c            # CALL f29c
+7725
+b226
+7624
+b100            # RTN R0
+
+# addr f29c
+b306
+b337
+b226
+b100            # RTN R0
+
+a600            # CMPRI R6, 00
+84a5            # CBR f2a5 IF L
+b546
+b567
+b100            # RTN R0
+
+# addr f2a5
+b576
+b567
+b100            # RTN R0
+
+ca06
+6201
+ca07
+9fff
+6a03
+
+ca06
+6201
+ca07
+9fff
+6a03
+
+# addr f2b2
+ca06
+6201
+ca07
+9fff            # CALL f3b3 (f2ff, I)
+b100            # RTN R0
+
+e300            # LDBI R3 = 00
+e400            # LDBI R4 = 00
+e500            # LDBI R5 = 00
+c22f 0047       # LOAD R7 = 0047(R2)
+7722
+b100            # RTN R0
+
+b303
+b304
+b335
+b224
+b223
+b100
+
+b543
+b564
+b565
+b100
+
+97b2            # CALL f2b2
+620f
+97b2            # CALL f2b2
+b100            # RTN R0
+
+97ce            # CALL f2ce
+6207
+# addr f2ce
+ca06
+6201
+ca07
+97a0            # CALL f2a0
+9fff            # CALL f3b3 (f2ff, I)
+b100            # RTN R0
+
+97b2
+6a0d
+97b2
+b100
+
+# addr f2d8
+6b02
+9ffe            # CALL b5a3 (f2fe, I)
+97dc            # CALL f2dc
+9ffd            # CALL b5a9 (f2fd, I)
+
+9787            # CALL f287
+978f            # CALL f28f
+9798            # CALL f298
+b100            # RTN R0
+
+97ea
+97ea
+97ea
+e406
+b545
+b566
+b567
+6c01
+81e4
+b100
+6a03
+ca04
+7524
+c22c 0001
+7624
+b225
+c22c 0002
+7724
+b226
+b225
+da05
+d22e 0001
+d22f 0002
+b100            # RTN R0
+
+f406
+b5a9
+b5a3
+f3b3
+  b006          # PUSH R6
+  b007          # PUSH R7
+  0981
+  c006 0130     # LOAD R6 = (0130)
+  c807
+  6001
+  2726
+  b907          # POP R7
+  b906          # POP R6
+b100            # RTN R0
+
+970e
+9737
+b100
+
+e400
+d22c 006e       # STOR 006e(R2) = R4
+d22c 00d2       # STOR 00d2(R2) = R4
+c22e 00cf       # LOAD R6 = 00cf(R2)
+a630            # CMPRI R6, 30
+8219            # CBR f319 IF E
+e69f
+871a            # CBR f31a
+# addr f319
+e66f
+# addr f31a
+7622
+d22e 00cf       # STOR 00cf(R2) = R6
+c22c 00d0       # LOAD R4 = 00d0(R2)
+5524            # MOVE R5 = R4
+2d15
+8224            # CBR f324 IF E
+e349
+9762            # CALL f362
+# addr f324
+c22b 0048       # LOAD R3 = 0048(R2)
+e5c0
+0524
+
+8236            # CBR f336 IF E
+a580            # CMPRI R5, 80
+8230            # CBR f330 IF E
+a300            # CMPRI R3, 00
+8236            # CBR f336 IF E
+a540            # CMPRI R5, 40
+8232            # CBR f332 IF E
+8736            # CBR f336
+
+# addr f330
+a301            # CMPRI R3, 01
+8336            # CBR f336 IF GE
+# addr f332
+e51f
+0425
+d22c 006e       # STOR 006e(R2) = R4
+# addr f336
+b100            # RTN R0
+
+e3d2
+9762
+a519
+834d
+c22b 0048
+c22c 006e
+2524
+
+8245
+a300
+824b
+a301
+834a
+a300
+8249
+
+97ec
+874b
+97de
+9754
+9767
+8737
+
+c22c 00d0
+2c34
+8253
+9ff9
+9ffb
+b100
+e34b
+c22c 004b
+c22d 004c
+b806 0aab
+7526
+2e21
+8260
+6401
+e500
+97a3
+b100
+7322
+cb05
+6501
+db05
+b100
+c22d 005a
+c22c 0059
+c22b 0058
+97bb
+97b3
+e757
+977d
+c22f 0056
+2726
+8478
+9782
+97d7
+877c
+d22b 0058
+e359
+97a3
+b100
+
+7722
+cf06
+6601
+df06
+b100
+b546
+e700
+
+b543
+b564
+b565
+b567
+b546
+
+8584
+c22e 00d5
+7726
+b225
+b224
+d22f 00d5
+c22b 0047
+a345
+8496
+e319
+6302
+5723            # MOVE R7 = R3
+97a3
+a732
+849d
+6b2d
+97a4
+d22f 0047
+e357
+e504
+97a8
+b100            # RTN R0
+
+# addr f3a3
+7322
+db04
+6301
+db05
+b100            # RTN R0
+
+e400
+  b006          # PUSH R6
+  e600
+  7322
+# addr f3ac
+  db04
+  6301
+  6601
+  2526
+  84ac          # CBR f3ac IF L
+  b906          # POP R6
+b100            # RTN R0
+
+# addr f3b3
+7527
+b226
+7426
+b223
+a600            # CMPRI R6, 00
+83ba            # CBR f3ba IF GE
+6b01
+# addr f3ba
+b100            # RTN R0
+
+  b005          # PUSH R5
+  b004          # PUSH R4
+  b003          # PUSH R3
+  e368
+  7322
+  9ffa          # CALL b5a3 (f3fa, I)
+  d22e 006c     # STOR 006c(R2) = R6
+  d22f 006d     # STOR 006d(R2) = R7
+  e36a
+  97a3          # CALL f3a3
+  
+  c22b 00cf     # LOAD R3 = 00cf(R2)
+  9ff8          # CALL b5a5 (f3f8, I)
+  6301
+  d22b 00cf     # STOR 00cf(R2) = R3
+  d22e 0068     # STOR 0068(R2) = R6
+  d22f 0069     # STOR 0069(R2) = R7
+  9fff          # CALL f10e (f3ff, I)
+  9ff7          # CALL e102 (f3f7, I)
+  b903          # POP R3
+  b904          # POP R4
+  b905          # POP R5
+b100            # RTN R0
+
+# addr f3d7
+c22c 0048       # LOAD R4 = 0048(R2)
+a400            # CMPRI R4, 00
+82dd            # CBR f3dd IF E
+9ffe            # CALL f20b (f3fe, I)
+9ffd            # CALL bf45 (f3fd, I)
+# addr f3dd
+b100            # RTN R0
+
+# addr f3de
+e304
+d22b 0048       # STOR 0048(R2) = R3
+e349
+e50a
+97a8            # CALL f3a8
+979f            # CALL f39f
+b806 0190       # LDWI R6 = 0190
+d22e 0055       # STOR 0055(R2) = R6
+9ff6            # CALL bfe2 (f3f6, I)
+9dfc            # CALL e121 (f3fc, I) IF LG
+b100            # RTN R0
+
+e400
+d22c 0048
+9ff6
+82f4
+e404
+d22c 0056
+b100
+f000
+bfe2
+e102
+b5a5
+f15d
+b5a3
+bf39
+e121
+bf45
+f20b
+f10e
+ffff
+0383
+4cff
+4ea2
+0303
+3d00
+  b003
+  b004
+  b005
+  5420
+  e300
+  9ff7
+  a5ff
+  8219
+    b003
+    5325
+    9ff6
+    b903
+  8218
+  e640
+  7e25
+  b336
+  e540
+  9ff8
+  870b
+  6301
+  b543
+  7023
+  b905
+  b904
+  b903
+b100
+9ffa
+e370
+7322
+  b006
+  6306
+    b003
+    cb05
+    7325
+    6301
+      b004
+      e600
+      e700
+      974b
+      974b
+        b007
+        5426
+        b707
+        b726
+        7624
+        b904
+      7724
+      b226
+      974b
+      b904
+    db04
+    9751
+    6501
+    a518
+    843e
+    6d18
+    b903
+  db05
+  9758
+  9758
+  9758
+  5416          # MOVE R4 = R6, LJL
+  7447
+  b706
+  b564
+  b224
+  b906
+9ff9
+b100
+6b08
+6d08
+8350
+6318
+6518
+cb04
+b306
+7f24
+b226
+a400
+8357
+6e01
+b100
+6b02
+cb04
+7624
+c32c 0001
+7724
+b226
+db06
+d32f 0001
+b100
+
+# addr f463
+e501
+  b000          # PUSH R0
+
+# addr f465
+  c22b 002a     # LOAD R3 = 002a(R2)
+  2bf3
+  8583          # CBR f483 IF LG
+  e301
+  d22b 002a     # STOR 002a(R2) = R3
+  d22b 0027     # STOR 0027(R2) = R3
+    b005        # PUSH R5
+    c22c 0028   # LOAD R4 = 0028(R2)
+    c22d 0029   # LOAD R5 = 0029(R2)
+    9720        # CALL f420
+    d22c 0022   # STOR 0022(R2) = R4
+    c228 0019   # LOAD R0 = 0019(R2)
+    c22b 0020   # LOAD R3 = 0020(R2)
+    7320
+    57c3        # MOVE R7 = R3, RJ0
+    b800 0fff   # LDWI R0 = 0fff
+    0320
+    d22b 0020   # STOR 0020(R2) = R3
+    b905        # POP R5
+  8787          # CBR f487
+
+# addr f483
+  c22c 0022     # LOAD R4 = 0022(R2)
+  c22f 0024     # LOAD R7 = 0024(R2)
+  
+# addr f487
+  c22b 0021     # LOAD R3 = 0021(R2)
+  7b24
+  9ffe          # CALL f935 (f4fe, I)
+  5303          # MOVE R3 = R3, SWB
+  1523
+  97a0          # CALL f4a0
+  a400          # CMPRI R4, 00
+  8595          # CBR f495 IF LG
+  a700          # CMPRI R7, 00
+  8195          # CBR f495 IF G
+  d22c 002a     # STOR 002a(R2) = R4
+  8797          # CBR f497
+  
+# addr f495
+  d22f 0024     # STOR 0024(R2) = R7
+
+# addr f497
+  50f5          # MOVE R0 = R5, RJ3
+  a00f          # CMPRI R0, 0f
+  839c          # CBR f49c IF GE
+  9ffc          # CALL d92b (f4fc, I)
+  8165          # CBR f465 IF G
+  9fff          # CALL f955 (f4ff, I)
+  e501
+  b900          # POP R0
+
+# addr f49c
+b100            # RTN R0
+
+  b003
+  b000
+  b001
+  # b9xx to close these is FAR below
+  c228 0021
+  7c20
+  d22c 001b
+  a400
+  83ab
+  b334
+  a40e
+  86af
+  e002
+  87b4
+  a407
+  86b3
+  e001
+  87b4
+  e000
+  d228 001f     # STOR 001f(R2) = R0
+  a400
+  85ba
+  a700
+  82f2
+  50f5          # MOVE R0 = R5, RJ3
+  a00f
+  82f2
+  b803 ef7f
+  33d5
+  a700
+  82c8
+  0b13
+  6f01
+    b007
+    e701
+    9ffb
+    b907
+    
+    b007
+    b807 ef7f
+    c228 001f
+    a002
+    85da
+    a404
+    84d9
+    0f07
+    0b93
+    0ba3
+      b006
+      e604
+      9ffd
+      b906
+    87ea
+    e001
+    a001
+    85e4
+    a402
+    84e4
+    0f07
+      b006
+      e602
+      9ffd
+      b906
+    87ea
+    a401
+    84ea
+      b006
+      e601
+      9ffd
+      b906
+    50f5        # MOVE R0 = R5, RJ3
+    7026
+    d803
+    6001
+    d807
+    6502 
+    b907
+  87b6
+  b901
+  b900
+  b903
+b100
+fc07
+fd34
+f52b
+ecc2
+f905
+b6e7
+d92b
+f961
+f935
+f955
+c72f 001d
+b100
+
+  b005          # PUSH R5
+  e41e
+  9ffa
+  2325
+  820b
+  6c01
+  8105
+  e41f
+  b905          # POP R5
+b100            # RTN R0
+
+9ff2
+8afe
+b100
+9ff2
+8afd
+b100            # RTN R0
+
+e703            # LDBI R7 = 03
+# addr f514
+c72b 019f       # LOAD R3 = 019f(R7)
+a300            # CMPRI R3, 00
+8226            # CBR f526 IF E
+e500            # LDBI R5 = 00
+d32d ffff       # STOR ffff(R3) = R5
+c32c fffd       # LOAD R4 = fffd(R3)
+6405
+b000            # PUSH R0
+b800 f522       # LDWI R0 = f522
+4024            # BR R4
+
+# addr f522
+c22d 0007       # LOAD R5 = 7(R2)
+2d25
+9dee
+
+# addr f526
+6f01
+8314            # CBR f514 IF GE
+b100            # RTN R0
+  
+f000
+f000
+
+# addr f52b
+d001 0127       # STOR (0127) = R1
+0981
+d000 012e       # STOR (012e) = R0
+b900            # POP R0
+d000 0126       # STOR (0126) = R0
+d002 0128       # STOR (0128) = R2
+d003 0129       # STOR (0129) = R3
+d004 012a       # STOR (012a) = R4
+d005 012b       # STOR (012b) = R5
+d006 012c       # STOR (012c) = R6
+d007 012d       # STOR (012d) = R7
+b404
+d004 012f       # STOR (012f) = R4
+e300            # LDBI R3 = 00
+d003 3c00       # STOR (3c00) = R3
+c003 3c00       # LOAD R3 = (3c00)
+b303
+9aef            # CALL 3ff8 (f5ef, I) IF E
+e41e            # LDBI R4 = 1e
+b604
+534f            # MOVE R3 = R15, RJU
+b543
+b543
+a33e            # CMPRI R3, 3e
+8553            # CBR f553 IF LG
+
+5c05            # MOVE R12 = R5, SWB
+5a26            # MOVE R10 = R6
+5806            # MOVE R8 = R6, SWB
+
+# addr f553
+6c01
+854a
+e41f
+b604
+5825            # MOVE R8 = R5
+6701
+cf03
+8742
+e50a
+e602
+b616
+2e8f
+922b
+9fff
+e3df
+d003 0100       # STOR (0100) = R3
+b803 8000       # LDWI R3 = 8000
+d003 0123       # STOR (0123) = R3
+e301
+d003 0104       # STOR (0104) = R3
+e300
+5a23            # MOVE R10 = R3
+5b23            # MOVE R11 = R3
+e600
+9ffd
+9ff1
+e300
+9ffe
+8578
+b807 0400       # LDWI R7 = 0400
+7327
+8772
+d003 0103       # STOR (0103) = R3
+9ffc
+e600
+e71f
+d72e 00b0       # STOR 00b0(R7) = R6
+6f01
+857d
+e502
+e30b
+7325
+9703
+828e
+e327
+7325
+9703
+828e
+e32f
+7325
+9703
+858f
+1c74
+2f74
+e30b
+7325
+9703
+1427
+d52c 00cf       # STOR 00cf(R5) = R4
+6d01
+8182
+9ffb
+e601
+5426            # MOVE R4 = R6
+9ffa
+82a2
+e506
+c62b 00b0       # LOAD R3 = 00b0(R6)
+a300
+922b
+6601
+a61e
+869a
+b803 0105       # LDWI R3 = 0105
+e400
+db04
+6301
+c004 00ef       # LOAD R4 = (00ef)
+2423
+84a7
+b802 01b2       # LDWI R2 = 01b2
+e302
+c32d 00cf       # LOAD R5 = 00cf(R3)
+2f75
+82bc
+d32a 0100       # STOR 0100(R3) = R2
+5515            # MOVE R5 = R5, LJU
+15f3
+da05
+622a
+87bf
+e500
+d32d 0100       # STOR 0100(R3) = R5
+6b01
+81b1
+e700
+
+9ff9
+9ff8
+9ff7
+9ff6
+
+d002 0124       # STOR (0124) = R2
+c003 00d5       # LOAD R3 = (00d5)
+c32c 0002       # LOAD R4 = 2(R3)
+5464            # MOVE R4 = R4, RJL
+d004 0125       # STOR (0125) = R4
+c32d 0003       # LOAD R5 = 3(R3)
+6504
+7422
+dc05
+cb03
+a300
+85ca
+c003 0125       # LOAD R3 = (0125)
+7223
+6201
+9ff5
+5722            # MOVE R7 = R2
+c003 00ef       # LOAD R3 = (00ef)
+9ff4
+d002 00de       # STOR (00de) = R2
+8ff3
+c007 00ef       # LOAD R7 = (00ef)
+c003 0103       # LOAD R3 = (0103)
+9ff4
+9ff2
+9900
+e200
+d002 0104       # STOR (0104) = R2
+8ff0
+8afc
+3ff8
+fa4c
+f201
+fe03
+cf07
+c408
+c966
+c907
+e8b2
+c200
+c95e
+f900
+bd20
+ee73
+f700
+ecce
+fc1c
+e4fa
+fbd5
+e5fb
+d6e6
+e700
+a700
+840f
+a600
+8313
+b336
+9713
+b306
+b337
+b226
+b100
+b337
+a600
+830a
+b336
+  b003
+  b004
+  b005
+  e400
+  e310
+  b556
+  831b
+  7427
+  b564
+  b565
+  6b01
+  8118
+  5725
+  5624
+  8524
+  a500
+  0931
+  b905
+  b904
+  b903
+b100
+  b007
+  c32f fffc
+  6701
+  d32f fffc
+  b907
+b100
+  b007
+  c32f fffc
+  6f01
+  d32f fffc
+  b907
+b100
+  b007
+  c32f fffc
+  a700
+  b907
+b100
+
+  b007          # PUSH R7
+  c32f fffe     # LOAD R7 = fffe(R3)
+  b617
+  b907          # POP R7
+b100            # RTN R0
+
+  b007          # PUSH R7
+  c22f 0009     # LOAD R7 = 0009(R2)
+  a700          # CMPRI R7, 00
+  b907          # POP R7
+b100            # RTN R0
+
+  b007          # PUSH R7
+  c32f fffe     # LOAD R7 = fffe(R3)
+  57c7          # MOVE R7 = R7, RJ0
+  c72f 018e     # LOAD R7 = 018e(R7)
+  2f07
+  b907          # POP R7
+b100            # RTN R0
+
+  b004
+  e400
+  97e7
+  9762
+  b804 8000
+  d32c fff8
+  e400
+  d32c fff7
+  d32f ffef
+  b904
+b100
+  b004
+  b001
+  0981
+  9772
+  856f
+  97f0
+  856f
+  9728
+  c32c fff9
+  1c04
+  d32c fff9
+  b901
+  b904
+b100
+  b004
+  c32c fff9
+  5464
+  a400
+  827a
+  97dc
+  97e2
+  b904
+b100
+974a
+829f
+9744
+859a
+  b004
+  97f0
+  8298
+    b004
+    9772
+    8587
+    97dc
+    b904
+  8598
+  c32c fff9
+  0c04
+  d32c fff9
+    b004
+    e401
+    97e7
+    e423
+    9ffe
+    b804 0119
+    d32c fff0
+    b904
+  b904
+879e
+9772
+829e
+97c3
+9762
+87a1
+97c3
+9762
+9fff
+  b006
+  b007
+  c32f 0000
+  97d0
+    b004
+    b005
+    c32c fff7
+    5526
+    3524
+    84b8
+    7c26
+    5526
+    3524
+    83b9
+    e400
+    e700
+    a600
+    83b7
+    b304
+    87b9
+    7c26
+    5624
+    b905
+    b904
+  d32e 0000
+  d32f 0001
+  b907
+  b906
+b100
+  b004
+  b001
+  0981
+  9772
+  82cd
+  c32c fff9
+  1c14
+  d32c fff9
+  b901
+  b904
+b100
+c32e fff8
+9713
+a600
+83d9
+b806 ffff
+5726
+b100
+b707
+b726
+b100
+  b007
+  c32f fff9
+  2f17
+  b907
+b100
+82e5
+2020
+87e6
+0941
+b100
+  b007
+  c32f fff9
+  5737
+  1764
+  d32f fff9
+  b907
+b100
+  b007
+  c32f fff9
+  2f07
+  b907
+b100
+  b007
+  c32f fff0
+  6f01
+  d32f fff0
+  b907
+b100
+e45a
+bb0d
+5726
+6701
+5767
+7736
+0981
+ce03
+cf04
+b303
+de03
+ce05
+3523
+8513
+cf05
+3524
+8513
+b303
+de03
+1981
+b100
+5625
+e570
+75c7
+9ff8
+  b003
+  b007
+  ca07
+  9ffa
+  a700
+  8230
+  c72c 0000
+  c72d 0001
+  c72f 0004
+  5667
+  9ff9
+  f733
+  ca03
+  c32f 001f
+  a700
+  822f
+  e700
+  d32f 001f
+  1e36
+  0941
+  b907
+  b903
+b100
+  b007
+  c32f 019f
+  c72f ffff
+  1617
+  b907
+b100
+9717
+825a
+d72e 0008
+c72b 0009
+1623
+d72e 0009
+c72b 0002
+a300
+8549
+975c
+c72e 0003
+7326
+6602
+d72e 0003
+9fff
+db04
+6301
+db05
+9780
+c72d 0005
+6501
+d72d 0005
+9763
+670a
+b100
+ca06
+c62b 0013
+636f
+d72b 0002
+b100
+c72e 0003
+a630
+826d
+a660
+836a
+877a
+e600
+d72e 0003
+c72c 0002
+6460
+dc06
+e601
+d72e 0005
+97a6
+c72b 0001
+9ffd
+827b
+9dfe
+b100
+b805 f77f
+9ffc
+877a
+58ff
+c72e 0004
+ca03
+cb04
+c72b 0006
+2cb4
+828b
+a300
+828e
+879f
+a301
+8295
+879f
+e401
+c72b 0005
+63a0
+b805 ffe0
+879b
+e400
+c72b 0005
+1b93
+b805 ff60
+0625
+1623
+d72c 0006
+c72d 0008
+5535
+1625
+d72e 0004
+b100
+  b004
+  ca03
+  c32d 0001
+  c72b 0007
+  a300
+  82b1
+  c32c 0001
+  1524
+  e3e4
+  0523
+  5325
+  2ba3
+  82c3
+  c72b 0004
+  0da5
+  a540
+  82bf
+  a580
+  82c1
+  1b53
+  87c5
+  1b63
+  87c5
+  1b73
+  87c5
+  c72b 0004
+  b904
+6401
+dc03
+d003 01a3
+c72b 0009
+6401
+dc03
+e500
+d72d 0004
+d72d 0009
+b100
+650a
+b100
+ca03
+cb04
+53f4
+d72b 0000
+a301
+82e0
+a302
+82e6
+87f7
+b803 0061
+c006 0102
+e518
+87eb
+b803 0062
+c006 0101
+e500
+e400
+9ffb
+d72b 0001
+d72e 0007
+d72d 0003
+e401
+d72c 0005
+670a
+b100
+f52b
+fc37
+f500
+e899
+dda9
+ec28
+f008
+f287
+ffff
+0181
+14f6
+dbc0
+0202
+3e02
+0283
+0247
+a493
+8514
+9ffe
+5527
+5423
+9ffd
+0000
+8612
+9ffb
+8713
+9fff
+1981
+8ffc
+b306
+b337
+b226
+851b
+a700
+0931
+b100
+7527
+b224
+  b003
+  5331
+  0b33
+  0b43
+  7426
+  1321
+  a500
+  8227
+  0b43
+  5123
+  b903
+b100
+  b006
+  b007
+  b306
+  7f25
+  b226
+    b003
+    5331
+    0b33
+    0b43
+    7426
+    1321
+    5527
+    8238
+    0b43
+    5123
+    b903
+  b907
+  b906
+b100
+
+# addr f83d
+a300            # CMPRI R3, 00
+865b            # CBR f85b IF LE
+
+a31f            # CMPRI R3, 1f
+8642            # CBR f842 IF LE
+
+e31f            # LDBI R3 = 1f
+
+# addr f842
+  b005          # PUSH R5
+  e500          # LDBI R5 = 00
+  a300          # CMPRI R3, 00
+  8657          # CBR f857 IF LE
+  
+  a600          # CMPRI R6, 00
+  8350          # CBR f850 IF GE
+
+# addr f848
+  b707
+  b726
+  844c          # CBR f84c IF L
+  
+  1d15
+
+# addr f84c
+  6b01
+  8148          # CBR f848 IF G
+  
+  1e06
+  8757          # CBR f857
+
+# addr f850
+  b707
+  b726
+  8354          # CBR f854 IF GE
+  
+  1d15
+
+# addr f854
+  6b01
+  8150          # CBR f850 IF G
+  
+  0e06
+
+# addr f857
+  976d          # CALL f86d
+  
+  1125
+  b905          # POP R5
+b100            # RTN R0
+
+# addr f85b
+b333
+845f            # CBR f85f IF L
+
+a31f            # CMPRI R3, 1f
+8660            # CBR f860 IF LE
+
+e31f            # LDBI R3 = 1f
+a300            # CMPRI R3, 00
+866d            # CBR f86d IF LE
+
+a600            # CMPRI R6, 00
+8369            # CBR f869 IF GE
+
+b576
+b567
+6b01
+8164            # CBR f864 IF G
+
+876d            # CBR f86d
+
+b546
+b567
+6b01
+8169            # CBR f869 IF G
+
+a600            # CMPRI R6, 00
+8571            # CBR f871 IF LG
+
+a700            # CMPRI R7, 00
+0931
+b100            # RTN R0
+
+  b003
+  b004
+  b005
+  e301
+  9742
+  5426
+  5527
+  e302
+  9742
+  971c
+  5624
+  5725
+  b905
+  b904
+  b903
+b100
+
+  b007          # PUSH R7
+  b006          # PUSH R6
+  b005          # PUSH R5
+  b004          # PUSH R4
+  cb06
+  c32f 0001     # LOAD R7 = 1(R3)
+  e4f8
+  0446
+  3614
+  
+  b544
+  b544
+  
+  6c30
+  8494          # CBR f894 IF L
+  b807 ffff     # LDWI R7 = ffff
+  0e07
+  87d2          # CBR f8d2
+
+# addr f894
+  b707
+  b726
+  
+  b707
+  b726
+  
+  5747          # MOVE R7 = R7, RJU
+  7716
+  c64d f8da     # LOAD R5 = f8da(R6)
+  c64e f8db     # LOAD R6 = f8db(R6)
+    b005        # PUSH R5
+    7d26
+    
+    b705
+    b705
+    
+    e600
+    37f7
+    83a6        # CBR f8a6 IF GE
+
+# addr f8a5
+    7625
+
+# addr f8a6
+    b545
+    b707
+    
+    84a5        # CBR f8a5 IF L
+    81a6        # CBR f8a6 IF G
+    
+    # Lots of repetition
+    b546
+    b546
+    b567
+    b546
+    b567
+    
+    b905        # POP R5
+  7625
+  6420
+  83b6          # CBR f8b6 IF GE
+  
+  5726          # MOVE R7 = R6
+  e600
+  6420
+
+# addr f8b6
+  6c10
+  83bc          # CBR f8bc IF GE
+  
+  5747          # MOVE R7 = R7, RJU
+  7716
+  5646          # MOVE R6 = R6, RJU
+  6410
+
+# addr f8bc
+  b805 f8c0     # LDWI R5 = f8c0
+  7425
+  4024
+  
+# addr f8c0
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b546
+  b567
+  
+  b227
+  b226
+
+# addr f8d2
+  d32f 0001     # STOR 1(R3) = R7
+  db06
+  b904          # POP R4
+  b905          # POP R5
+  b906          # POP R6
+  b907          # POP R7
+b100            # RTN R0
+
+# addr f8da (data)
+8000
+82cd
+85aa
+8898
+8b95
+8ea4
+91c3
+94f4
+9837
+9b8d
+9ef5
+a270
+a5fe
+a9a1
+ad57
+b123
+b504
+b8fb
+bd08
+c12b
+c566
+c9b9
+ce23
+d2a7
+d744
+dbfb
+e0cc
+e5b8
+eac0
+efe3
+f524
+fa82
+ffff
+fea4
+ce4b
+f300
+e02e
+e00f
+
+# addr f900
+b614
+554f            # MOVE R5 = R7, RJU
+b545
+b545
+b100            # RTN R0
+
+  b006
+  c22f 0007
+  a700
+  850f
+  c22e 0008
+  c22f 0009
+  9ffe
+  5624
+  5725
+  c22b 0011
+  6302
+  b333
+  9ffd
+  2b11
+  821e
+  a600
+  b804 7fff
+  8333
+  b334
+  8733
+  e400
+  c22d 0014
+  9ffc
+  2b11
+  8226
+  a400
+  8719
+  a400
+  8119
+  842d
+  a500
+  8424
+  5425
+  8733
+  6401
+  8419
+  a500
+  842b
+  b804 8001
+  b906
+b100
+a300
+853d
+a700
+823b
+e302
+8745
+e300
+8745
+833f
+b333
+a30e
+8643
+e307
+8745
+c32b f946
+b100
+0000
+0007
+0006
+0001
+0001
+0001
+0002
+0002
+0007
+0003
+0003
+0006
+0003
+0006
+0006
+b807 ffff
+55f5
+5425
+7426
+a50f
+8360
+dc07
+6401
+6501
+875a
+b100
+  b005
+  c22d 001b
+  a500
+  c22d 0021
+  846b
+  b336
+  7526
+  876f
+  7526
+  b336
+  0b23
+  0f27
+  7426
+  d22d 0021
+  b905
+0b03
+b100
+e700
+e200
+97c3
+e204
+97c3
+c003 0140
+c006 0141
+b000
+c000 0142
+b600
+5023
+8687
+5428
+7026
+d804
+6301
+a307
+84b7
+546f
+6001
+d804
+c000 013f
+d004 013f
+55e4
+0dc5
+c52b f9bb
+a506
+8599
+2420
+85a4
+c005 0123
+2df5
+85a2
+c005 013e
+6501
+d005 013e
+e001
+87a5
+e000
+5526
+6508
+dd00
+c005 0123
+0df5
+d005 0123
+e501
+de05
+6609
+ce06
+d006 0141
+c005 0143
+b005
+6701
+b900
+d003 0140
+8fff
+fffc
+fffd
+fffe
+0001
+ffff
+0000
+0001
+0000
+b000
+c228 0159
+b600
+c22e 015a
+ce04
+a400
+81d1
+b804 ffff
+5a24
+5b24
+87fa
+c22b 015b
+5023
+7026
+a401
+85dd
+c804
+5a24
+6001
+c804
+5b24
+87e2
+b804 ffff
+5a24
+5b24
+6001
+a30d
+84f7
+e500
+de05
+e301
+6001
+c806
+d22e 015a
+c22d 015c
+c528 0002
+50f0
+a007
+82f8
+b900
+b005
+b000
+6701
+87f8
+6302
+d22b 015b
+b900
+b100
+f81c
+f83d
+f82a
+f0b9
+e638
+9ffb
+cb05
+a500
+8508
+e501
+db05
+871a
+c42e 0002
+57f6
+a707
+8518
+0ef6
+0ed6
+d42e 0002
+db04
+5624
+cc04
+d004 0100
+de05
+871a
+e523
+9ffe
+9ffc
+  b005
+  b001
+  0981
+  cb05
+  a500
+  8526
+  e501
+  db05
+  b901
+  e500
+  
+  8728
+  b901
+  e501
+  
+  b905
+b100
+9ffb
+cb05
+a501
+8644
+cd06
+db06
+c52f 0002
+56f7
+1ff7
+a602
+823c
+a600
+8542
+1fd7
+d52f 0002
+9ffc
+d52f 0002
+b000
+5025
+e701
+9ffd
+e524
+9ffe
+e500
+db05
+9ffc
+00ff
+b100
+b100
+0000
+0000
+
+c003 0134       # LOAD R3 = (0134)
+0981
+9ffa
+975f
+1981
+874e
+9ffb
+cc04
+d004 0100       # STOR (0100) = R4
+9ffc
+9ffb
+975f
+e701
+b000            # PUSH R0
+c000 0134       # LOAD R0 = (0134)
+9ffd
+e500
+d005 0133       # STOR (0133) = R5
+b100            # RTN R0
+
+0981
+  b000          # PUSH R0
+  c000 0100     # LOAD R0 = (0100)
+  d328 0102     # STOR 0102(R3) = R0
+  b900          # POP R0
+b100            # RTN R0
+
+  b000          # PUSH R0
+  e001
+  d328 0102     # STOR 0102(R3) = R0
+  b900          # POP R0
+1981
+b100            # RTN R0
+
+0981
+c32e 0002       # LOAD R6 = 2(R3)
+55f6
+a507
+827e
+a503
+827e
+a502
+827e
+e526
+9ffe
+0ee6
+d32e 0002       # STOR 2(R3) = R6
+1981
+b100            # RTN R0
+
+00c0
+b100
+b100
+0000
+0000
+e300
+db03
+e0ff
+b000            # PUSH R0
+cb04
+2420
+8291
+e528
+9ffe
+c003 0100       # LOAD R3 = (0100)
+d003 0134       # STOR (0134) = R3
+c003 0135       # LOAD R3 = (0135)
+975f
+9fff
+c007 0136       # LOAD R7 = (0136)
+c005 0135       # LOAD R5 = (0135)
+1981
+630a
+2523
+84a6
+b807 fffe       # LDWI R7 = fffe
+c003 0134       # LOAD R3 = (0134)
+879d
+6702
+0981
+c32e 0002       # LOAD R6 = 2(R3)
+54f6
+a405
+82b3
+a401
+829d
+a400
+829d
+e525
+9ffe
+1ee6
+d32e 0002       # STOR 2(R3) = R6
+db05
+c004 0134       # LOAD R4 = (0134)
+dc03
+1981
+d007 0136       # STOR (0136) = R7
+7722
+cf06
+c72d 0001       # LOAD R5 = 1(R7)
+5565
+7526
+2625
+82cb
+6d01
+cd00
+2625
+82cb
+b000            # PUSH R0
+87c5
+c32d 0002       # LOAD R5 = 2(R3)
+55e5
+6501
+0981
+d005 0133       # STOR (0133) = R5
+9fff
+9772
+e400
+cc04
+a4ff
+82da
+e52a
+9ffe
+c007 0136       # LOAD R7 = (0136)
+7722
+cf06
+c72d 0001       # LOAD R5 = 1(R7)
+5545
+7526
+de00
+b900            # POP R0
+6601
+2526
+86e9
+e52b
+9ffe
+a0ff
+85e2
+e400
+b004            # PUSH R4
+cc04
+a400
+b904            # POP R4
+85e2
+cf04
+c72d 0001       # LOAD R5 = 1(R7)
+7c26
+1435
+d72c 0001       # STOR 1(R7) = R4
+b000            # PUSH R0
+8799
+
+f008
+f00f
+f0de
+f0c1
+f52b
+f026
+
+d42c 00b0       # STOR 00b0(R4) = R4
+b100            # RTN R0
+
+5627
+9710
+0981
+cf04
+6402
+a41f
+860b
+e41f
+d72c 0021       # STOR 0021(R7) = R4
+e400
+df04
+1981
+
+# Increasing
+9711
+9712
+9713
+9714
+
+e500
+
+# More patterns
+c72c 004c       # LOAD R4 = 004c(R7)
+a420
+841d
+1d75
+6c20
+d72c 004c       # STOR 004c(R7) = R4
+
+c72c 004d       # LOAD R4 = 004d(R7)
+a420
+8425
+1d65
+6c20
+d72c 004d       # STOR 004d(R7) = R4
+
+c72c 004e
+a420
+842d
+1d55
+6c20
+d72c 004e
+
+c72c 004f
+a420
+8435
+1d45
+6c20
+d72c 004f
+
+c72c 0050
+a420
+843d
+1d35
+6c20
+d72c 0050
+
+c72c 0051
+a420
+8445
+1d25
+6c20
+d72c 0051
+
+c72c 0052
+a410
+844d
+1d05
+6c10
+d72c 0052
+
+c72c 0030
+
+0524
+6601
+de05
+b100            # RTN R0
+
+  b007          # PUSH R7
+  b006          # PUSH R6
+  b003          # PUSH R3
+  0b06
+  1327
+  855f
+  3426
+  b805 ffff     # LDWI R5 = ffff
+  0e05
+  1426
+  8777
+  1b04
+  0325
+  b303
+  8259
+  1b06
+  0327
+  b303
+  856a
+  e400
+  e500
+  8777
+  0b04
+  1325
+  8267
+  5324
+  0c04
+  3326
+  8375
+  0e06
+  977b
+  1c04
+  8777
+  0e06
+  977b
+  b903          # POP R3
+  b906          # POP R6
+  b907          # POP R7
+b100            # RTN R0
+
+  b000
+  b002
+  9fff
+  979e
+  5223
+  9fff
+  7b22
+  63fc
+    b003
+    5024
+    b304
+    b335
+    b224
+    e200
+    1ba2
+    2026
+    8692
+    7725
+    b226
+    7624
+    6301
+    b222
+    878a
+    b707
+    b726
+    b703
+    b722
+    838a
+    0c02
+    5523
+    b903
+  b902
+  b900
+9ffe
+b100
+3426
+3624
+3426
+3527
+3725
+3527
+b100
+  b007
+  b006
+  b003
+  1b04
+  0325
+  b303
+  82b0
+  1b06
+  0327
+  b303
+  85b7
+  2b04
+  1426
+  1527
+  3326
+  84c6
+  0c04
+  87ca
+  0b04
+  1325
+  82bd
+  0b06
+  1327
+  85c0
+  e400
+  e500
+  87ca
+  5324
+  0c04
+  3326
+  83c8
+  0e06
+  97ce
+  1c04
+  87ca
+  0e06
+  97ce
+  b903
+  b906
+  b907
+b100
+  b002
+  9fff
+  5414
+  7445
+  5515
+  5223
+  979e
+  9fff
+  5414
+  7445
+  5515
+  6b80
+  6b87
+  7322
+    b003
+    e200
+    e300
+    87e3
+    7325
+    b222
+    7224
+    b544
+    b565
+    b707
+    82ea
+    b726
+    84e0
+    87e3
+    b726
+    83ef
+    7325
+    b222
+    7224
+    b544
+    b565
+    b706
+    84ec
+    81ef
+    5422
+    5523
+    b903
+  b902
+9ffe
+5624
+1625
+82fd
+e601
+b100
+ffc2
+ffb6
+ffff
+0383
+33ce
+df26 0101
+3f01
+0210
+  b006
+  b007
+  5313
+  b703
+  b703
+  8311
+  b806 f000
+  2623
+  8316
+  cb07
+  b307
+  8518
+  9ffd
+  8218
+  2020
+  8719
+  0941
+  b907
+  b906
+b100
+e702
+b617
+e600
+e700
+2020
+e32b
+6b01
+8522
+6701
+b226
+2b8f
+8520
+b804 0800       # LDWI R4 = 0800
+e32a
+6b01
+852b
+b403
+8000
+6701
+b226
+2b8f
+8535
+6c01
+852a
+8520
+b100
+
+  b004
+  c804
+  6001
+  974a
+  fc3e
+  b904
+b100
+
+  b006
+  c32e fc46
+  0627
+  b906
+8545
+b100
+
+4024
+0080
+0020
+0008
+0002
+
+# addr fc
+  b003
+  b005
+  e300
+  c32d 019f     # LOAD R5 = 019f(R3)
+  a500
+  c805
+  9559
+  6301
+  a303
+  864d
+  6001
+  b905
+  b903
+b100
+
+4025
+
+  b003
+  b006
+  b007
+  b807 2800
+  7724
+  b806 7800
+  0627
+  5426
+  7e27
+  b704
+  53c4
+  c32f fc79
+  5427
+  6301
+  c32b fc79
+  7f23
+  9fff
+  5747
+  1716
+  5646
+  e303
+  9ffe
+  7427
+  b907
+  b906
+  b903
+b100
+
+# Data referenced in the above function
+db27
+e65a
+f182
+fb19
+03d1
+0c1c
+1443
+1c89
+2515
+2d8a
+35e3
+3e20
+4648
+4e60
+569c
+5ed8
+
+6714
+  b004
+  ca04
+  979a
+  b904
+b100
+  b004
+  c004 0101
+  a400
+  959a
+  c004 0102
+  a400
+  959a
+  b904
+b100
+  b006
+  b007
+  57f5
+  c72f ed7e
+  0981
+  2ea5
+  c42e 0002
+  82a9
+  b307
+  1627
+  d42e 0002
+  87b9
+  0627
+  d42e 0002
+  2eb5
+  c42e 0001
+  82b3
+  b307
+  1627
+  87b4
+  0627
+  d42e 0001
+  cc07
+  b637
+  5d26
+  1981
+  b907
+  b906
+b100
+a500
+81c3
+84ca
+a700
+1911
+b100
+a700
+83ce
+b337
+97ce
+b337
+0911
+b100
+
+b335
+a700
+81c6
+b337
+e600
+  b003          # PUSH R3
+  b004          # PUSH R4
+  e310
+  5425
+  b334
+  b707
+  b726
+  7624
+  84da
+  6701
+  87db
+  7625
+  6b01
+  81d4
+  b904
+  b903
+a700
+b100
+  b004
+  5427
+  5726
+  97ce
+  3427
+  3724
+  3427
+  97cf
+  5526
+  5624
+  85ee
+  a700
+  0931
+  b904
+b100
+5423
+7322
+b901
+4020
+e514
+9ffa
+9afb
+9ffa
+9dfc
+b100
+e300
+e089
+e08e
+ecce
+f860
+f605
+  b003
+  9704
+  b903
+b100
+5324
+6302
+8ffd
+  b003
+  5324
+  6302
+  9ffc
+  8702
+  5520
+  b900
+0981
+c42b 0001
+5343
+a300
+9204
+9729
+6301
+972e
+1981
+b000
+5025
+b100
+b003
+b005
+970c
+b905
+8702
+b003
+0981
+9729
+6b01
+972e
+a300
+9207
+1981
+8702
+b005
+c42d 0001
+5345
+b100
+5565
+1513
+d42d 0001
+b905
+b100
+5523
+b545
+7524
+cd05
+6301
+b553
+833e
+b713
+5545
+b100
+b713
+5565
+b100
+b003
+c003 0125
+2324
+814f
+c003 0124
+7423
+cc04
+a400
+8250
+7425
+cc04
+8750
+e400
+b903            # POP R3
+a400
+b100            # RTN R0
+
+e700
+b005            # PUSH R5
+e501
+9741
+b903            # POP R3
+8269
+6b80
+b006            # PUSH R6
+5624
+c42d 0001       # LOAD R5 = 1(R4)
+5565
+2523
+8168
+6402
+9734
+5725
+9734
+5327
+7f25
+ce04
+b906            # POP R6
+b100            # RTN R0
+
+9fff
+  b002          # PUSH R2
+  c328 0002     # LOAD R0 = 2(R3)
+  a006
+  8472
+  a014
+  8474
+  e006
+  8775
+  6002
+  d328 0002     # STOR 2(R3) = R0
+  c32d 0003     # LOAD R5 = 3(R3)
+  c32e 0004     # LOAD R6 = 4(R3)
+  c32f 0005     # LOAD R7 = 5(R3)
+  7023
+  c802
+  c02c 0001     # LOAD R4 = 1(R0)
+  b302
+  b334
+  b222
+  979d
+  cb02
+  c32c 0001     # LOAD R4 = 1(R3)
+  d802
+  d02c 0001     # STOR 1(R0) = R4
+  979d
+  d32d 0003     # STOR 3(R3) = R5
+  d32e 0004     # STOR 4(R3) = R6
+  d32f 0005     # STOR 5(R3) = R7
+  e203
+  b545
+  b566
+  b567
+  6a01
+  8193
+  db06
+  d32f 0001     # STOR 1(R3) = R7
+  b902          # POP R2
+8ffe
+a200
+83a0
+6d01
+7724
+b226
+b225
+7622
+b225
+b100            # RTN R0
+
+b000            # PUSH R0
+c000 013a       # LOAD R0 = (013a)
+a000
+82e5
+e500
+e600
+e700
+b000            # PUSH R0
+c028 0004       # LOAD R0 = 4(R0)
+b002            # PUSH R2
+e200
+5010
+83ca
+2b10
+c22b 019f       # LOAD R3 = 019f(R2)
+c32c 0001       # LOAD R4 = 1(R3)
+cb03
+85c0
+7724
+b226
+b225
+87c5
+b303
+7c27
+b226
+b225
+5724
+7623
+b225
+a300
+83ca
+6d01
+6201
+b700
+b700
+85b4
+b902
+a500
+82d9
+81db
+6501
+84d6
+a600
+84de
+e700
+1e07
+87de
+a600
+83de
+b807 ffff       # LDWI R7 = ffff
+0e07
+b900            # POP R0
+d02f 0001       # STOR 1(R0) = R7
+d806
+c028 0005       # LOAD R0 = 5(R0)
+87a9
+b900            # POP R0
+b100            # RTN R0
+
+0941
+b907            # POP R7
+1127
+b907            # POP R7
+b902            # POP R2
+b100            # RTN R0
+
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+f000
+
+fa2a
+fa01
+df70
+df77
+fbd3
+f516
+e700
+  b003          # PUSH R3
+  c803
+  6001
+  5343
+  b543
+  b543
+  9ffb
+  b903          # POP R3
+850f
+b000            # PUSH R0
+6801
+c800
+b100            # RTN R0
+
+0000
+b100            # RTN R0
+
+b100            # RTN R0
+
+0000
+0000
+5320
+b900            # POP R0
+1981
+c32e 0002       # LOAD R6 = 2(R3)
+55f6
+a503
+8223
+a501
+8534
+1ed6
+d32e 0002       # STOR 2(R3) = R6
+8736
+1ed6
+d32e 0002       # STOR 2(R3) = R6
+2324
+862b
+db04
+5423
+8736
+5524
+cd06
+2326
+8131
+5526
+872c
+dd03
+db06
+8736
+e521
+9fff
+0981
+6f01
+8115
+da04
+5422
+8ffc
+  b006
+  b007
+  c807
+  6001
+  e500
+  5423
+  2725
+  834a
+  cc06
+  a600
+  854a
+  6501
+  6402
+  8742
+  b907
+  b906
+b100
+5425
+b704
+7423
+b100
+
+  b005          # PUSH R5
+  e500
+  d22d fffe     # STOR fffe(R2) = R5
+  b905          # POP R5
+b100            # RTN R0
+
+  b005
+  5522
+  97a4
+  b905
+b100
+  b005
+  0981
+  c22d fffe
+  a500
+  8567
+  c005 0100
+  d22d fffe
+  9ffe
+  1981
+  b905
+b100
+  b003
+  0981
+  c52b fffe
+  a300
+  8574
+  6b01
+  d52b fffe
+  8775
+  9ffd
+  1981
+  b903
+b100
+  b005
+  c005 0130
+  a500
+  857f
+  e532
+  9fff
+  2f81
+  8283
+  e533
+  9fff
+  6d01
+  d005 0130
+  c007 0131
+  cf05
+  d005 0131
+  b905
+b100
+  b001
+  0981
+    b004
+    c004 0131
+    df04
+    d007 0131
+    c004 0130
+    6401
+    d004 0130
+    b904
+  b901
+b100
+
+  b002
+  b007
+  4020
+  b907
+  b902
+b900
+b100
+
+  b002
+  b007
+  c42a 0001
+  a200
+  82f2
+  6201
+  57f2
+  a70f
+  85b3
+  9778
+  da07
+  df02
+  6701
+  5227
+  d42a 0001
+  da05
+  b907
+  b902
+b100
+b002
+b007
+2f81
+b007
+0981
+cc02
+a200
+8af9
+ca05
+c42f 0001
+2722
+85ce
+7ff7
+b337
+978d
+e700
+dc07
+d42f 0001
+8ffa
+6201
+57f2
+a70f
+85d6
+7f22
+ca02
+6201
+978d
+dc02
+8ffa
+cc05
+a500
+82dd
+cd05
+0941
+b100
+b002
+b007
+cc02
+a200
+82f2
+6a01
+57f2
+a700
+85ed
+9778
+670f
+da07
+df02
+6f01
+5227
+dc02
+da05
+b907
+b902
+b100
+9778
+670e
+dc07
+d42f 0001
+df05
+87ef
+
+fde8
+fde7
+fc07
+f027
+f008
+f026
+f52b
+
+97b6
+7464
+b705
+b224
+6b01
+b100
+e600
+a700
+830a
+b306
+  b003
+  b004
+  b005
+  b803 0116
+  5426
+  8319
+  b304
+  b337
+  b224
+  8318
+  b544
+  b567
+  6301
+  1c04
+  5527
+  97c2
+  5725
+  5624
+  b905
+  b904
+  b903
+b100
+9737
+832c
+9ff7
+a600
+822a
+e700
+1f07
+1911
+b100
+b337
+b100
+a600
+8530
+a700
+8335
+b807 7fff
+a700
+1911
+b100
+a700
+b100
+  b003
+  b004
+  b005
+  5426
+  5527
+  0e06
+  1627
+  8541
+  e700
+  875e
+  97b6
+  6bb2
+  6b64
+  a309
+  8448
+  e309
+  874d
+  b806 ffe9
+  2623
+  834d
+  5326
+  0e04
+  5725
+  9ff8
+  2d11
+  825b
+  b806 8000
+  e700
+  2c04
+  8559
+  b307
+  b306
+  1911
+  875e
+  2c04
+  9df7
+  9ff9
+  b905
+  b904
+  b903
+b100
+3e06
+9768
+  b001
+  3e06
+  b901
+b100
+b006
+b007
+b003
+2b04
+b006
+b004
+0c04
+0e06
+2624
+8183
+847b
+5647
+2645
+8183
+847b
+5667
+2665
+8183
+8281
+3527
+3725
+3527
+b906
+b904
+8785
+a300
+857b
+b904
+b906
+0b06
+1327
+82ad
+1b04
+0325
+b303
+82ad
+9700
+b003
+b005
+b004
+b003
+5426
+5527
+9700
+b906
+7b26
+a318
+849c
+b904
+b905
+b903
+87ac
+5664
+5725
+55c4
+b904
+25c4
+82a5
+b306
+b337
+b226
+9ffb
+b905
+2b04
+0c04
+9ffa
+1423
+b903
+97c2
+b903
+0e04
+1625
+82b3
+e601
+1624
+b907
+b906
+b100
+0b04
+
+# Repetition
+b543
+b543
+b543
+b543
+b543
+b543
+
+b714
+1c84
+5464
+b554
+b100
+  b006
+  b007
+  2f04
+  0c04
+  5624
+  1625
+  85cb
+  e300
+  87de
+  a4ff
+  86d1
+  b544
+  b565
+  6301
+  87cb
+  a480
+  83d7
+  b705
+  b724
+  6b01
+  87d1
+  6501
+  b224
+  b544
+  b565
+  6301
+  a480
+  83d9
+  1427
+  a300
+  83e5
+  e300
+  e500
+  e400
+  87ee
+  b806 01ff
+  2623
+  86ee
+  5326
+  b805 ffff
+  1465
+  0c84
+  0c94
+  5303
+  b553
+  b543
+  7423
+  b907          # POP R7
+  b906          # POP R6
+b100            # RTN R0
+
+f000
+f815
+f83d
+f86d
+f81c
+f860
+f55b
+8ffc
+8fff
+f035

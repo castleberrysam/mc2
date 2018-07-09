@@ -1,0 +1,32 @@
+| Part Number | Board Name                               | Compact | Have |
+| 19300-60000 | Motherboard                              | N/A     | x    |
+| 19300-60020 | Processor                                |         |      |
+| 19300-60025 | MC5 Processor                            |         | x    |
+| 19300-60040 | PS (power supply) Control                |         |      |
+| 19300-60050 | Duct                                     |         |      |
+| 19300-60070 | Detector Power Supply                    |         |      |
+| 19300-60090 | Data Acquisition                         |         | x    |
+| 19300-60110 | Power Supply                             |         |      |
+| 19300-60140 | Temp Measurement                         |         |      |
+| 19300-60150 | ROM                                      |         |      |
+| 19300-60155 | MC5 ROM                                  |         | x    |
+| 19301-60010 | FID (flame ionization detector)          | x       |      |
+| 19302-60015 | Unlabeled                                | x       |      |
+| 19303-60010 | Nickel 63 Electron Capture               | x       |      |
+| 19303-60020 | EC Overheat Protection                   |         |      |
+| 19321-60010 | Microsal Control                         |         | x    |
+| 19322-60010 | Valve Driver                             |         |      |
+| 19322-60020 | Valve Junction                           |         |      |
+| 19324-60010 | ALS (automatic liquid sampler) Interface |         |      |
+| 19331-60010 | Analog Output                            |         | x    |
+| 19335-60010 | Data Communications Interface            |         |      |
+| 19350-60010 | P/P Remote                               |         |      |
+| 19350-60020 | P/P Mainframe                            |         | x    |
+| 19376-60020 | 16K RAM                                  |         |      |
+| 19376-60025 | MC5 16K RAM                              |         |      |
+|   Unlabeled | Unlabeled                                |         |      |
+
+All part numbers for this machine are in the form 193xx-6xxxx.
+Circuit boards have a part number less than 193xx-60500.
+Rebuilt boards have a part number in the form 193xx-69xxx.
+Redesigned boards have a part number in the form 193xx-6xxx5.

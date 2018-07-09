@@ -1,0 +1,38 @@
+Warn : deprecated option: -p/--pipe. Use '-c "gdb_port pipe; log_output openocd.log"' instead.
+Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
+adapter speed: 500 kHz
+Info : RCLK (adaptive clock speed)
+Info : ICDI Firmware version: 9270
+Info : tm4c123gh6pm.cpu: hardware has 6 breakpoints, 4 watchpoints
+Info : accepting 'gdb' connection from pipe
+undefined debug reason 7 - target needs reset
+adapter speed: RCLK - adaptive
+target state: halted
+target halted due to debug-request, current mode: Thread 
+xPSR: 0x01000000 pc: 0x0000097c msp: 0x20008000
+adapter speed: RCLK - adaptive
+Error: memory write failed: 0x7
+Error: memory write failed: 0x7
+Error: memory read failed: 0x7
+Error: jtag status contains invalid mode value - communication failure
+TARGET: tm4c123gh6pm.cpu - Not halted
+in procedure 'reset' 
+in procedure 'ocd_bouncer'
+
+
+
+Error: Target not halted
+Error: failed erasing sectors 0 to 2
+Error: flash_erase returned -304
+adapter speed: RCLK - adaptive
+target state: halted
+target halted due to debug-request, current mode: Thread 
+xPSR: 0x01000000 pc: 0x0000097c msp: 0x20008000
+target state: halted
+target halted due to breakpoint, current mode: Thread 
+xPSR: 0x61000000 pc: 0x20000042 msp: 0x20008000
+adapter speed: RCLK - adaptive
+target state: halted
+target halted due to debug-request, current mode: Thread 
+xPSR: 0x01000000 pc: 0x0000097c msp: 0x20008000
+Info : dropped 'gdb' connection
