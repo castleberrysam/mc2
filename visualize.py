@@ -36,7 +36,7 @@ class Instruction:
         ("LOAD",      0xf8f8, 0xc800),
         ("STOR_LONG", 0xf800, 0xd000),
         ("STOR",      0xf8f8, 0xd800),
-        ("LDBI",      0xf000, 0xe000)
+        ("LDBI",      0xf000, 0xe000),
         ("COP",       0xf000, 0xf000)
     ]
 
