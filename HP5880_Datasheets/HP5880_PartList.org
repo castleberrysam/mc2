@@ -23,6 +23,8 @@
 |   1820-0938 | CD4027BE        | [[./TI_CD4027B_Datasheet.pdf]]          | Dual JK master-slave flip-flop                                        |
 |   1820-0939 | CD4013BE        | [[./TI_CD4013B_Datasheet.pdf]]          | Dual D-type flip-flop                                                 |
 |   1820-0976 | CD4015BE        | [[./TI_CD4015B_Datasheet.pdf]]          | Dual 4-stage static shift register                                    |
+|   1820-0990 | SN75189A        | [[./TI_SN75189_Datasheet.pdf]]          | Quadruple line receiver                                               |
+|   1820-1075 | SN75150P        | [[./TI_SN75150_Datasheet.pdf]]          | Dual line driver                                                      |
 |   1820-1112 | SN74LS74AN      | [[./TI_SN74S74_Datasheet.pdf]]          | Dual D-type positive-edge-triggered flip-flops with preset and clear  |
 |   1820-1114 | MC14516BCP      | [[./ON_MC14516B_Datasheet.pdf]]         | Binary up/down counter                                                |
 |   1820-1144 | SN74LS02N       | [[./TI_SN74LS02_Datasheet.pdf]]         | Quadruple 2-input positive-NOR gates                                  |
@@ -59,6 +61,7 @@
 |   1820-1469 | SN74LS107AN     | [[./TI_SN74LS107A_Datasheet.pdf]]       | Dual JK flip-flops with clear                                         |
 |   1820-1478 | 74LS93N         | [[./Motorola_SN74LS93_Datasheet.pdf]]   | Decade counter; divide-by-twelve counter; 4-bit binary counter        |
 |   1820-1484 | 40098PC         | [[./Philips_HEF40098B_Datasheet.pdf]]   | 3-state hex inverting buffer                                          |
+|   1820-1486 | CD4081B         | [[./TI_CD4081B_Datasheet.pdf]]          | Quad 2-input AND gate                                                 |
 |   1816-1530 | MB7142E         | [[./Fujitsu_MB7142E_Datasheet.pdf]]     | Schottky 32768-bit PROM, programmed as MC5 Processor Board ROM 0      |
 |   1816-1531 | MB7142E         | [[./Fujitsu_MB7142E_Datasheet.pdf]]     | Schottky 32768-bit PROM, programmed as MC5 Processor Board ROM 1      |
 |   1820-1745 | MC14001BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Quad 2-input NOR gate                                                 |
@@ -68,9 +71,11 @@
 |   1820-1897 | CD4024BF        | [[./TI_CD4040B_Datasheet.pdf]]          | Ripple-cary binary counter/dividers, 7 stage                          |
 |   1820-1906 | MM80C98J        | [[./Fairchild_MM80C97_Datasheet.pdf]]   | 3-state hex inverters                                                 |
 |   1820-1956 | MC14042BCP      | [[./ON_MC14042B_Datasheet.pdf]]         | Quad transparent latch                                                |
+|             | MC14043BCP      | [[./ON_MC14043B_Datasheet.pdf]]         | Quad RS latch                                                         |
 |   1820-1959 | MC14508BCP      | [[./Motorola_MC14508B_Datasheet.pdf]]   | Dual 4-bit latch                                                      |
 |   1820-1961 | MC14023BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Triple 3-input NAND gate                                              |
 |   1820-1962 | MC14028BCP      | [[./ON_MC14028B_Datasheet.pdf]]         | BCD-to-decimal decoder, binary-to-octal decoder                       |
+|   1820-1965 | MC14025BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Triple 3-input NOR gate                                               |
 |   1820-1970 | MC14071BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Quad 2-input OR gate                                                  |
 |   1820-2014 | MC14069UBCP     | [[./TI_MC14069UB_Datasheet.pdf]]        | Hex inverter                                                          |
 |   1820-2031 | MC14021BCP      | [[./ON_MC14021B_Datasheet.pdf]]         | 8-bit static shift register                                           |
