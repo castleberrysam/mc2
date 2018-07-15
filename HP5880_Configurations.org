@@ -79,25 +79,25 @@
 |       16 | P/P Mainframe    |                   |                               |
 |       17 | PS Control       |                   |                               |
 ** My Configuration
-| Slot Num | Board Name       |
-|        0 | (FID)            |
-|        1 | (FID)            |
-|        2 |                  |
-|        3 |                  |
-|        4 | Data Acquisition |
-|        5 | MC5 ROM          |
-|        6 | MC5 Processor    |
-|        7 | (16K RAM)        |
-|        8 |                  |
-|        9 |                  |
-|       10 |                  |
-|       11 |                  |
-|       12 |                  |
-|       13 |                  |
-|       14 |                  |
-|       15 |                  |
-|       16 | P/P Mainframe    |
-|       17 | (PS Control)     |
+| Slot Num | Board Name                    |
+|        0 | (FID)                         |
+|        1 | (FID)                         |
+|        2 |                               |
+|        3 |                               |
+|        4 | Data Acquisition              |
+|        5 | MC5 ROM                       |
+|        6 | MC5 Processor                 |
+|        7 | (16K RAM)                     |
+|        8 |                               |
+|        9 |                               |
+|       10 |                               |
+|       11 |                               |
+|       12 |                               |
+|       13 | Data Communications Interface |
+|       14 |                               |
+|       15 |                               |
+|       16 | P/P Mainframe                 |
+|       17 | (PS Control)                  |
 
 Slots 9, 10, 11, and 12 may be intercompatible, according to the 7673 manual.
 The J2 connector on the Microsal Control board is routed to an external port only, labeled "ALS/BCD".

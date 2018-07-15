@@ -19,7 +19,7 @@
 | 19322-60020 | Valve Junction                           |         |      |
 | 19324-60010 | ALS (automatic liquid sampler) Interface |         |      |
 | 19331-60010 | Analog Output                            |         | x    |
-| 19335-60010 | Data Communications Interface            |         |      |
+| 19335-60010 | Data Communications Interface            |         | x    |
 | 19350-60010 | P/P Remote                               |         |      |
 | 19350-60020 | P/P Mainframe                            |         | x    |
 | 19376-60020 | 16K RAM                                  |         |      |
