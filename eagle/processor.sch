@@ -11684,7 +11684,7 @@ germanium</description>
 <label x="1435.1" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="J1.58" class="0">
+<net name="LOW_READ_0" class="0">
 <segment>
 <pinref part="JP8" gate=".58" pin="1"/>
 <wire x1="76.2" y1="198.12" x2="83.82" y2="198.12" width="0.1524" layer="91"/>
@@ -11713,7 +11713,7 @@ germanium</description>
 <label x="81.28" y="195.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="J1.60" class="0">
+<net name="LOW_READ_1" class="0">
 <segment>
 <pinref part="U$22" gate="G$1" pin="2Y"/>
 <wire x1="619.76" y1="200.66" x2="624.84" y2="200.66" width="0.1524" layer="91"/>
@@ -11747,7 +11747,7 @@ germanium</description>
 <label x="406.4" y="325.12" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="J1.62" class="0">
+<net name="LOW_WRITE_0" class="0">
 <segment>
 <pinref part="U$22" gate="G$1" pin="4Y"/>
 <label x="622.3" y="195.58" size="1.778" layer="95"/>
@@ -11777,7 +11777,7 @@ germanium</description>
 <label x="81.28" y="185.42" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="J1.64" class="0">
+<net name="LOW_WRITE_1" class="0">
 <segment>
 <pinref part="U$22" gate="G$1" pin="1Y"/>
 <label x="622.3" y="203.2" size="1.778" layer="95"/>
@@ -11808,7 +11808,7 @@ germanium</description>
 <label x="1435.1" y="71.12" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="~IC33B" class="0">
+<net name="/SERV_REQ" class="0">
 <segment>
 <pinref part="JP8" gate=".66" pin="1"/>
 <wire x1="76.2" y1="177.8" x2="83.82" y2="177.8" width="0.1524" layer="91"/>
@@ -11823,8 +11823,8 @@ germanium</description>
 <label x="660.4" y="142.24" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="215.9" y1="398.78" x2="205.74" y2="398.78" width="0.1524" layer="91"/>
-<label x="205.74" y="398.78" size="1.778" layer="95"/>
+<wire x1="215.9" y1="398.78" x2="200.66" y2="398.78" width="0.1524" layer="91"/>
+<label x="200.66" y="398.78" size="1.778" layer="95"/>
 <pinref part="Q7" gate="G1" pin="B"/>
 </segment>
 </net>
@@ -12004,8 +12004,8 @@ germanium</description>
 </segment>
 <segment>
 <pinref part="IC44" gate="A" pin="I1"/>
-<wire x1="594.36" y1="330.2" x2="589.28" y2="330.2" width="0.1524" layer="91"/>
-<label x="589.28" y="330.2" size="1.778" layer="95"/>
+<wire x1="594.36" y1="330.2" x2="579.12" y2="330.2" width="0.1524" layer="91"/>
+<label x="579.12" y="330.2" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="/MEM_ACK" class="0">
@@ -12076,8 +12076,8 @@ germanium</description>
 </segment>
 <segment>
 <pinref part="IC46" gate="D" pin="I0"/>
-<wire x1="543.56" y1="325.12" x2="538.48" y2="325.12" width="0.1524" layer="91"/>
-<label x="538.48" y="325.12" size="1.778" layer="95"/>
+<wire x1="543.56" y1="325.12" x2="535.94" y2="325.12" width="0.1524" layer="91"/>
+<label x="535.94" y="325.12" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC29" gate="B" pin="S2"/>
@@ -12762,7 +12762,7 @@ germanium</description>
 <wire x1="652.78" y1="551.18" x2="650.24" y2="551.18" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="LOW_0" class="0">
+<net name="WRITE_0" class="0">
 <segment>
 <pinref part="U$22" gate="G$1" pin="4A"/>
 <wire x1="594.36" y1="195.58" x2="581.66" y2="195.58" width="0.1524" layer="91"/>
@@ -12779,7 +12779,7 @@ germanium</description>
 <label x="541.02" y="134.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="LOW_1" class="0">
+<net name="WRITE_1" class="0">
 <segment>
 <pinref part="U$18" gate="G$1" pin="Q2"/>
 <wire x1="497.84" y1="185.42" x2="502.92" y2="185.42" width="0.1524" layer="91"/>
@@ -12791,7 +12791,7 @@ germanium</description>
 <label x="581.66" y="203.2" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="LOW_3" class="0">
+<net name="READ_1" class="0">
 <segment>
 <pinref part="U$18" gate="G$1" pin="Q4"/>
 <wire x1="497.84" y1="180.34" x2="502.92" y2="180.34" width="0.1524" layer="91"/>
@@ -13548,7 +13548,7 @@ germanium</description>
 <junction x="1559.56" y="284.48"/>
 </segment>
 </net>
-<net name="~J1_CLK" class="0">
+<net name="~/J1_CLK" class="0">
 <segment>
 <pinref part="IC45" gate="B" pin="CLK"/>
 <wire x1="510.54" y1="322.58" x2="495.3" y2="322.58" width="0.1524" layer="91"/>
@@ -13752,7 +13752,7 @@ germanium</description>
 <wire x1="1460.5" y1="254" x2="1460.5" y2="256.54" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="MC5.6" class="0">
+<net name="/INT" class="0">
 <segment>
 <pinref part="IC46" gate="C" pin="O"/>
 <wire x1="284.48" y1="388.62" x2="289.56" y2="388.62" width="0.1524" layer="91"/>
@@ -14531,7 +14531,7 @@ germanium</description>
 <label x="500.38" y="502.92" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="LOW_2" class="0">
+<net name="READ_0" class="0">
 <segment>
 <pinref part="U$18" gate="G$1" pin="Q3"/>
 <wire x1="497.84" y1="182.88" x2="502.92" y2="182.88" width="0.1524" layer="91"/>
