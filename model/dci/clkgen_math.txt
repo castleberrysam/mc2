@@ -1,0 +1,19 @@
+best approximation:
+300: 102:1
+600: 51:1
+1200: 26:1
+
+300:
+count0 preset is 1101 = 13
+count1 preset is 1100 = 12
+2 * ((16 * (15 - 12)) + (15 - 13) + 1) = 102
+
+600:
+count0 preset is 0110 = 6
+count1 preset is 1110 = 14
+2 * ((16 * (15 - 14)) + (15 - 6) + 1) = 52
+
+1200:
+count0 preset is 0011 = 3
+count1 preset is 1111 = 15
+2 * ((16 * (15 - 15)) + (15 - 3) + 1) = 26
