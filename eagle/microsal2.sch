@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.2.2">
+<eagle version="9.0.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.05" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -12389,7 +12390,7 @@ B78108, manufacturer Siemens</description>
 </sheet>
 <sheet>
 <plain>
-<text x="198.12" y="205.74" size="1.778" layer="91">FF4 LOGIC (FUNCTION UNKNOWN)</text>
+<text x="198.12" y="205.74" size="1.778" layer="91">MC5 SERVICE REQUEST LOGIC</text>
 <text x="66.04" y="205.74" size="1.778" layer="91">EXTERNAL BUS OUTPUT LOGIC</text>
 <frame x1="0" y1="0" x2="279.4" y2="215.9" columns="8" rows="5" layer="91"/>
 </plain>
@@ -14142,7 +14143,7 @@ B78108, manufacturer Siemens</description>
 </drawing>
 <compatibility>
 <note version="8.2" severity="warning">
-Since Version 8.2, Eagle supports online libraries. The ids
+Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
 with this version.
 </note>

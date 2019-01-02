@@ -1,0 +1,299 @@
+sub a082 math_interpret
+sub a0c0 math_unop
+sub a0c7 f32_abs
+sub a0cb i32_abs
+sub a0ce math_binop
+sub a297 mem16_rd32_and_interpret
+sub a2a0 mem16_blk_rd8_inc
+sub b919 f32_b10_exp
+sub b93f math_fmt_f32
+sub b981 math_fmt_adjust
+sub b9ac math_fmt_digit
+sub b9b6 f32_b10_digit
+sub bace f32_div_d10
+sub bade f32_lalign
+sub bd20 ram_init
+sub bd9b br_r5
+sub bdde dll_insert
+sub bde7 dll_remove
+sub beb4 f32_mul_x10
+sub c200 dll0_arr_init
+sub c408 mem_blk_create_all
+sub c423 mem_rd16_if_valid
+sub c437 mem_rd8_if_valid
+sub c441 mem32_advance_16
+sub c446 mem32_rd16_inc_off
+sub c453 mem32_wr16_inc_off
+sub c467 mem_wr8
+sub c478 mem_rd8
+sub c4e3 mem32_advance_8
+sub c907 dll2_alloc_inst
+sub c94c br_r5_save237
+sub c95e dll_alloc_fix_all
+sub c966 dll3_arr_init
+sub c9c6 dll3_d_in_range_and_word_3
+sub c9d1 dll3_d_in_range
+sub c9e3 i16_mul_x10
+sub c9f7 dll3_rd_word
+sub c9ea dll3_arr_wr_mem_addr
+sub c9f1 dll_get_d
+sub cb3c math_fmt_wr8_inc
+sub cb52 math_fmt_chk_wr8
+sub d1d3 mem32_blk_rem
+sub d1d8 mem32_blk_base
+sub d85b mem32_blk_rd8_inc
+sub d86a mem32_blk_wr8_inc
+sub d876 mem32_rd_skip_if_lsb
+sub dea2 chk_rom
+sub deee rom_error_arg
+sub df77 psh_034567
+sub df94 f32_fmt_size
+sub e4df dll_remove_at_off
+sub e86b reg_save
+sub e878 dll_call_func1
+sub e87f dll_find_by_d
+sub e88c reg_restore
+sub e899 dll_arr_find_by_d
+sub e8a2 dll_alloc_fix
+sub e8b2 dll0_alloc_dyn
+sub e926 int_15
+sub ea10 math_fmt_clear
+sub ea15 math_fmt_fill
+sub ea1c math_fmt_fuzz
+sub ecce is_ram_addr
+sub ee5f chk_ram
+sub ee67 chk_cpu
+sub ee73 chk_machine
+sub f00f int_enter
+sub f035 interrupt
+sub f05f int_14
+sub f087 int_13
+sub f08f int_lsb
+sub f094 int_msb
+sub f0de int_exit
+sub f201 chk_high_rom_present
+sub f406 chk_are_pages_rom
+sub f503 find_slot_from_id
+sub f52b sys_error
+sub f55b reset
+sub f613 i16_fma
+sub f700 chk_ram_addr
+sub f815 i32_neg
+sub f81c i32_add
+sub f82a i32_sub
+sub f83d i32_shft
+sub f842 i32_lshft
+sub f860 i32_rshft
+sub f86d i32_setcc
+sub f900 get_id_from_slot
+sub fa5f clr_main_loop_var
+sub fb00 mark_slot_ok
+sub fb53 f32_div
+sub fb7b f32_div_fast
+sub fb9e xchg32
+sub fba5 f32_mul
+sub fbce f32_mul_fast
+sub fc07 is_page_rom
+sub fc1c wait_pwr_good
+sub fd34 read8
+sub fe03 call_if_exists
+sub fe78 mem_blk_alloc
+sub fe8d mem_blk_create
+sub fe9d psh_027
+sub ff00 f32_unpack_x2
+sub ff06 i16_to_f32
+sub ff0a i32_to_f32
+sub ff37 f32_to_i32
+sub ff62 f32_sub
+sub ff68 f32_add
+sub ffb6 f32_unpack
+sub ffc2 f32_pack
+sub fffd reset_vector
+sub fffe int_vector
+
+table 5f0a 4
+table 5fbb 4
+table 607f 4
+table 667a 4
+table a0c0 6
+table a0ce 15
+table a2ec 4
+table da5d 7
+table f055 9
+table f0c6 8
+
+link c94c c953
+link c97a c988
+link d85c d85f
+link d86b d870
+link f0cf fe15
+
+unlink d869 d86a
+unlink dead deaf
+unlink deba debc
+unlink dec0 dec2
+unlink dee0 dee2
+unlink dee5 dee7
+unlink f02c f02e
+unlink f02e f035
+unlink f0b2 f0b5
+unlink f0b7 f0b9
+unlink f0bb f0be
+unlink f0dc f0de
+unlink f413 f418
+unlink f713 f717
+unlink fa7c fa7e
+unlink fe34 fe36
+unlink fe7d fe7f
+unlink fe81 fe83
+
+mathfunc 50d1
+mathfunc 5269
+mathfunc 5ac5
+mathfunc 60ed
+mathfunc 62c6
+mathfunc 62db
+mathfunc 60f5
+mathfunc a082
+mathfunc a297
+
+var 00b1 slot01_ok
+var 00b2 slot02_ok
+var 00b3 slot03_ok
+var 00b4 slot04_ok
+var 00b5 slot05_ok
+var 00b6 slot06_ok
+var 00b7 slot07_ok
+var 00b8 slot08_ok
+var 00b9 slot09_ok
+var 00ba slot0a_ok
+var 00bb slot0b_ok
+var 00bc slot0c_ok
+var 00bd slot0d_ok
+var 00be slot0e_ok
+var 00bf slot0f_ok
+var 00c0 slot10_ok
+var 00c1 slot11_ok
+var 00c2 slot12_ok
+var 00c3 slot13_ok
+var 00c4 slot14_ok
+var 00c5 slot15_ok
+var 00c6 slot16_ok
+var 00c7 slot17_ok
+var 00c8 slot18_ok
+var 00c9 slot19_ok
+var 00ca slot1a_ok
+var 00cb slot1b_ok
+var 00cc slot1c_ok
+var 00cd slot1d_ok
+var 00ce slot1e_ok
+var 00cf slot1f_ok
+
+# card 0c/28/30
+var 00d0 pp_dci1_slot
+# card 0d/29/31
+var 00d1 pp_dci2_slot
+
+var 00d4 dll0_head
+var 00d5 dll1_head
+var 00d6 dll2_head
+var 00d7 dll3_head
+
+var 00de dll3_alloc_end
+
+var 00e9 rsave_r2
+var 00ea rsave_r3
+var 00eb rsave_r4
+var 00ec rsave_r5
+var 00ed rsave_r6
+var 00ee rsave_r7
+
+var 00ef heap_end
+
+# initialized to 0x00df
+var 0100 int_save_base
+
+# allocated starting at 01b2, in increments of 2a
+# the first word contains the slot id in the upper byte and the DCI number in the low byte
+var 0101 dci1_mem_base
+var 0102 dci2_mem_base
+
+var 0103 ram_end
+
+# initialized to 0x0001, set to 0x0000 once reset finishes
+var 0104 reset_in_progress
+
+# reset initializes all memory from 0105 to heap_end to 0x0000
+
+# initialized to 0x8000
+var 0123 0x0123
+
+var 0124 inst_mem_end
+var 0125 dll1_arr_len
+
+var 0130 mem32_blks_free
+var 0131 mem32_next_blk
+
+var 0132 dll0_alloc_end
+
+# set to 0x0000 in each main loop iteration
+var 0133 main_loop_var
+
+var 0135 dll0_arr_end
+
+# initialized to 0x0145
+var 0139 card10_ptr2
+
+# card 01 in upper byte, card 17 in lower byte
+var 013c card01_slot
+
+# initialized to 0x0001
+var 0140 card10_val
+# initialized to 0x0145
+var 0141 card10_ptr
+var 0142 daq_slot
+var 0143 card10_dll_node
+
+# initialized to 0x014f
+var 014e card10_ptr3
+
+# initialized to 0x0145
+var 0158 card10_ptr4
+
+var 0159 pp1_slot
+var 015a pp1_rom_addr
+# initialized to 0x0001
+var 015b pp1_val
+var 015c pp1_dll_node
+
+var 015d pp2_slot
+var 015e pp2_rom_addr
+# initialized to 0x0001
+var 015f pp2_val
+var 0160 pp2_dll_node
+
+var 015d dll3_arr_base
+
+# initialized to 0xffff
+var 017f 0x017f
+# initialized to 0xffff
+var 0180 0x0180
+
+# initialized to 0x4000
+var 019e 0x019e
+
+var 019f inst0_mem_base
+var 01a0 inst1_mem_base
+var 01a1 inst2_mem_base
+var 01a2 inst3_mem_base
+
+data 5cc0 3
+data 668b 1
+data bdea 1
+data f202 8
+data f5e9 1
+data f725 1
+data fc3b 1
+
+omit a082
+omit f52b

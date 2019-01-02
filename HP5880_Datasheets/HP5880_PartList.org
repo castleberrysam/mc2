@@ -1,12 +1,15 @@
 | HP Part No. | Normal Part No. | Link                                | Description                                                           |
 |   0960-0487 |                 |                                     | 11.7965MHz crystal                                                    |
 |   1810-0083 |                 |                                     | 14DIP resistor network                                                |
-|  1818-0805A |                 |                                     | MC5 ROM Board 'G1L'                                                   |
-|  1818-0806A |                 |                                     | MC5 ROM Board 'G1R'                                                   |
-|  1818-0809A |                 |                                     | MC5 ROM Board 'G3L'                                                   |
-|  1818-0810A |                 |                                     | MC5 ROM Board 'G3R'                                                   |
-|  1818-1247A |                 |                                     | MC5 ROM Board 'G2L'                                                   |
-|  1818-1248A |                 |                                     | MC5 ROM Board 'G2R'                                                   |
+|   1816-1308 | 93L422PC        | [[./Motorola_93L422_Datasheet.pdf]]     | TTL 256 x 4-bit RAM                                                   |
+|   1818-0341 | MK4116N         | [[./Intersil_MK4116_Datasheet.pdf]]     | 16,384 bit NMOS dynamic RAM                                           |
+|             | MB8116E         | [[./Fujitsu_MB8116E_Datasheet.pdf]]     | 16,384-bit dynamic RAM                                                |
+|   1818-0805 |                 |                                     | MC5 ROM Board 'G1L'                                                   |
+|   1818-0806 |                 |                                     | MC5 ROM Board 'G1R'                                                   |
+|   1818-0809 |                 |                                     | MC5 ROM Board 'G3L'                                                   |
+|   1818-0810 |                 |                                     | MC5 ROM Board 'G3R'                                                   |
+|   1818-1247 |                 |                                     | MC5 ROM Board 'G2L'                                                   |
+|   1818-1248 |                 |                                     | MC5 ROM Board 'G2R'                                                   |
 |   1818-1593 | D2364           | [[./NEC_D2364_Datasheet.pdf]]           | MC5 ROM Board 'G6L'                                                   |
 |   1818-1594 | D2364           | [[./NEC_D2364_Datasheet.pdf]]           | MC5 ROM Board 'G6R'                                                   |
 |   1820-0430 | LM309K          | [[./National_LM309_Datasheet.pdf]]      | 5-volt regulator                                                      |
@@ -16,6 +19,8 @@
 |   1820-0514 | SN7426N         | [[./TI_SN74LS26_Datasheet.pdf]]         | Quadruple 2-input high-voltage interface positive-NAND gates          |
 |   1820-0668 | SN7407N         | [[./TI_SN7407_Datasheet.pdf]]           | Hex buffers/drivers with open-collector high-voltage outputs          |
 |   1820-0682 | SN74S03N        | [[./TI_SN74S03_Datasheet.pdf]]          | Quadruple 2-input positive-NAND gates with open-collector outputs     |
+|   1820-0683 | SN74S04N        | [[./TI_SN74S04_Datasheet.pdf]]          | Hex inverters                                                         |
+|   1820-0688 | SN74S20N        | [[./TI_SN74LS20_Datasheet.pdf]]         | Dual 4-input positive-NAND gates                                      |
 |   1820-0693 | SN74S74N        | [[./TI_SN74S74_Datasheet.pdf]]          | Dual D-type positive-edge-triggered flip-flops with preset and clear  |
 |   1820-0910 | SN74LS83AN      | [[./Motorola_SN74LS83A_Datasheet.pdf]]  | 4-bit binary full adder with fast carry                               |
 |   1820-0931 | CD4029BE        | [[./TI_CD4029B_Datasheet.pdf]]          | Presettable up/down counter                                           |
@@ -25,6 +30,7 @@
 |   1820-0976 | CD4015BE        | [[./TI_CD4015B_Datasheet.pdf]]          | Dual 4-stage static shift register                                    |
 |   1820-0990 | SN75189A        | [[./TI_SN75189_Datasheet.pdf]]          | Quadruple line receiver                                               |
 |   1820-1075 | SN75150P        | [[./TI_SN75150_Datasheet.pdf]]          | Dual line driver                                                      |
+|   1820-1076 | SN74S174N       | [[./TI_SN74S174_Datasheet.pdf]]         | Hex D-type flip-flops                                                 |
 |   1820-1112 | SN74LS74AN      | [[./TI_SN74S74_Datasheet.pdf]]          | Dual D-type positive-edge-triggered flip-flops with preset and clear  |
 |   1820-1114 | MC14516BCP      | [[./ON_MC14516B_Datasheet.pdf]]         | Binary up/down counter                                                |
 |   1820-1144 | SN74LS02N       | [[./TI_SN74LS02_Datasheet.pdf]]         | Quadruple 2-input positive-NOR gates                                  |
@@ -47,8 +53,10 @@
 |   1820-1246 | SN74LS09N       | [[./TI_SN74LS09_Datasheet.pdf]]         | Quadruple 2-input positive-AND gates with open-collector outputs      |
 |   1820-1257 | SN74159N        | [[./TI_SN74159_Datasheet.pdf]]          | 4-line to 16-line decoders/demultiplexers with open-collector outputs |
 |   1820-1266 | MM80C97N        | [[./Fairchild_MM80C97_Datasheet.pdf]]   | 3-state hex buffers                                                   |
+|   1820-1273 | SN74LS28N       | [[./TI_SN74LS28_Datasheet.pdf]]         | Quadruple 2-input positive-NOR buffers                                |
 |   1820-1278 | SN74LS191N      | [[./TI_SN74LS191_Datasheet.pdf]]        | Synchronous up/down counters with down/up mode control                |
 |   1820-1281 | DM74LS139N      | [[./Fairchild_DM74LS139_Datasheet.pdf]] | Decoder/demultiplexer                                                 |
+|   1820-1286 | SN74LS40N       | [[./TI_SN74LS40_Datasheet.pdf]]         | Dual 4-input positive-NAND buffers                                    |
 |   1820-1411 | 74LS75N         | [[./TI_SN7475_Datasheet.pdf]]           | 4-bit bitstable latches                                               |
 |   1820-1412 | MC14556BCP      | [[./ON_MC14555B_Datasheet.pdf]]         | Dual binary to 1-of-4 decoder/demultiplexer, inverting                |
 |   1820-1416 | 74LS14N         | [[./TI_SN74LS14_Datasheet.pdf]]         | Hex schmitt-trigger inverters                                         |
@@ -73,10 +81,12 @@
 |   1820-1956 | MC14042BCP      | [[./ON_MC14042B_Datasheet.pdf]]         | Quad transparent latch                                                |
 |             | MC14043BCP      | [[./ON_MC14043B_Datasheet.pdf]]         | Quad RS latch                                                         |
 |   1820-1959 | MC14508BCP      | [[./Motorola_MC14508B_Datasheet.pdf]]   | Dual 4-bit latch                                                      |
+|   1820-1960 | MC14012BCP      | [[./ON_MC14012B_Datasheet.pdf]]         | Dual 4-input NAND gates                                               |
 |   1820-1961 | MC14023BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Triple 3-input NAND gate                                              |
 |   1820-1962 | MC14028BCP      | [[./ON_MC14028B_Datasheet.pdf]]         | BCD-to-decimal decoder, binary-to-octal decoder                       |
 |   1820-1965 | MC14025BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Triple 3-input NOR gate                                               |
 |   1820-1970 | MC14071BCP      | [[./ON_MC14023B_Datasheet.pdf]]         | Quad 2-input OR gate                                                  |
+|   1820-1989 | 74LS393PC       | [[./TI_SN74LS393_Datasheet.pdf]]        | Dual 4-bit decade and binary counters                                 |
 |   1820-2014 | MC14069UBCP     | [[./TI_MC14069UB_Datasheet.pdf]]        | Hex inverter                                                          |
 |   1820-2031 | MC14021BCP      | [[./ON_MC14021B_Datasheet.pdf]]         | 8-bit static shift register                                           |
 |   1820-2050 | MC14555BCP      | [[./ON_MC14555B_Datasheet.pdf]]         | Dual binary to 1-of-4 decoder/demultiplexer                           |
@@ -85,4 +95,6 @@
 |   1820-2204 | IM6402-1IPL     | [[./Intersil_IM6402_Datasheet.pdf]]     | UART                                                                  |
 |   1820-2206 | SN74LS640N      | [[./TI_SN74LS640_Datasheet.pdf]]        | Octal bus transcievers, inverting three-state outputs                 |
 |   1820-2855 | D8749H          | [[./Intel_D8749H_Datasheet.pdf]]        | Single-component 8-bit microcontroller                                |
+|             | 1AB7-6001       | Not available                       | ??? 20-pin DIP package                                                |
 |   1820-2917 | 1AE8-6202       | Not available                       | Hewlett Packard 48-pin MC5 processor                                  |
+|   1820-5319 | SN74S133N       | [[./TI_SN74S133_Datasheet.pdf]]         | 13-input positive-NAND gate                                           |

@@ -1,0 +1,103 @@
+ffff
+- constant, used to detect ROM blocks
+abcd
+- bits ab[6:0] and cd[6:0] must be equal
+- bit ab[7] must be 0
+- bit cd[7] must be 1
+????
+- first half of checksum (r0)
+????
+- second half of checksum (r5)
+abab
+- loaded into r6 when sys_error is called
+- the two halves must be equal
+abcd
+- ab is the upper 6 bits of the address
+- cd is the length of the following data used by sub_bd20 (if it is zero then it is skipped)
+
+Data used by sub_bd20:
+aaaa aabb bbbb bbbb
+- a is an offset into the working space of sub_bd20; it might need to be in the range 0-3
+- b is an offset from the beginning of the page to another data structure
+
+Data structure pointed to by b:
+0 - cccc cccc dddd dddd
+* d is used to determine the ordering of the linked list; sorted in ascending order of d
+* c is also used to determine order when two nodes have the same d.
+* 1. if existing c < new c -> insert
+* 2. else if existing d != new d -> insert
+* 3. else if end of list -> insert
+* 4. else continue
+* After the lists have been established, elements are removed so only the first in each group with the same d value remains in the list
+1 - func0
+2 - func1
+* Returns how much fixed memory to allocate in R5 in the form qqqq qrrr rrrr rrrr
+* q = how much before pointer
+* r = how much after pointer
+* Returns how much dynamic memory to allocate in R6; see dll0_alloc_dyn to see how it's used
+3 - ???
+4 - xyzw/subroutine
+* The value 00z3 is stored into the below data structure
+* Or, a subroutine for dll2/dll3; called to initialize the allocated memory. Address is passed in R3
+* For dll1, the address of this word is stored in dll1_arr(d)
+5 - ???
+* Address of this word is stored in the below data structure
+* dll3: This is a pointer to some data
+6 - ???
+7 - subroutine (dll2)
+* The ID of an instrument card is passed in R6; the subroutine sets R1(Z) if it supports that card
+
+Data structure created after dll_alloc:
+0 - ???
+1 - Address of word 5 in the data structure pointed to by b
+2 - The value 00z3 from the above data structure
+3 - ??? (initialized to 0x80)
+4 - address for the allocated memory, from the below data structure
+5 - ???
+6 - ???
+7 - ???
+8 - ???
+9 - ???
+Then:
+Check the value w from the above data structure.
+If non-zero, get int_save_base(w) and store at the address for the allocated memory.
+Check the value xy from the above data structure.
+If non-zero, store pointer to data structure at address (0x0102 + xy)
+
+After the last data structure is the address for int_save_base.
+The word int_save_base(2) is initialized to 0x07.
+
+RAM structure built by sub_bd20:
+Each data item of the preceding type reserves 6 words at the end of ram.
+Initialized as follows:
+0 - next pointer (initialized to 0x0000)
+1 - prev pointer (initalized to the working space pointer of sub_bd20 (0-3))
+2 - word read from the offset specified by b
+3 - address from the offset specified by b
+4 - address for allocated memory (initialized to 0x0000)
+5 - pointer to the data structure created after dll_alloc (initialized to 0x0000)
+
+To verify the checksum:
+1. Create three 16-bit vars r4, r6, r7.
+2. Initialize r6 and r7 to 0.
+3. For each offset in [0000,0400) add the low byte to r7 and add the high byte to r6 (zero-extended).
+4. Load the two 16-bit checksum values r0, r5.
+5. Swap the bytes in r5.
+6. Swap the lower bytes of r0 and r5.
+7. Set r4 = r0.
+8. Add the high byte of r4 to r0 (zero-extended).
+9. Add the low byte of r4 to r0 (zero-extended).
+10. Set r4 = r5.
+11. Swap the bytes in r4.
+12. Add the high byte of r5 to r4 (zero-extended).
+13. Add the low byte of r5 to r4 (zero-extended).
+14. The checksum is correct if r6 == r0 and r7 == r4.
+
+In ram_init:
+1. Mark slot 2 ok (power supply control board)
+2. Mark slot with card 3e ok
+3. Mark slot with cards 1b/1f ok
+4. Mark slot with cards 1a/1e ok; add 0x1000 to expected RAM amt
+5. Mark slot with cards 3b/3f ok; add 0x4000 to expected RAM amt
+6. Raise error if expected RAM amt != actual RAM amt
+7. Raise error if there are any filled slots that were not marked ok

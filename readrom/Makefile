@@ -13,7 +13,7 @@ USE_NANO=--specs=nano.specs
 USE_HOST=--specs=nosys.specs
 
 # Options for specific architecture
-ARCH_FLAGS=-mabi=aapcs -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mcpu=cortex-m4
+ARCH_FLAGS=-mabi=aapcs -mfloat-abi=soft -mfpu=fpv4-sp-d16 -mthumb -mcpu=cortex-m4
 
 STARTUP_DEFS=-D__STARTUP_CLEAR_BSS -D__START=main -D__NO_SYSTEM_INIT
 
