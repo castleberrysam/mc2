@@ -1,0 +1,1750 @@
+\documentclass[hidelinks,11pt]{article}
+
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[margin=1in]{geometry}
+\usepackage{xparse}
+\usepackage{calc}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{luacode}
+
+% Common use macros
+\newcolumntype{C}{>{\ttfamily}c}
+\newcolumntype{L}{>{\ttfamily}l}
+\newcolumntype{R}{>{\ttfamily}r}
+\newcolumntype{P}[1]{>{\ttfamily}p{#1}}
+
+\newcommand{\tn}[1]{\textnormal{#1}}
+
+\newcommand{\la}{$\leftarrow$}
+\newcommand{\ol}[1]{$\overline{\mbox{#1}}$}
+
+\newcommand{\lab}{$\langle$}
+\newcommand{\rab}{$\rangle$}
+
+\newcommand{\gap}{\bigskip\noindent}
+
+% Instruction bitfield diagram macros
+\newlength{\bit}
+\setlength{\bit}{0.5cm}
+\newcolumntype{B}[1]{>{\centering\arraybackslash\ttfamily}m{#1\bit}}
+\newcommand{\insntbl}[1]{\luadirect{insntbl([[#1]])}}
+
+% Instruction description macros
+\newcommand{\insndescop}[1]{\texttt{#1}\\\>}
+\NewDocumentCommand{\insndesc}
+{>{\SplitList{;}}m m m m}{%
+  \gap
+  {
+    \setlength{\topsep}{0pt}
+    \begin{tabbing}
+      Operation: \=\ProcessList{#1}{\insndescop}\kill
+      Sets flags: #2 \\
+      Mangles flags: #3
+    \end{tabbing}
+  }
+
+  \gap
+  Assembler syntax: \texttt{#4}%
+}
+
+% Memory map diagram macros
+\newcommand{\mmtop}[2]{\raisebox{#1-(\heightof{#2}+1pt)}{#2}}
+\newcommand{\mmbot}[1]{\raisebox{1pt}{#1}}
+\newcommand{\mmreg}[4]{%
+  \rule{0pt}{#1} & \mmtop{#1}{#2} & \multirow{2}{*}[6pt]{#4} \\
+  \rule{0pt}{#1} & \mmbot{#3} & \\
+  \cline{3-3}%
+}
+\NewDocumentEnvironment{mmap}{m}{%
+  \hfill
+  \renewcommand{\arraystretch}{0}
+  \begin{tabular}{rR|@{}c@{}|}
+    \cline{3-3}
+    & & \rule{#1}{0pt} \\%
+}{%
+  \end{tabular}%
+  \rule{(\linewidth - #1) / 2}{0pt}%
+  \par%
+}
+
+% ROM function index macros
+\newenvironment{romfunc}[2]{%
+  \subsubsection{#1 (\texttt{#2})}
+  \tabularx{\textwidth}{|c|c|X||c|c|X|}
+  \hline
+  \multicolumn{3}{|c||}{Inputs} & \multicolumn{3}{c|}{Outputs} \\
+  \hline
+  \em{Register(s)} & \em{Type} & \em{Description} & \em{Register(s)} & \em{Type} & \em{Description} \\
+  \hline%
+}{%
+  \hline
+  \endtabularx%
+}
+
+\luadirect{dofile("macros.lua")}
+
+% \showoutput
+
+\begin{document}
+
+\title{An Unofficial Hewlett Packard 5880 GC Design Specification}
+\author{Sam Castleberry}
+\maketitle
+\tableofcontents
+\pagebreak
+
+\part{Hardware}
+The system is divided into a number of boards, which are connected together via a backplane with card-edge connectors. The backplane has 4 short (56-pin) slots for instrument boards and 14 wide (86-pin) slots for system boards. The wide slots comprise the system bus; all system bus cycles originate as I/O register accesses by the MC5, since there is a second, separate memory bus between the processor, RAM, and ROM boards for normal memory accesses.
+
+\gap
+\begin{tabular}{|C|l|l|}
+  \hline
+  \tn{DI} & Slot & Description \\
+  \hline
+  00 & & System interrupt flags \\
+  03 & & Not connected (?) \\
+  \hline
+  13 & 0 & Instrument slot 0 \\
+  12 & 1 & Instrument slot 1 \\
+  11 & 2 & Instrument slot 2 \\
+  17 & 3 & Instrument slot 3 \\
+  16 & 4 & Data Acquisition \\
+  0b & 5 & MC5 ROM \\
+  & 6 & MC5 Processor \\
+  06 & 7 & 16K RAM \\
+  04 & 8 & General purpose \\
+  05 & 9 & General purpose \\
+  07 & 10 & General purpose \\
+  0a & 11 & General purpose \\
+  15 & 12 & General purpose \\
+  14 & 13 & General purpose \\
+  1b & 14 & General purpose \\
+  1a & 15 & General purpose \\
+  01 & 16 & P/P Mainframe \\
+  02 & 17 & Power Supply Control \\
+  \hline
+\end{tabular}
+
+\pagebreak
+\vfill
+\noindent
+\begin{tiny}%
+  \begin{tabularx}{\textwidth}{|l|X|X|X|X|X|X|X|X|X|X|X|X|X|X|}
+    \hline
+    Pin & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 \\
+    \hline
+    1 & ??? & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND \\
+    2 & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L \\
+    3 & ??? & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L \\
+    4 & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L \\
+    5 & A & A & A & A & A & A & A & A & A & A & A & A & A & A \\
+    6 & B & B & B & B & B & B & B & B & B & B & B & B & B & B \\
+    7 & ??? & SEL00 & SEL00 & C0 & C0 & C0 & C0 & C0 & C0 & C0 & C0 & C0 & C0 & C0 \\
+    8 & ??? & SEL?? & SEL?? & C1 & C1 & C1 & C1 & C1 & C1 & C1 & C1 & C1 & C1 & C1 \\
+    9 & ??? & SEL01 & SEL01 & C2 & C2 & C2 & C2 & C2 & C2 & C2 & C2 & C2 & C2 & C2 \\
+    10 & ??? & SEL17 & SEL17 & C3 & C3 & C3 & C3 & C3 & C3 & C3 & C3 & C3 & C3 & C3 \\
+    11 & ??? & SEL02 & SEL02 & C4 & C4 & C4 & C4 & C4 & C4 & C4 & C4 & C4 & C4 & C4 \\
+    12 & ??? & SEL16 & SEL16 & C5 & C5 & C5 & C5 & C5 & C5 & C5 & C5 & C5 & C5 & C5 \\
+    13 & ??? & SEL03 & SEL03 & C6 & C6 & C6 & C6 & C6 & C6 & C6 & C6 & C6 & C6 & C6 \\
+    14 & ??? & SEL15 & SEL15 & C7 & C7 & C7 & C7 & C7 & C7 & C7 & C7 & C7 & C7 & C7 \\
+    15 & ??? & SEL04 & SEL04 & C8 & C8 & C8 & C8 & C8 & C8 & C8 & C8 & C8 & C8 & C8 \\
+    16 & ??? & SEL14 & SEL14 & & & & & & & & & & & ??? \\
+    17 & ??? & SEL12 & SEL12 & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & ??? \\
+    18 & ??? & SEL13 & SEL13 & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & ??? \\
+    19 & ??? & SEL10 & SEL10 & & & & & & & & & & & ??? \\
+    20 & ??? & SEL11 & SEL11 & & & & & & & & & & & ??? \\
+    21 & ??? & SEL05 & SEL05 & & & & & & & & & & & ??? \\
+    22 & ??? & SEL09 & SEL09 & & & & & & & & & & & ??? \\
+    23 & ??? & SEL08 & SEL08 & & & & & & & & & & & ??? \\
+    24 & ??? & SEL07 & SEL07 & & & & & & & & & & & ??? \\
+    25 & E & E & E & E & E & E & E & E & E & E & E & E & E & E \\
+    26 & E & E & E & E & E & E & E & E & E & E & E & E & E & E \\
+    27 & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND \\
+    28 & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND \\
+    29 & F & F & F & F & F & F & F & F & F & F & F & F & F & F \\
+    30 & F & F & F & F & F & F & F & F & F & F & F & F & F & F \\
+    31 & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L \\
+    32 & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L & +12L \\
+    33 & G & G & G & G & G & G & G & G & G & G & G & G & G & G \\
+    34 & G & G & G & G & G & G & G & G & G & G & G & G & G & G \\
+    35 & H & H & H & H & H & H & H & H & H & H & H & H & H & H \\
+    36 & H & H & H & H & H & H & H & H & H & H & H & H & H & H \\
+    37 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 \\
+    38 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 \\
+    39 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 \\
+    40 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 & -12 \\
+    41 & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B \\
+    42 & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B & +12B \\
+    43 & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B \\
+    44 & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B & +5B \\
+    45 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 & D15 \\
+    46 & I & I & I & I & I & I & I & I & I & I & I & I & I & I \\
+    47 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 & D14 \\
+    48 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 & A2 \\
+    49 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 & D13 \\
+    50 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 & A1 \\
+    51 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 & D12 \\
+    52 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 & A0 \\
+    53 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 & D11 \\
+    54 & J & J & J & J & J & J & J & J & J & J & J & J & J & J \\
+    55 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 & D10 \\
+    56 & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} & R/\ol{W} \\
+    57 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 & D9 \\
+    58 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 & ST\_R0 \\
+    59 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 & D8 \\
+    60 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 & ST\_R1 \\
+    61 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 & D7 \\
+    62 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 & ST\_W0 \\
+    63 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 & D6 \\
+    64 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 & ST\_W1 \\
+    65 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 & D5 \\
+    66 & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} & \ol{IIP} \\
+    67 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 & D4 \\
+    68 & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ & 40HZ \\
+    69 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 & D3 \\
+    70 & K & K & K & K & K & K & K & K & K & K & K & K & K & K \\
+    71 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 & D2 \\
+    72 & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} & \ol{IRQ} \\
+    73 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 & D1 \\
+    74 & L & L & L & L & L & L & L & L & L & L & L & L & L & L \\
+    75 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 & D0 \\
+    76 & M & M & M & M & M & M & M & M & M & M & M & M & M & M \\
+    77 & SEL04 & SEL05 & & SEL07 & SEL08 & SEL09 & SEL10 & SEL11 & SEL12 & SEL13 & SEL14 & SEL15 & SEL16 & SEL17 \\
+    78 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 & CLK1 \\
+    79 & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V \\
+    80 & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V \\
+    81 & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V \\
+    82 & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V & +24V \\
+    83 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 & CLK2 \\
+    84 & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND \\
+    85 & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L & +5L \\
+    86 & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND & GND \\
+    \hline
+  \end{tabularx}
+\end{tiny}
+\vfill
+\pagebreak
+
+\gap
+The backplane has pullups to +5L on D15-D0 and on SEL0-SEL17.
+Slots 5, 6, and 7 are identically keyed so that they can only accept the processor, RAM, and ROM boards.
+
+\gap
+The board in a given slot is accessed by executing \texttt{LDRB} with the appropriate value and using the I/O device registers (R8-R15). Since some slots are general purpose, all boards have a type identifier in the top 6 bits of R15.
+
+\gap
+\begin{tabular}{|C|l|}
+  \hline
+  \tn{ID} & Type \\
+  \hline
+  000001 (01) & Valve Driver (maybe) (1) \\
+  001000 (08) & Data Acquisition \\
+  001010 (0a) & Flow/pressure Regulation 1 \\
+  001011 (0b) & Flow/pressure Regulation 2 \\
+  001100 (0c) & P/P Mainframe 1 \\
+  001101 (0d) & P/P Mainframe 2 \\
+  010111 (17) & Valve Driver (maybe) (2) \\
+  011010 (1a) & 4K RAM (maybe) (1) \\
+  011011 (1b) & ??? marked ok in ram\_init \\
+  011010 (1e) & 4K RAM (maybe) (2) \\
+  011111 (1f) & ??? marked ok in ram\_init \\
+  100100 (24) & Microsal Control \\
+  101000 (28) & Data Communications Interface 1 \\
+  101001 (29) & Data Communications Interface 2 \\
+  110000 (30) & ??? checked for with PP1 and DCI1 in reset \\
+  110001 (31) & ??? checked for with PP2 and DCI2 in reset \\
+  111011 (3b) & 16K RAM (1) \\
+  110100 (34) & Analog Output 1 \\
+  110101 (35) & Analog Output 2 \\
+  111100 (3c) & Unlabeled board 1 \\
+  111101 (3d) & Unlabeled board 2 \\
+  111110 (3e) & ??? marked ok in ram\_init \\
+  111111 (3f) & 16K RAM (maybe) (2) \\
+  \hline
+\end{tabular}
+
+\gap
+The ST\_R0/1 and ST\_W0/1 signals are asserted by the processor board to read and write the system interrupt flags when DI = \texttt{00}. Using R8, R10, R12, or R14 accesses the upper 16 bits of status via ST\_x0, and using R9, R11, R13, or R15 accesses the lower 16 bits of status via ST\_x1.
+
+\part{Software}
+
+\pagebreak
+\section{Memory Map}
+Each memory location contains one word (16 bits). The system contains 256 words of fast RAM, 16K words of slow RAM, 4K words of fast ROM, and 36K words of slow ROM. Reading an empty region yields zero. Writing ROM or an empty region has no effect.
+
+\vfill
+\begin{mmap}{4cm}
+  \mmreg{0.25cm}{0000}{}{Fast RAM (SRAM)}
+  \mmreg{1.75cm}{0100}{3fff}{Slow RAM (DRAM)}
+  \mmreg{0.50cm}{4000}{4fff}{Empty}
+  \mmreg{1.00cm}{5000}{6fff}{Slow ROM}
+  \mmreg{0.50cm}{7000}{7fff}{Empty}
+  \mmreg{3.50cm}{8000}{efff}{Slow ROM}
+  \mmreg{0.50cm}{f000}{ffff}{Fast ROM}
+\end{mmap}
+\vfill
+\pagebreak
+
+\section{ROM Block Headers}
+The system ROM is divided into blocks of 1K words. Each of these blocks has a header that is used for a number of purposes, such as setting up system state during reset.
+
+\section{Math Library}
+
+\subsection{Fixed Point}
+
+\subsection{Floating Point}
+There are two floating point formats.
+
+\gap
+In the packed 32-bit format, the number is held in a register pair.
+
+\insntbl
+{
+  !LBL R4(R6),
+  S, 1,
+  EXP, 9,
+  FRAC[21:16], 6,
+
+  !ROW,
+  !LBL R5(R7),
+  FRAC[15:0], 16,
+}
+
+\gap
+In the unpacked 48-bit format, the exponent is held in a dedicated register.
+
+\insntbl
+{
+  !LBL R3,
+  EXP, 16,
+
+  !ROW,
+  !LBL R4,
+  S, 1,
+  FRAC[30:16], 15,
+
+  !ROW,
+  !LBL R5,
+  FRAC[15:0], 16,
+}
+
+\gap
+The standard calling convention places packed floats in R4R5/R6R7 and unpacked floats in R3R4R5, with the contents ordered as shown.
+
+\gap
+In the packed format, the represented value is zero when EXP and FRAC are all zeroes, and infinity when EXP and FRAC are all ones. The bias value for EXP is 256.
+
+\subsection{The Math DSL}
+A flexible DSL is supported for long floating point computations. Its' main features include:
+\begin{itemize}
+\item Accumulator-to-memory and accumulator-to-immediate binary operations
+\item Accumulator-to-accumulator unary operations
+\item Register-indexed memory addressing to both contiguous and block chain allocated regions
+\item 32-bit floating point and integer arithmetic
+\item Conversion between 32-bit floating point and 32-bit integer format
+\item Load/store operations, with integrated conversion
+\item Exit with accumulator held in either R4R5 or R6R7
+\item Exit with accumulator written to buffer in decimal string format
+\end{itemize}
+
+\noindent
+The DSL is encoded using four different instruction formats. The first is used for binary operations indexing contiguous memory:
+
+\insntbl
+{
+  OPCODE, 4,
+  END, 2,
+  S, 1,
+  OFFSET, 9,
+}
+
+\gap
+\begin{tabular}{|L|p{8cm}|}
+  \hline
+  \tn{Field} & Description \\
+  \hline
+  OPCODE & Opcode of the binary operation. \\
+  \hline
+  END & \texttt{00}:\ Do not exit interpret mode. Subsequent data is more Math DSL instructions. \newline
+        \texttt{01}:\ Exit interpret mode, setting condition codes and saving the accumulator in R4R5. Subsequent data is MC5 instructions. \newline
+        \texttt{10}:\ Same as \texttt{01}, but save the accumulator in R6R7 instead. \newline
+        \texttt{11}:\ Same as \texttt{11}, but use a print specifier following the instruction to format the accumulator as a decimal string first. \\
+  \hline
+  S & \texttt{0}: Use R2 as the base for the memory access. \newline
+      \texttt{1}: Use R3 as the base for the memory access. \\
+  \hline
+  OFFSET & Offset for the memory access. The actual offset used is \texttt{OFFSET} - \texttt{0x20}, so that you may specify a small negative offset. \\
+  \hline
+\end{tabular}
+
+\gap
+The second format is used for binary operations indexing block chain allocated memory:
+
+\insntbl
+{
+  0000, 4,
+  END, 2,
+  S2, 1,
+  1, 1,
+  OPCODE, 4,
+  OFFSET2, 4,
+}
+
+\gap
+\begin{tabular}{|L|p{8cm}|}
+  \hline
+  \tn{Field} & Description \\
+  \hline
+  END & See above definition. \\
+  \hline
+  S2 & \texttt{0}: Use R6 as the base for the memory access. \newline
+       \texttt{1}: Use R3 as the base for the memory access. \\
+  \hline
+  OPCODE & Opcode of the binary operation. \\
+  \hline
+  OFFSET2 & Offset for the memory access. \\
+  \hline
+\end{tabular}
+
+\gap
+The third format is used for binary operations taking an immediate operand:
+
+\insntbl
+{
+  0000, 4,
+  END, 2,
+  , 1,
+  0, 1,
+  OPCODE, 4,
+  END2, 2,
+  , 2,
+  
+  !SEP,
+  !WIDTH 8,
+  IMM\_HI, 16,
+  
+  !SEP,
+  !WIDTH 8,
+  IMM\_LO, 16,
+}
+
+\gap
+\begin{tabular}{|L|p{8cm}|}
+  \hline
+  \tn{Field} & Description \\
+  \hline
+  END & Similar function to the above definition; however, \texttt{END} is ORed with \texttt{END2} before evaulation. \\
+  \hline
+  OPCODE & Opcode of the binary operation. \\
+  \hline
+  END2 & See \texttt{END}. \\
+  \hline
+  IMM\_HI & High word of the immediate. \\
+  \hline
+  IMM\_LO & Low word of the immediate. \\
+  \hline
+\end{tabular}
+
+\gap
+The final format is used for unary operations:
+
+\insntbl
+{
+  0000, 4,
+  END, 2,
+  , 1,
+  00000, 5,
+  OPCODE, 4,
+}
+
+\gap
+\begin{tabular}{|L|p{8cm}|}
+  \hline
+  \tn{Field} & Description \\
+  \hline
+  END & See above definition. \\
+  \hline
+  OPCODE & Opcode of the unary operation. \\
+  \hline
+\end{tabular}
+
+\gap
+The print specifier is an extra word placed after the instruction when \texttt{END} = \texttt{11}. The high byte specifies the maximum length of the number, and the low byte specifies the minimum length of the number, if it is not \texttt{0xff}.
+
+\pagebreak
+\part{Appendices}
+\appendix
+
+% Tasks are created in state 3
+
+% Scheduler code
+% If scheduler task in state 3:
+%% Switch scheduler task to state 7
+%% If target task in state 3:
+%%% Switch target task to state 7
+%%% If current task <= target task:
+%%%% Walk from current task until finding one > target task
+%%%% Insert target task into the chain before this found task
+%%%% Continue loop
+%%% Else:
+%%%% Insert target task into the chain before current task
+%%%% Change current task to target task
+%% Else if target task in state 1:
+%%% Switch target task to state 5
+%%% Continue loop
+% Else if scheduler task in state 7:
+%% Add saved R7 to current R7
+%% Restore scheduler task
+
+% Task wait code
+% Ensure current task is in state 7
+% Switch current task to state 3
+
+% Task state bits:
+% 0 - ???
+% 1 - enable/disable
+% 2 - in progress/waiting
+
+\section{Task Index}
+\begin{tabular}{|C|C|l|}
+  \hline
+  \tn{ID} & Interrupt & Description \\
+  \hline
+  00 & & Scheduler \\
+  \hline
+  02 & 13 & Flow/pressure regulation driver \\
+  10 & & Data acquisition driver \\
+  31 & 15 & \\
+  32 & 14 & \\
+  40 & 27 & \\
+  61 & & \\
+  62 & & \\
+  81 & & \\
+  82 & & \\
+  98 & & \\
+  a1 & & \\
+  a2 & & \\
+  bf & & Power monitor \\
+  \hline
+  c0 & & Aperiodic task host \\
+  \hline
+  c2 & & \\
+  c3 & & \\
+  c4 & & \\
+  c5 & & \\
+  c6 & & \\
+  c7 & & \\
+  c8 & & \\
+  c9 & & \\
+  d1 & & \\
+  fe & & Format string print processor \\
+  \hline
+  ff & & Idle \\
+  \hline
+\end{tabular}
+
+\section{System Error Codes}
+{
+  \centering
+  \begin{tabular}{|C|l|}
+    \hline
+    \tn{Code} & Description \\
+    \hline
+    01 & ROM block header corrupt (1) \\
+    02 & ROM block header corrupt (2) \\
+    03 & ROM block header address mismatch \\
+    04 & ROM block checksum mismatch (1) \\
+    05 & ROM block checksum mismatch (2) \\
+    06 & No (usable) driver found for card \\
+    07 & System reports a different amount of RAM than really has \\
+    08 & CPU self-check failed \\
+    0a & Power supply R15[7] not set at reset \\
+    1e & Interrupt received but no interrupt flag set \\
+    1f & Interrupt received but no handler registered \\
+    20 & Scheduler called and it isn't in state 3 or 7 \\
+    21 & Tried to schedule task not in state 3 or 1 \\
+    22 & Task tried to wait when not in state 7 \\
+    25 & Task c0 managed task (ID > c0) not in state 5, 1, or 0 \\
+    26 & Tried to disable task not in state 7, 3, or 2 \\
+    28 & Stack not empty at task c0 init \\
+    2a & Stack underflowed in task c0 managed task (ID > c0) \\
+    2b & Stack overflowed in task c0 managed task (ID > c0) \\
+    32 & Memory allocator exhausted \\
+    33 & Memory allocator called with interrupts enabled \\
+    34 & Memory advance past end of chain \\
+    40 & Required ROM block not present \\
+    70 & RAM check failed (0000-0fff) \\
+    71 & RAM check failed (1000-1fff) \\
+    72 & RAM check failed (2000-2fff) \\
+    73 & RAM check failed (3000-3fff) \\
+    \hline
+  \end{tabular}
+}
+
+\pagebreak
+\section{ROM Function Index}
+
+\subsection{General Purpose}
+
+\begin{romfunc}{xchg32}{fb9e}
+  R4R5 & dword & & R6R7 & dword & Input R4R5 \\
+  R6R7 & dword & & R4R5 & dword & Input R6R7 \\
+\end{romfunc}
+
+\gap
+Swaps the dwords in R4R5 and R6R7.
+
+\subsection{Memory Management}
+
+\begin{romfunc}{mem32\_advance\_8}{c4e3}
+  R6 & byteptr & Inside a memory block & R6 & byteptr & New position \\
+  R5 & uint & \# of bytes to advance & & & \\
+\end{romfunc}
+
+\gap
+Advances the given memory block pointer by a number of bytes. Can generate error 34.
+
+\begin{romfunc}{mem32\_advance\_16}{c441}
+  R6 & byteptr & Inside a memory block & R6 & byteptr & New position \\
+  R5 & uint & \# of words to advance & R5 & uint & New offset in block \\
+  & & & R0 & byteptr & Input R6 \\
+  & & & S[0] & uint & Input R5 \\
+  & & & S[1] & romptr & Input R0 \\
+\end{romfunc}
+
+\gap
+Same as \texttt{mem32\_advance\_8} but mangles the stack and advances $(\mathrm{R5} * 2) + 1$ bytes.
+
+\begin{romfunc}{mem\_blk\_alloc}{fe78}
+  & & & R7 & wordptr & New memory block \\
+\end{romfunc}
+
+\gap
+Allocates a new memory block from the system, modifying \texttt{mem32\_blks\_free} and \texttt{mem32\_next\_blk}. Can generate errors 32, 33.
+
+\begin{romfunc}{mem32\_blk\_base}{d1d8}
+  R6 & byteptr & Inside a memory block & R7 & wordptr & Base of the block \\
+\end{romfunc}
+
+\begin{romfunc}{mem32\_blk\_rem}{d1d3}
+  R6 & byteptr & Inside a memory block & R7 & uint & \# of bytes left in the block from here (0-31) \\
+\end{romfunc}
+
+\begin{romfunc}{mem32\_rd\_skip\_if\_lsb}{d876}
+  R6 & byteptr & Inside a memory block & R2 & word & Data at R7 \\
+  & & & R7 & wordptr & R6 as wordptr \\
+\end{romfunc}
+
+\gap
+Converts R6 to a wordptr, reads the word there, then skips the subsequent two instructions if the LSB of R6 is zero.
+
+\begin{romfunc}{mem32\_blk\_rd8\_inc}{d85b}
+  R6 & byteptr & Inside a memory block & R6 & byteptr & Ptr to next byte \\
+  & & & R5 & byte & Data at input R6 \\
+\end{romfunc}
+
+\gap
+Reads the byte at R6, then increments R6. If the byte is the last in its block, a new block will be allocated and linked.
+
+\begin{romfunc}{mem32\_blk\_wr8\_inc}{d86a}
+  R6 & byteptr & Inside a memory block & R6 & byteptr & Ptr to next byte \\
+  R5 & byte & Byte to write at R6 & & & \\
+\end{romfunc}
+
+\gap
+Same as \texttt{mem32\_blk\_rd8\_inc} but writes instead of reads.
+
+\begin{romfunc}{mem\_rd8}{c478}
+  R6 & byteptr & & R5 & byte & Byte at R6 \\
+\end{romfunc}
+
+\gap
+Reads the byte at R6.
+
+\begin{romfunc}{mem\_wr8}{c467}
+  R6 & byteptr & & & & \\
+  R5 & byte & & & & \\ 
+\end{romfunc}
+
+\gap
+Writes the byte R5 to R6.
+
+\begin{romfunc}{mem32\_rd16\_inc\_off}{c446}
+  R6 & byteptr & Inside a memory block & R5 & uint & Input R5 + 1\\
+  R5 & uint & \# of words to advance & R7 & word & Data at advanced ptr \\
+\end{romfunc}
+
+\gap
+Reads a word from a block chain using base R6 and word offset R5, post-incrementing R5.
+
+\begin{romfunc}{mem32\_wr16\_inc\_off}{c453}
+  R6 & byteptr & Inside a memory block & R5 & uint & Input R5 + 1 \\
+  R5 & uint & \# of words to advance & & & \\
+  R7 & word & Data to write at advanced ptr & & & \\
+\end{romfunc}
+
+\gap
+Writes a word to a block chain using base R6 and offset R5, post-incrementing R5.
+
+\begin{romfunc}{mem\_enough\_blks}{f300}
+  I[0] & uint & & & & \\
+\end{romfunc}
+
+\gap
+Compares \texttt{mem32\_blks\_free} with the immediate, setting condition codes.
+
+\begin{romfunc}{mem\_any\_blks\_free}{ddcc}
+  & & & R0 & word & Input R5 \\
+  & & & S[0] & word & Input R4 \\
+  & & & S[1] & romptr & Input R0 \\
+\end{romfunc}
+
+\gap
+Mangles the stack and compares \texttt{mem32\_blks\_free} with zero, setting condition codes.
+
+\begin{romfunc}{fifo\_psh16}{fea4}
+  R4 & wordptr & Fifo & & \\
+  R5 & word & & & \\
+\end{romfunc}
+
+\gap
+Pushes a new word at the end of a fifo. A new block will be allocated and linked if needed.
+
+\begin{romfunc}{rd8\_inc}{fd34}
+  R4 & wordptr & Base & R3 & uint & Input R3 + 1 \\
+  R3 & uint & Byte offset & R5 & byte & \\
+\end{romfunc}
+
+\gap
+Reads a byte using R4 as a base and R3 as an offset, post-incrementing R3.
+The bytes are read in big-endian order. For example, using R3 = 0 returns the upper byte at [R4].
+
+\subsection{Fixed Point}
+
+\begin{romfunc}{i16\_fma}{f613}
+  R5 & uint & & R4R5 & uint32 & Inputs R5 + (R6 \* R7) \\
+  R6 & uint & & & & \\
+  R7 & uint & & & & \\
+\end{romfunc}
+
+\gap
+Performs a 16x16 fused multiply-add and sets the condition codes.
+
+\begin{romfunc}{i32\_rshft}{f860}
+  R6R7 & int32 & & R6R7 & int32 & Input R6R7 \rab\rab\ R3 \\
+  R3 & int & Shift amount & R3 & & Zero \\
+\end{romfunc}
+
+\gap
+If R3 is positive, shifts R6R7 right R3 times, then sets condition codes.
+
+\begin{romfunc}{i32\_add}{f81c}
+  R4R5 & int & & R4R5 & int & Inputs R4R5 + R6R7 \\
+  R6R7 & int & & & & \\
+\end{romfunc}
+
+\gap
+Adds two signed 32-bit integers, setting condition codes.
+
+\subsection{Floating Point}
+
+\begin{romfunc}{f32\_unpack}{ffb6}
+  R4R5 & float32 & & R3R4R5 & float48 & \\
+\end{romfunc}
+
+\gap
+Converts a packed float to an unpacked float, with the fraction right aligned in R4R5.
+
+\begin{romfunc}{f32\_unpack\_x2}{ff00}
+  R4R5 & float32 & & R3R4R5 & float48 & \\
+\end{romfunc}
+
+\gap
+Same as \texttt{f32\_unpack}, but the fraction is right aligned to bit 1 instead of bit 0.
+
+\begin{romfunc}{f32\_pack}{ffc2}
+  R3R4R5 & float48 & & R4R5 & float32 & \\
+  & & & R3 & & Mangled \\
+\end{romfunc}
+
+\gap
+Converts an unpacked float to a packed float. The unpacked float does not need to be normalized.
+
+\begin{romfunc}{f32\_lalign}{bade}
+  R3R6R7 & float48 & Nonnegative & R3R6R7 & float48 & Left aligned output \\
+  & & & R5 & & Mangled \\
+\end{romfunc}
+
+\gap
+Left aligns a positive unpacked float. More specifically, the fraction is left shifted until its' MSB is bit 14.
+
+\begin{romfunc}{f32\_mul\_x10}{beb4}
+  R3R6R7 & float48 & Nonnegative & R3R6R7 & float48 & Input \* 10 \\
+  & & & R5 & & Mangled \\
+\end{romfunc}
+
+\begin{romfunc}{f32\_div\_d10}{bace}
+  R3R6R7 & float48 & Nonnegative & R3R6R7 & float48 & Input / 10 \\
+  & & & R5 & & Mangled \\
+\end{romfunc}
+
+\subsection{Printing}
+
+\begin{romfunc}{f32\_b10\_exp}{b919}
+  R2 & wordptr & Buffer & R3 & & Zero \\
+  R6R7 & float32 & & R4 & int & Base 10 exponent \\
+  & & & R5 & bool & Input negative? \\
+  & & & R6R7 & uint & Left aligned fraction \\
+\end{romfunc}
+
+\gap
+Unpacks and finds the base 10 exponent for a packed float. Some values are written to the buffer:
+
+\gap
+\begin{tabular}{|C|l|}
+  \hline
+  \tn{Offset} & Description \\
+  \hline
+  fffb & Base 10 exponent \\
+  fffd & Zero \\
+  fffe & Copied from offset \texttt{0003} \\
+  \hline
+\end{tabular}
+
+\begin{romfunc}{f32\_fmt\_size}{df94}
+  R2 & wordptr & Buffer & R4 & uint & \\
+  R4 & int & Base 10 exponent & & & \\
+  R5 & bool & Negative? & & & \\
+\end{romfunc}
+
+\gap
+Calculates the width in digits of a number processed by \texttt{f32\_b10\_exp}. If \texttt{ffff}(R2)[7:0] is not \texttt{0xff}, it is added with 1 to the result.
+
+\begin{romfunc}{str\_wr8\_inc}{cb3c}
+  R2 & wordptr & Buffer & & & \\
+  R5 & char & & & & \\
+\end{romfunc}
+
+\gap
+If \texttt{0001}(R2) \rab\ \texttt{mem32\_blks\_free}, writes a char to and advances the block chain at \texttt{0003}(R2). Else, sets \texttt{0001}(R2)[14].
+
+\begin{romfunc}{str\_fill}{ea15}
+  R2 & wordptr & Buffer & & & \\
+  R4 & uint & Positive & & & \\
+  R5 & char & & & & \\
+\end{romfunc}
+
+\gap
+Calls \texttt{str\_wr8\_inc} R4 times.
+
+\begin{romfunc}{str\_blank}{ea10}
+  R2 & wordptr & Buffer & & & \\
+  R4 & uint & Positive & & & \\
+\end{romfunc}
+
+\gap
+Calls \texttt{str\_fill} with R5 = \texttt{0x20}.
+
+\begin{romfunc}{math\_fmt\_fuzz}{ea1c}
+  R2 & wordptr & Buffer & R4 & byte & \texttt{ffff}(R2)[15:8] \\
+  & & & R5 & byte & \texttt{0x24} \\
+\end{romfunc}
+
+\gap
+Calls \texttt{str\_fill} with R4 and R5 as above, then clears the condition codes.
+
+\begin{romfunc}{math\_fmt\_f32}{b93f}
+  R2 & wordptr & Buffer & & & \\
+  R4 & uint & From \texttt{f32\_fmt\_size} & & & \\
+  R5 & bool & Negative? & & & \\
+\end{romfunc}
+
+\gap
+TODO
+
+\begin{romfunc}{math\_fmt\_digit}{b9ac}
+\end{romfunc}
+
+\gap
+TODO
+
+\begin{romfunc}{f32\_b10\_digit}{b9b6}
+\end{romfunc}
+
+\gap
+TODO
+
+\begin{romfunc}{math\_fmt\_adjust}{b981}
+\end{romfunc}
+
+\gap
+TODO
+
+\begin{romfunc}{fifo\_psh32}{ddaf}
+  R5R6 & dword & & & \\
+\end{romfunc}
+
+\gap
+If the system has free memory blocks, pushes a new dword at the end of \texttt{print\_fifo0}, R5 first.
+
+\begin{romfunc}{fmt\_str\_print\_dci12}{dda9}
+  R5 & romptr & Format string & & & \\
+\end{romfunc}
+
+\gap
+Calls \texttt{fifo\_psh32} with R6 = 1, then again with R6 = 2.
+
+\begin{romfunc}{dci\_queue\_print}{ce24}
+  R2 & wordptr & Task area & & & \\
+  R4 & byte & Index & & & \\
+  R5 & byte & Object ID & & & \\
+\end{romfunc}
+
+\gap
+TODO
+
+\begin{romfunc}{dll3\_arr\_index}{e591}
+  R2 & wordptr & Task area & R3 & wordptr & \\
+  R5 & byte & Object ID & & & \\
+\end{romfunc}
+
+\gap
+Retrieves a pointer to the memory area for a given type 3 object.
+If the ID is greater than 9, it will be used directly.
+Otherwise, the communication channel number for this task is obtained by calling \texttt{get\_cur\_dci\_num}, multiplied by 10, and added to the ID to obtain the effective ID used for the lookup.
+
+\subsection{System Kernel}
+
+\begin{romfunc}{sys\_error}{f52b}
+  R5 & & & & & \\
+\end{romfunc}
+
+\begin{romfunc}{wait\_pwr\_good}{fc1c}
+  & & R6R7 & uint32 & Count & \\
+  & & R3 & & Zero \\
+  & & R4 & & Zero \\
+\end{romfunc}
+
+\gap
+Addresses the power supply controller, then loops while incrementing the counter until R15[7] is zero. Then loops while incrementing the counter until R15[7] has stayed zero for a minimum time period.
+
+\subsection{Format String Table}
+
+\gap
+\begin{tabular}{|C|l|}
+  \hline
+  \tn{Address} & String \\
+  \hline
+  843a & FLOW CONTROL B DEFECTIVE \\
+  a200 & PRESSURE A AT LIMIT \\
+  ac09 & PRESSURE B AT LIMIT \\
+  ac0c & FLOW D AT LIMIT \\
+  ac18 & PRESSURE C AT LIMIT \\
+  ac1b & FLOW C AT LIMIT \\
+  ac20 & FLOW B AT LIMIT \\
+  ac26 & FLOW A AT LIMIT \\
+  ac29 & PRESSURE D AT LIMIT \\
+  ac4f & FLOW CONTROL D DEFECTIVE \\
+  ac54 & FLOW CONTROL C DEFECTIVE \\
+  ac59 & FLOW CONTROL A DEFECTIVE \\
+  b0ee & AMBIENT SENSOR NOT INSTALLED \\
+  b0f0 & AUX 2 SENSOR NOT INSTALLED \\
+  b0f2 & AUX 1 SENSOR NOT INSTALLED \\
+  b0f4 & INJ 2 SENSOR NOT INSTALLED \\
+  b0f6 & INJ 1 SENSOR NOT INSTALLED \\
+  b0f8 & DET 2 SENSOR NOT INSTALLED \\
+  b0fa & DET 1 SENSOR NOT INSTALLED \\
+  b0fc & DEFECTIVE A/D CHANNEL SCAN \\
+  b101 & A/D OR SENSOR FAILURE ON OVEN CHANNEL \\
+  b28f & TEMP CONTROL DEACTIVATED ! \\
+  b2bc & AUX 2 AT LIMIT \\
+  b2be & AUX 1 AT LIMIT \\
+  b2c0 & INJ 2 AT LIMIT \\
+  b2c2 & INJ 1 AT LIMIT \\
+  b2c4 & DET 2 AT LIMIT \\
+  b2c6 & DET 1 AT LIMIT \\
+  b2c8 & OVEN AT LIMIT \\
+  b2ca & AUX 2 OUT OF CONTROL \\
+  b2cc & AUX 1 OUT OF CONTROL \\
+  b2ce & INJ 2 OUT OF CONTROL \\
+  b2d0 & INJ 1 OUT OF CONTROL \\
+  b2d2 & DET 2 OUT OF CONTROL \\
+  b2d4 & DET 1 OUT OF CONTROL \\
+  b2d6 & OVEN OUT OF CONTROL \\
+  e216 & PROGRAM IN PROGRESS \\
+  e638 & ON OTHER CHANNEL \\
+  e774 & RUN IN PROGRESS \\
+  e77f & POST RUN IN PROGRESS \\
+  e78e & REPORT IN PROGRESS \\
+  e7a0 & AUTO SEQ IN PROGRESS \\
+  e7ac & START VALVE IN PROGRESS \\
+  e7b8 & COL COMP IN PROGRESS \\
+  eb86 & POWER FAILURE \\
+  f77f & X \\
+  \hline
+\end{tabular}
+
+\pagebreak
+\section{Instruction Set Reference}
+
+\subsection{Instruction Descriptions}
+
+\subsubsection{LOAD (long)}
+\insntbl
+{
+  11000, 5,
+  CSRC, 3,
+  FD, 4,
+  I, 1,
+  CDST, 3,
+  !SEP,
+  LABEL, 16,
+}
+
+\insndesc
+{[CDST] \la\ [LABEL + [CSRC(FD)]]}
+{none}{none}
+{LOAD CDST = LABEL <(CSRC <,FD>)>}
+
+\gap
+Load CPU register from memory using direct addressing or indexed addressing via a CPU register.
+
+\subsubsection{LOAD}
+\insntbl
+{
+  11001, 5,
+  CSRC, 3,
+  00000, 5,
+  CDST, 3,
+}
+
+\insndesc
+{[CDST] \la\ [[CSRC]]}
+{none}{none}
+{LOAD CDST = (CSRC)}
+
+\gap
+Load CPU register from memory using implied addressing via a CPU register.
+
+\subsubsection{STOR (long)}
+\insntbl
+{
+  11010, 5,
+  CDST, 3,
+  FD, 4,
+  I, 1,
+  CSRC, 3,
+  !SEP,
+  LABEL, 16,
+}
+
+\insndesc
+{[LABEL + [CDST(FD)]] \la\ [CSRC]}
+{none}{none}
+{STOR LABEL <(CDST <,FD>)> = CSRC}
+
+\gap
+Store CPU register to memory using direct addressing or indexed addressing via a CPU register.
+
+\subsubsection{STOR}
+\insntbl
+{
+  11011, 5,
+  CDST, 3,
+  00000, 5,
+  CSRC, 3,
+}
+
+\insndesc
+{[[CDST]] \la\ [CSRC]}
+{none}{none}
+{STOR (CDST) = CSRC}
+
+\gap
+Store CPU register to memory using implied addressing via a CPU register.
+
+\subsubsection{LDWI}
+\insntbl
+{
+  1011100000000, 13,
+  CDST, 3,
+  !SEP,
+  WORD, 16,
+}
+
+\insndesc
+{[CDST] \la\ WORD}
+{none}{none}
+{LDWI CDST = WORD}
+
+\gap
+Load immediate 16 bits to CPU register.
+
+\subsubsection{LDBI}
+\insntbl
+{
+  1110, 4,
+  REG, 4,
+  BYTE, 8,
+}
+
+\insndesc
+{[REG<7,0>] \la\ BYTE}
+{NZL}{OC}
+{LDBI REG = BYTE}
+
+\gap
+Load immediate 8 bits to CPU or external register. The upper byte of the register is zeroed (or sign extended?).
+
+\subsubsection{ADDI}
+\insntbl
+{
+  01100, 5,
+  CDST, 3,
+  BYTE, 8,
+}
+
+\insndesc
+{[CDST] \la\ [CDST] + BYTE}
+{OCNZL}{none}
+{ADDI CDST, BYTE}
+
+\gap
+Add immediate 8 bits to lower half of CPU register.
+
+\subsubsection{SUBI}
+\insntbl
+{
+  01101, 5,
+  CDST, 3,
+  BYTE, 8,
+}
+
+\insndesc
+{[CDST] \la\ [CDST] - BYTE}
+{OCNZL}{none}
+{SUBI CDST, BYTE}
+
+\gap
+Subtract immediate 8 bits from lower half of CPU register.
+
+\subsubsection{CMPRI}
+\insntbl
+{
+  10100, 5,
+  CREG, 3,
+  BYTE, 8,
+}
+
+\insndesc
+{[CREG] - BYTE}
+{OCNZL}{none}
+{CMPRI CREG, BYTE}
+
+\gap
+Compare immediate 8 bits with lower half of CPU register. Only the statuses are affected.
+
+\subsubsection{BR}
+\insntbl
+{
+  01000000, 8,
+  FD, 4,
+  REG, 4,
+}
+
+\insndesc
+{[PC] \la\ [REG(FD)]}
+{none}{none}
+{BR REG <,FD>}
+
+\gap
+Branch to memory location addressed by register contents or by some operation on the register's contents.
+
+\subsubsection{IBR}
+\insntbl
+{
+  01001000, 8,
+  FD, 4,
+  REG, 4,
+}
+
+\insndesc
+{IBR REG <,FD>}
+{none}{none}
+{[PC] \la\ [PC + 1 + [REG(FD)]]}
+
+\gap
+Branch using PC-indexed addressing via any CPU or external register.
+
+\subsubsection{CALL}
+\insntbl
+{
+  1001, 4,
+  I, 1,
+  CC, 3,
+  LABEL, 8,
+}
+
+\insndesc
+{
+  If CC is true then;
+  [[SP]] \la\ [R0];
+  [SP] \la\ [SP] + 1;
+  [R0] \la\ [PC];
+  [PC] \la\ [PC]\lab 15,8\rab LABEL\lab 7,0\rab\ or;
+  [PC] \la\ [[PC]\lab 15,8\rab LABEL\lab 7,0\rab ] if I is specified
+}
+{none}{OCNZL}
+{CALL LABEL <,I> <IF CC>}
+
+\gap
+Subroutine call \textemdash\ may be conditional or unconditional. If condition is not satisfied, Program Counter is incremented and next instruction is executed. If condition is satisfied, statuses are saved on the stack, the incremented Program Counter is saved in Register 0, and the lower 8 bits of the Program Counter are replaced by the second byte of the instruction. Subroutine starting location must be within 256 words of CALL instruction location.
+
+\subsubsection{RTN}
+\insntbl
+{
+  1011000100000, 13,
+  CREG, 3,
+}
+
+\insndesc
+{
+  [PC] \la\ [CREG];
+  [CREG] \la\ [[SP] - 1];
+  [SP] \la\ [SP] - 1
+}
+{none}{none}
+{RTN CREG}
+
+\gap
+Subroutine return \textemdash\ get return address from specified CPU register and pop the stack into that register.
+
+\subsubsection{CBR}
+\insntbl
+{
+  1000, 4,
+  I, 1,
+  CC, 3,
+  LABEL, 8,
+}
+
+\insndesc
+{
+  If CC is true then;
+  [PC] \la\ [PC]\lab 15,8\rab LABEL\lab 7,0\rab\ or;
+  [PC] \la\ [[PC]\lab 15,8\rab LABEL\lab 7,0\rab ] if I is specified
+}
+{none}{none}
+{CBR LABEL <,I> <IF CC>}
+
+\gap
+Conditional branch \textemdash if condition is satisfied, then replace lower 8 bits of Program Counter with lower 8 bits of instruction. Branch destination must be within 256 words of CBR instruction.
+
+\subsubsection{MOVE}
+\insntbl
+{
+  0101, 4,
+  DST, 4,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[DST] \la\ [SRC(FD)]}
+{NZL}{OC}
+{MOVE DST = SRC <,FD>}
+
+\gap
+Move data from register to register, optionally operating on source word.
+
+\subsubsection{STRB}
+\insntbl
+{
+  1011010000000, 13,
+  CDST, 3,
+}
+
+\insndesc
+{[CDST] \la\ [DI]}
+{none}{none}
+{STRB CDST}
+
+\gap
+Move contents of Device Identification register into specified CPU register. Since the DI register is only 8 bits, the upper half of the operand is the DI register and the lower half is zero.
+
+\subsubsection{LDRB}
+\insntbl
+{
+  10110110, 8,
+  FD, 4,
+  0, 1,
+  CSRC, 3,
+}
+
+\insndesc
+{[DI] \la\ [CSRC(FD)]}
+{none}{none}
+{LDRB CSRC <,FD>}
+
+\gap
+Load Device Identification register with contents of a CPU register, or with some function of those contents. Since the DI register is only 8 bits, the upper half of the operand is used and the lower half is discarded.
+
+\subsubsection{ADD}
+\insntbl
+{
+  01110, 5,
+  CDST, 3,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[CDST] \la\ [SRC(FD)] + [CDST]}
+{OCNZL}{none}
+{ADD CDST, SRC <,FD>}
+
+\gap
+Add contents of CPU register and any register; deposit result in CPU register.
+
+\subsubsection{SUBR}
+\insntbl
+{
+  01111, 5,
+  CDST, 3,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[CDST] \la\ [SRC(FD)] - [CDST]}
+{OCNZL}{none}
+{SUBR CDST, SRC <,FD>}
+
+\gap
+Subtract contents of CPU register from any register's contents; deposit result in CPU register.
+\textbf{Note that the destination is subtracted from the source operand.}
+
+\subsubsection{AND}
+\insntbl
+{
+  00000, 5,
+  CDST, 3,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[CDST] \la\ [SRC(FD)] \& [CDST]}
+{NZL}{OC}
+{AND CDST, SRC <,FD>}
+
+\gap
+AND CPU register contents with any register's contents; deposit result in CPU register.
+
+\subsubsection{OR}
+\insntbl
+{
+  00010, 5,
+  CDST, 3,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[CDST] \la\ [SRC(FD)] | [CDST]}
+{NZL}{OC}
+{OR CDST, SRC <,FD>}
+
+\gap
+OR CPU register contents with any register's contents; deposit result in CPU register.
+
+\subsubsection{XOR}
+\insntbl
+{
+  00110, 5,
+  CDST, 3,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[CDST] \la\ [SRC(FD)] \textasciicircum\ [CDST]}
+{NZL}{OC}
+{XOR CDST, SRC <,FD>}
+
+\gap
+Exclusive-OR CPU register contents with any register's contents; deposit result in CPU register.
+
+\subsubsection{CMPR}
+\insntbl
+{
+  00100, 5,
+  CDST, 3,
+  FD, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[SRC(FD)] - [CDST]}
+{OCNZL}{none}
+{CMPR CDST, SRC <,FD>}
+
+\gap
+Compare contents of CPU register with those of any register. Only the statuses are affected.
+\textbf{Note that the destination is subtracted from the source operand.}
+
+\subsubsection{ADDC}
+\insntbl
+{
+  1011001000100, 13,
+  CREG, 3,
+}
+
+\insndesc
+{[CREG] \la\ [CREG] + [C]}
+{OCNZL}{none}
+{ADDC CREG}
+
+\gap
+Add Carry bit to contents of CPU register.
+
+\subsubsection{NEG}
+\insntbl
+{
+  1011001100110, 13,
+  CREG, 3,
+}
+
+\insndesc
+{[CREG] \la\ 0 - [CREG]}
+{OCNZL}{none}
+{NEG CREG}
+
+\gap
+Negate contents of CPU register (two's complement).
+
+\subsubsection{CMPL}
+\insntbl
+{
+  1011001100000, 13,
+  CREG, 3,
+}
+
+\insndesc
+{[CREG] \la\ [\ol{CREG}]}
+{NZL}{OC}
+{CMPL CREG}
+
+\gap
+Complement contents of CPU register (one's complement).
+
+\subsubsection{SHFTL}
+\insntbl
+{
+  1011011100, 10,
+  T, 2,
+  0, 1,
+  CREG, 3,
+}
+
+\insndesc
+{TODO}
+{OCNZL}{none}
+{SHFTL RRL, CREG <,C>}
+
+\gap
+Rotate CPU register contents left one bit position, through Carry if specified.
+
+\insndesc
+{TODO}
+{OCNZL}{none}
+{SHFTL LSL, CREG <,F>}
+
+\gap
+Shift CPU register contents left one bit position, filling bit 0 according to F.
+
+\subsubsection{SHFTR}
+\insntbl
+{
+  1011010101, 10,
+  T, 2,
+  0, 1,
+  CREG, 3,
+}
+
+\insndesc
+{TODO}
+{CNZL}{O}
+{SHFTR RRR, CREG <,C>}
+
+\gap
+Rotate CPU register contents right one bit position, through Carry if specified.
+
+\insndesc
+{TODO}
+{CNZL}{O}
+{SHFTR LSR, CREG <,F>}
+
+\gap
+Shift CPU register contents right one bit position, filling bit 15 according to F.
+
+\subsubsection{SBIT}
+\insntbl
+{
+  00011, 5,
+  CDST, 3,
+  K, 4,
+  SRC, 4,
+}
+
+\insndesc
+{
+  % [SRC\lab K\rab ] \la\ 1;
+  % [CDST] \la\ [SRC]
+  [CDST] \la\ [SRC] | $\mathtt{2^K}$
+}
+{NZL}{OC}
+{SBIT CDST, SRC(K)}
+
+\gap
+Set the specified bit of the specified register to 1, then deposit result in a CPU register.
+\textbf{The MC5 numbers bits from left to right. For example, bit 12 is encoded as $15 - 12 = 3$.}
+
+\subsubsection{RBIT}
+\insntbl
+{
+  00001, 5,
+  CDST, 3,
+  K, 4,
+  SRC, 4,
+}
+
+\insndesc
+{
+  % [SRC\lab K\rab ] \la\ 0;
+  % [CDST] \la\ [SRC]
+  [CDST] \la\ [SRC] \&\ \ol{$\mathtt{2^K}$}
+}
+{NZL}{OC}
+{RBIT CDST, SRC(K)}
+
+\gap
+Reset the specified bit of the specified register to 0, then deposit result in a CPU register.
+\textbf{The MC5 numbers bits from left to right. For example, bit 12 is encoded as $15 - 12 = 3$.}
+
+\subsubsection{CBIT}
+\insntbl
+{
+  00111, 5,
+  CDST, 3,
+  K, 4,
+  SRC, 4,
+}
+
+\insndesc
+{
+  [SRC\lab K\rab ] \la\ [\ol{SRC\lab K\rab }];
+  [CDST] \la\ [SRC]
+}
+{NZL}{OC}
+{CBIT CDST, SRC(K)}
+
+\gap
+Complement the specified bit of the specified register, then deposit result in a CPU register.
+\textbf{The MC5 numbers bits from left to right. For example, bit 12 is encoded as $15 - 12 = 3$.}
+
+\subsubsection{TBIT}
+\insntbl
+{
+  00101, 5,
+  CDST, 3,
+  K, 4,
+  SRC, 4,
+}
+
+\insndesc
+{[CDST] \la\ [SRC] \& $\mathtt{2^K}$}
+{NZL}{OC}
+{TBIT CDST, SRC(K)}
+
+\gap
+Set all bits of the specified register, except the specified bit, to 0; deposit result in a CPU register.
+\textbf{The MC5 numbers bits from left to right. For example, bit 12 is encoded as $15 - 12 = 3$.}
+\subsubsection{PUSH}
+\insntbl
+{
+  1011000000000, 13,
+  CREG, 3,
+}
+
+\insndesc
+{
+  [[SP]] \la\ [CREG];
+  [SP] \la\ [SP] + 1
+}
+{none}{none}
+{PUSH CREG}
+
+\gap
+Store CPU register's contents on top of stack.
+
+\subsubsection{POP}
+\insntbl
+{
+  1011100100000, 13,
+  CREG, 3,
+}
+
+\insndesc
+{
+  [CREG] \la\ [[SP] - 1];
+  [SP] \la\ [SP] - 1
+}
+{none}{none}
+{POP CREG}
+
+\gap
+Load CPU register from top of stack.
+
+\subsubsection{HALT}
+\insntbl
+{
+  ????????????????, 16,
+}
+
+\insndesc
+{???}
+{none}{none}
+{HALT}
+
+\gap
+CPU enters idle state.
+
+\subsubsection{COP}
+\insntbl
+{
+  1111, 4,
+  ????????????, 12,
+}
+
+\insndesc
+{???}
+{???}{???}
+{COP ???}
+
+\gap
+TODO
+
+\pagebreak
+\subsection{Instruction Field Encodings}
+
+\subsubsection{Field Descriptor Encodings}
+{
+  \centering
+  \begin{tabular}{|C|L|l|}
+    \hline
+    \tn{Encoding} & \tn{Mnemonic} & Description \\
+    \hline
+    0000 & SWB & Swap bytes \\
+    0001 & LJL & Left justify lower byte \\
+    0010 & NOP & No operation \\
+    0011 & LJU & Left justify upper byte \\
+    0100 & RJU & Right justify upper byte \\
+    0101 & & \\
+    0110 & RJL & Right justify lower byte \\
+    0111 & & \\
+    1000 & & \\
+    1001 & & \\
+    1010 & & \\
+    1011 & & \\
+    1100 & RJ0 & Right-justify high order nibble \\
+    1101 & RJ1 & Right-justify next-to-high order nibble \\
+    1110 & RJ2 & Right-justify next-to-low order nibble \\
+    1111 & RJ3 & Right-justify low order nibble \\
+    \hline
+  \end{tabular}
+  \par
+}
+
+\subsubsection{Condition Code Encodings}
+{
+  \centering
+  \begin{tabular}{|C|L|l|}
+    \hline
+    \tn{Encoding} & \tn{Mnemonic} & Description \\
+    \hline
+    000 & FALSE & Not true \\
+    001 & G & Greater than 0 \\
+    010 & E & Equal to 0 \\
+    011 & GE & Greater than or equal to 0 \\
+    100 & L & Less than 0 \\
+    101 & LG & Not equal to 0 \\
+    110 & LE & Less than or equal to 0 \\
+    111 & TRUE & Unconditional branch \\
+    \hline
+  \end{tabular}
+  \par
+}
+
+\pagebreak
+\subsubsection{Opcode Encodings}
+{
+  \centering
+  \begin{tabular}{|C|C|L|P{0.5\textwidth}|}
+    \hline
+    \tn{Mask} & \tn{Value} & \tn{Mnemonic} & \tn{Description} \\
+    \hline
+    f800 & c000 & LOAD \tn{(long)} & [CDST] \la\ [LABEL + [CSRC(FD)]] \\
+    f8f8 & c800 & LOAD & [CDST] \la\ [[CSRC]] \\
+    f800 & d000 & STOR \tn{(long)} & [LABEL + [CDST(FD)]] \la\ [CSRC] \\
+    f8f8 & d800 & STOR & [[CDST]] \la\ [CSRC] \\
+    \hline
+    fff8 & b800 & LDWI & [CDST] \la\ WORD \\
+    f000 & e000 & LDBI & [REG<7,0>] \la\ BYTE \\
+    \hline
+    f800 & 6000 & ADDI & [CDST] \la\ [CDST] + BYTE \\
+    f800 & 6800 & SUBI & [CDST] \la\ [CDST] - BYTE \\
+    f800 & a000 & CMPRI & [CREG] - BYTE \\
+    \hline
+    ff00 & 4000 & BR & [PC] \la\ [REG(FD)] \\
+    ff00 & 4800 & IBR & [PC] \la\ [LABEL + [REG(FD)] \\
+    f000 & 9000 & CALL & \\
+    fff8 & b100 & RTN & \\
+    f000 & 8000 & CBR & \\
+    \hline
+    f000 & 5000 & MOVE & [DST] \la\ [SRC(FD)] \\
+    fff8 & b400 & STRB & [CDST] \la\ [DI] \\
+    ff08 & b600 & LDRB & [DI] \la\ [CSRC(FD)] \\
+    \hline
+    f800 & 7000 & ADD & [CDST] \la\ [SRC(FD)] + [CDST] \\
+    f800 & 7800 & SUBR & [CDST] \la\ [SRC(FD)] - [CDST] \\
+    f800 & 0000 & AND & [CDST] \la\ [SRC(FD)] \& [CDST] \\
+    f800 & 1000 & OR & [CDST] \la\ [SRC(FD)] | [CDST] \\
+    f800 & 3000 & XOR & [CDST] \la\ [SRC(FD)] \textasciicircum\ [CDST] \\
+    f800 & 2000 & CMPR & [SRC(FD)] - [CDST] \\
+    \hline
+    fff8 & b220 & ADDC & [CREG] \la\ [CREG] + [C] \\
+    fff8 & b330 & NEG & [CREG] \la\ 0 - [CREG] \\
+    fff8 & b300 & CMPL & [CREG] \la\ [\ol{CREG}] \\
+    ffc8 & b700 & SHFTL & \\
+    ffc8 & b540 & SHFTR & \\
+    \hline
+    f800 & 1800 & SBIT & [SRC(K)] \la\ 1 \par [CDST] \la\ [SRC] \\
+    f800 & 0800 & RBIT & [SRC(K)] \la\ 0 \par [CDST] \la\ [SRC] \\
+    f800 & 3800 & CBIT & [SRC(K)] \la\ [\ol{SRC<K>}] \par [CDST] \la\ [SRC] \\
+    f800 & 2800 & TBIT & [CDST] \la\ [SRC] \& $\mathtt{2^K}$ \\
+    \hline
+    fff8 & b000 & PUSH & [[SP]] \la\ [CREG] \par [SP] \la\ [SP] + 1 \\
+    fff8 & b900 & POP & [CREG] \la\ [[SP] - 1] \par [SP] \la\ [SP] - 1 \\
+    \hline
+    & & HALT & \tn{CPU enters idle state.} \\
+    \hline
+    f000 & f000 & COP & \tn{Execute coprocessor instruction.} \\
+    \hline
+  \end{tabular}
+  \par
+}
+
+\end{document}
