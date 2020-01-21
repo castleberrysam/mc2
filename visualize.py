@@ -223,7 +223,7 @@ class Instruction:
         elif self.op == "STOR":
             return "{} (R{}) = R{}".format(self.op, self.src, self.dst)
         elif self.op == "LDWI":
-            return "{} R{} = 0x{:04x}".format(self.op, self.dst, self.imm)
+            return "{} R{} = {}".format(self.op, self.dst, Instruction.getVariable(variables, self.imm))
         elif self.op == "LDBI":
             return "{} R{} = 0x{:02x}".format(self.op, self.dst, self.imm)
         elif self.op == "ADDI" or self.op == "SUBI" or self.op == "CMPRI":
@@ -436,8 +436,8 @@ class BasicBlock:
                 numCases = tbls[addr_str]
                 print("Identified jump table {} with length {}".format(addr_str, numCases), file=sys.stderr)
             else:
-                sys.stderr.write("How many cases in table for IBR at addr {}?: ".format(addr_str))
-                numCases = int(input())
+                numCases = 0
+                print("***Warning*** Unknown jump table at {}".format(addr_str), file=sys.stderr)
             self.jumpTable.extend(memory[addr:addr+numCases])
 
     def __str__(self, dot=False, variables={}):
@@ -478,7 +478,7 @@ class Program:
             print("Omitting block at {:04x}".format(addr), file=sys.stderr)
             self.bblocks[addr] = None
             return
-        if self.memory[addr] == None:
+        if self.memory[addr] == None or self.memory[addr & 0xfc00] != 0xffff:
             print("Block at {:04x} is outside of known memory space".format(addr), file=sys.stderr)
             self.bblocks[addr] = None
             return
@@ -496,10 +496,11 @@ class Program:
         for case in bblock.jumpTable:
             self.parseBlocks(case, bblock.isSub, False)
 
-    def addLink(self, string, addr1, addr2, color):
+    def addLink(self, string, addr1, addr2, color, label=None):
         if addr2 is None:
             return string
-        return string + "    bb_{:04x} -> bb_{:04x} [color=\"{}\"];\n".format(addr1, addr2, color)
+        label = "label=\"{}\"".format(label) if label is not None else ""
+        return string + "    bb_{:04x} -> bb_{:04x} [color=\"{}\",{}];\n".format(addr1, addr2, color, label)
 
     def __str__(self, dot=False):
         string = ""
@@ -516,8 +517,8 @@ class Program:
                 if not bblock.call:
                     string = self.addLink(string, addr, bblock.trueBranch, "green" if bblock.falseBranch else "black")
                 string = self.addLink(string, addr, bblock.falseBranch, "black" if bblock.call else "red")
-                for case in bblock.jumpTable:
-                    string = self.addLink(string, addr, case, "purple")
+                for i in range(len(bblock.jumpTable)):
+                    string = self.addLink(string, addr, bblock.jumpTable[i], "purple", i)
             string += "}"
         else:
             string += "\t.section program, \"rx\"\n"
@@ -531,10 +532,18 @@ class Program:
     def dotStr(self):
         return self.__str__(True)
 
+    def getCoverage(self, bitmap):
+        for addr, bblock in self.bblocks.items():
+            if bblock is None:
+                continue
+            for i in range(bblock.size // 2):
+                bitmap[addr+i] = 1
+
 if __name__ == "__main__":
     import sys
     if(len(sys.argv) < 5):
-        print("Usage: visualize.py <binary file> <load offset> <parse offset> <annotation file>")
+        print("Usage: visualize.py <binary file> <load offset> <annotation file> <parse offset>")
+        print("Usage: visualize.py <binary file> <load offset> <annotation file> <coverage start> <coverage end>")
         exit(1)
     
     import struct
@@ -556,7 +565,7 @@ if __name__ == "__main__":
     mathfuncs = []
     variables = {}
     omits = []
-    with open(sys.argv[4], "r") as f:
+    with open(sys.argv[3], "r") as f:
         for line in f:
             if line.startswith("#"):
                 continue
@@ -564,6 +573,8 @@ if __name__ == "__main__":
             if len(parts) < 1:
                 continue
             if parts[0] == "sub":
+                if parts[1] in subs:
+                    print("***Warning*** Multiple definitions of function {}".format(parts[1]), file=sys.stderr)
                 subs[parts[1]] = parts[2]
             elif parts[0] == "table":
                 tbls[parts[1]] = int(parts[2])
@@ -587,5 +598,31 @@ if __name__ == "__main__":
             elif parts[0] == "omit":
                 omits.append(int(parts[1], 16))
             
-    program = Program(memory, subs, tbls, lnks, ulnks, datas, mathfuncs, variables, omits, int(sys.argv[3], 16))
-    print(program.dotStr())
+    if len(sys.argv) == 5:
+        program = Program(memory, subs, tbls, lnks, ulnks, datas, mathfuncs, variables, omits, int(sys.argv[4], 16))
+        print(program.dotStr())
+    else:
+        covStart = int(sys.argv[4], 16)
+        covEnd = int(sys.argv[5], 16)
+        if covEnd > 0xffff:
+            covEnd = 0xffff
+        bitmap = [0] * 64*1024
+        for addr, sub in subs.items():
+            addr = int(addr, 16)
+            if addr < covStart or addr >= covEnd:
+                continue
+            program = Program(memory, subs, tbls, lnks, ulnks, datas, mathfuncs, variables, omits, addr)
+            program.getCoverage(bitmap)
+        for addr, size in tbls.items():
+            addr = int(addr, 16) + 1
+            for i in range(size):
+                bitmap[addr+i] = 1
+        for addr in datas:
+            bitmap[addr] = 1
+        uncoverStart = None
+        for i in range(covStart,covEnd):
+            if bitmap[i] == 0 and uncoverStart is None:
+                uncoverStart = i
+            elif bitmap[i] == 1 and uncoverStart is not None:
+                print("Uncovered region at {:04x}-{:04x}".format(uncoverStart, i-1))
+                uncoverStart = None

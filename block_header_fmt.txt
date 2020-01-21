@@ -16,66 +16,130 @@ abcd
 - cd is the length of the following data used by sub_bd20 (if it is zero then it is skipped)
 
 Data used by sub_bd20:
-aaaa aabb bbbb bbbb
+aaaa aabb bbbb bbbb (bits in one word entry)
 - a is an offset into the working space of sub_bd20; it might need to be in the range 0-3
 - b is an offset from the beginning of the page to another data structure
 
 Data structure pointed to by b:
 0 - cccc cccc dddd dddd
 * d is used to determine the ordering of the linked list; sorted in ascending order of d
-* c is also used to determine order when two nodes have the same d.
+* c is also used to determine order when two nodes have the same d; sorted in descending order of c
 * 1. if existing c < new c -> insert
 * 2. else if existing d != new d -> insert
 * 3. else if end of list -> insert
 * 4. else continue
 * After the lists have been established, elements are removed so only the first in each group with the same d value remains in the list
+* The d value alone (& 00ff) acts as the "ID" for the task
 1 - func0
+* Unsets Z condition code if this element should be removed from the list
+* System loops through all elements in all lists in descending order (3->0) calling this func on each, until no elements were removed
 2 - func1
-* Returns how much fixed memory to allocate in R5 in the form qqqq qrrr rrrr rrrr
+* Returns a value in R5 and a value in R6, both default to 0
+* Called for every element at the end of ram_init, but return values not checked
+* Returns how much memory to allocate in R5 in the form qqqq qrrr rrrr rrrr
 * q = how much before pointer
 * r = how much after pointer
-* Returns how much dynamic memory to allocate in R6; see dll0_alloc_dyn to see how it's used
+* Returns how much memory to allocate for taskc0 in R6 for tasks with id > c0; see taskc0_alloc
 3 - ???
+* For at least type 3, looks like a subroutine (often = RTN R0)
 4 - xyzw/subroutine
-* The value 00z3 is stored into the below data structure
-* Or, a subroutine for dll2/dll3; called to initialize the allocated memory. Address is passed in R3
+* The value 00z3 is stored into the below data structure for type 0
+* For type 0, if w not zero, writes value from pp_dci(w)_mem_addr to first word in allocated memory (so w should only be 1 or 2)
+* For type 0, if xy not zero, writes address of data structure created after dll_alloc at int[31-xy]_task (there aren't configurable handlers for int31/30/29, so xy should be >= 3)
+* Or, a subroutine for dll2/dll3; called to initialize the instrument (dll2)/allocated memory. Address is passed in R3, for dll2 the appropriate instrument slot id is selected first
 * For dll1, the address of this word is stored in dll1_arr(d)
 5 - ???
-* Address of this word is stored in the below data structure
-* dll3: This is a pointer to some data
+* Address of this word is stored in the below data structure for type 0
+* dll3: This is a pointer to a word used to filter nodes
 6 - ???
 7 - subroutine (dll2)
 * The ID of an instrument card is passed in R6; the subroutine sets R1(Z) if it supports that card
 
-Data structure created after dll_alloc:
-0 - ???
-1 - Address of word 5 in the data structure pointed to by b
-2 - The value 00z3 from the above data structure
-3 - ??? (initialized to 0x80)
-4 - address for the allocated memory, from the below data structure
-5 - ???
-6 - ???
-7 - ???
-8 - ???
-9 - ???
-Then:
-Check the value w from the above data structure.
-If non-zero, get int_save_base(w) and store at the address for the allocated memory.
-Check the value xy from the above data structure.
-If non-zero, store pointer to data structure at address (0x0102 + xy)
+Task c0 operation:
+Repeatedly loops through tasks with ID greater than c0.
+If a task is found in state 5:
+Switch it to state 7 (running?)
+Schedule sys_task after that task
+Schedule that task after this task (task c0)
+Save current offset in task c0 memory in taskc0_mem_off to continue scanning later
+Get the two words for the new task from task c0 memory
+Add the lower half of the second word to the first word
+If the lower half of the second word was not zero:
+1. Subtract one from it (our copy, no write back)
+2. Get the word at (first word + lower half of the second word) into R0
+3. If now zero, break
+4. Else, push R0 and loop
+Set taskff_var to the z value of the task (from above) + 1
+Call task_wait
+... new task executes, then switches to sys_task, which then switches back to us ...
+Call task_disable to disable the new (now old) task, so we won't run it again until somebody enables it
+Error if the bottom of the stack is not ff (happens if it underflowed)
+Read the stack back into the task c0 mem for the old task
+Write the new saved stack size into the lower half of the second word
 
-After the last data structure is the address for int_save_base.
-The word int_save_base(2) is initialized to 0x07.
+Data structure created after dll_alloc, only created for type 0 tasks:
+0 - pointer to next scheduled task
+1 - saved PC (initialized to address of word 5 in the data structure pointed to by b for type 0)
+2 - Task status (initialized to the value 00z3 using z from the above data structure for type 0)
+  - upper byte: saved DI
+  - when curr_task/sys_task is created after type 0 tasks creation, instead initialized to 0007
+3 - saved R1 (initialized to 0x80 for type 0)
+4 - saved R2 (initialized to the address for the allocated memory, from the below data structure, for type 0 and 2)
+  - for task c0, also set to the memory allocated to it by taskc0_alloc, in the following manner:
+  - 1. First allocate 2 * # of tasks after it in the list (so # of tasks with ID > c0). Each of these is a "slot" for that task that we will write a couple things into. For each task slot:
+  - 2. In the first half of the slot, write the current free memory pointer.
+  - 3. Then, add 1 to the R6 value returned by calling dll_get_mem_reqs on the task. In the second half of the slot, write the lower byte of that value in the upper byte (LJL).
+  - 4. Then add that value to the free memory pointer to allocate that many words.
+5 - saved R3
+6 - saved R4
+7 - saved R5
+8 - saved R6
+9 - saved R7
+Then:
+Explained above already, see that
+#Check the value w from the above data structure (w is in the range 0-2).
+#If non-zero, get curr_task + w and store at the address for the allocated memory.
+#Check the value xy from the above data structure.
+#If non-zero, store pointer to data structure at address dci2_mem_base + xy.
+#After the last data structure is the address for int_save_base.
+#The word int_save_base(2) is initialized to 0x07.
 
 RAM structure built by sub_bd20:
-Each data item of the preceding type reserves 6 words at the end of ram.
+Each data item of the preceding type reserves 6 words for this structure at the end of ram.
 Initialized as follows:
 0 - next pointer (initialized to 0x0000)
 1 - prev pointer (initalized to the working space pointer of sub_bd20 (0-3))
-2 - word read from the offset specified by b
+2 - word read from the offset specified by b (the task "ID" word)
 3 - address from the offset specified by b
 4 - address for allocated memory (initialized to 0x0000)
-5 - pointer to the data structure created after dll_alloc (initialized to 0x0000)
+  - For type 2, offset fffe = c95a(instrument number) and fffd = value in offset 3 of this data structure
+  - For type 3, offset ffff = value in offset 3 of this data structure
+5 - pointer to the data structure (task block) created after dll_alloc (initialized to 0x0000)
+
+The dll1 array takes the task ID (the d part) as the index, and stores there (rom info base addr + 4).
+dll1_arr_max is set to the highest ID in the dll1 chain.
+
+There's also a dll3 array, that's not allocated dynamically, at dll3_arr_base.
+The index is the ID and the value is address of the allocated memory for that element, by task_alloc.
+
+dll_id_in_range:
+Return E if (R7 * 10) + 2 <= ID <= (R7 * 10) + 9
+For R7 = 1: 12 <= ID <= 19 (decimal)
+For R7 = 2: 22 <= ID <= 29 (decimal)
+
+dll3_id_in_range_and_word_3:
+Calls the above, then also checks the word at the address at (rom info base addr + 5). Sets E if the lower two bits are set.
+
+System calls the above with R7 = 1, then R7 = 2.
+If it passes, dll3_arr_base(R7 * 10) = address of the allocated memory for this element.
+Stops at the first element that passes the check.
+
+Then loops through again with R7 = 1 and R7 = 2, calling dll_id_in_range.
+If so, gets the word at the address at (rom info base addr + 5).
+If bit 2 is set (AND 4), dll3_arr_base((R7 * 10) + 1) = address of the allocated memory for this element.
+Stops at the first element that passes the check.
+
+All tasks after taskc0 are disabled at reset.
 
 To verify the checksum:
 1. Create three 16-bit vars r4, r6, r7.

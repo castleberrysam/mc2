@@ -1,0 +1,15 @@
+From sub_db73
+Initially, R0 = 0 and R6 = 0
+
+00-7f: set R0(14), write ASCII
+80-bf: set R5 = 00-3f, then see below
+c0-df: set R6 = 00-1f
+e0-fc: ignored
+fd: clear R0(15)
+fe: set R0(15)
+ff: terminator
+
+For 80-bf:
+1. Write 0x20 (space) if R(14) and not R(15); clear R0(14)
+2. Call dll1_str_copy; R6 is the ID and R5 is the index into the string table
+3. Write 0x20 (space) if not R(15)

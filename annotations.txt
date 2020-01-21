@@ -1,3 +1,10 @@
+sub 6dfd unk_6dfd
+sub 893a are_pages_2c_19_rom
+sub 8ade inst_alloc
+sub 8afd task_inst_alloc
+sub 9868 msal_select
+sub 9900 msal_init
+sub 9980 task40_entry
 sub a082 math_interpret
 sub a0c0 math_unop
 sub a0c7 f32_abs
@@ -5,6 +12,10 @@ sub a0cb i32_abs
 sub a0ce math_binop
 sub a297 mem16_rd32_and_interpret
 sub a2a0 mem16_blk_rd8_inc
+sub a760 br_r3
+sub b5a3 load64_noinc
+sub b5a9 load32
+sub b5aa load32_noinc
 sub b919 f32_b10_exp
 sub b93f math_fmt_f32
 sub b981 math_fmt_adjust
@@ -17,7 +28,10 @@ sub bd9b br_r5
 sub bdde dll_insert
 sub bde7 dll_remove
 sub beb4 f32_mul_x10
-sub c200 dll0_arr_init
+sub bfe2 is_page_1b_rom
+sub bfe7 i48_neg_3
+sub bfed i48_add_i32_hi_2
+sub c200 taskt0_state_init
 sub c408 mem_blk_create_all
 sub c423 mem_rd16_if_valid
 sub c437 mem_rd8_if_valid
@@ -27,53 +41,148 @@ sub c453 mem32_wr16_inc_off
 sub c467 mem_wr8
 sub c478 mem_rd8
 sub c4e3 mem32_advance_8
-sub c907 dll2_alloc_inst
+sub c52e str_wr_i16
+sub c533 str_wr_fix16
+sub c600 get_curr_dci_num
+sub c907 taskt2_alloc
 sub c94c br_r5_save237
-sub c95e dll_alloc_fix_all
-sub c966 dll3_arr_init
-sub c9c6 dll3_d_in_range_and_word_3
-sub c9d1 dll3_d_in_range
+sub c95e task_alloc_all
+sub c966 taskt3_alloc
+sub c9c6 dll3_id_in_range_and_word_3
+sub c9d1 dll_id_in_range
 sub c9e3 i16_mul_x10
 sub c9f7 dll3_rd_word
 sub c9ea dll3_arr_wr_mem_addr
-sub c9f1 dll_get_d
-sub cb3c math_fmt_wr8_inc
+sub c9f1 dll_get_id
+sub cb07 buf_alloc
+sub cb3c str_wr8_inc
 sub cb52 math_fmt_chk_wr8
+sub cb5d str_buf_free
+sub cc59 task10_entry
+sub ce24 dci_queue_print
+sub ce51 save0134567
+sub ce5d restore0134567
 sub d1d3 mem32_blk_rem
 sub d1d8 mem32_blk_base
+sub d847 buf_alloc_bytes
 sub d85b mem32_blk_rd8_inc
 sub d86a mem32_blk_wr8_inc
 sub d876 mem32_rd_skip_if_lsb
+sub d891 buf_free
+sub db07 pp1_dci_present
+sub db09 pp2_dci_present
+sub db71 fmt_str_process_imm_mkbuf
+sub db73 fmt_str_process_mkbuf
+sub dca5 fmt_str_process_imm
+sub dcae fmt_str_process
+sub dcd7 dll1_str_copy
+sub dce3 str_terminate
+sub dda9 fmt_str_print_dci12
+sub ddaf fifo_psh32
+sub ddcc mem_any_blks_free
+sub de67 task98_entry
+sub de6c run_as_task98
+sub ddeb str_print4
 sub dea2 chk_rom
 sub deee rom_error_arg
+sub ddd1 process_print_fifo
 sub df77 psh_034567
 sub df94 f32_fmt_size
-sub e4df dll_remove_at_off
+sub e00f modify_saved_values_1
+sub e01b modify_saved_values_2
+sub e089 str_print3
+sub e08e str_buf_flush
+sub e0a2 str_print
+sub e0a9 str_print2
+sub e0ad str_print5
+sub e0b6 str_printb
+sub e0bb str_print7
+sub e102 unk_e102
+sub e4df dll_remove_index
+sub e591 dll3_arr_index
 sub e86b reg_save
-sub e878 dll_call_func1
-sub e87f dll_find_by_d
+sub e878 dll_get_mem_reqs
+sub e87f dll_find_by_id
 sub e88c reg_restore
-sub e899 dll_arr_find_by_d
-sub e8a2 dll_alloc_fix
-sub e8b2 dll0_alloc_dyn
-sub e926 int_15
-sub ea10 math_fmt_clear
-sub ea15 math_fmt_fill
+sub e899 task_find_by_id
+sub e8a2 task_alloc
+sub e8b2 taskc0_alloc
+sub e926 int_31
+sub ea00 call_for_each_dci
+sub ea10 str_blank
+sub ea15 str_fill
 sub ea1c math_fmt_fuzz
+sub eb66 taskbf_entry
+sub eb80 write_dcimem_17
+sub ec0b unk_ec0b
 sub ecce is_ram_addr
+sub ed6e call_tbl_off
 sub ee5f chk_ram
 sub ee67 chk_cpu
 sub ee73 chk_machine
-sub f00f int_enter
+sub ee7f taskfe_entry
+sub eea2 clr_taskbf_var_bit
+sub f008 task_switch
+sub f00f task_save
+sub f026 task_wait
+sub f027 task_wait_nosave
 sub f035 interrupt
-sub f05f int_14
-sub f087 int_13
+sub f05f int_30
+sub f087 int_29
 sub f08f int_lsb
 sub f094 int_msb
-sub f0de int_exit
+sub f0c1 task_schedule
+sub f0de task_restore
+sub f100 unk_f100
+sub f10e unk_f10e
+sub f153 i32_rsub_fast_1
+sub f154 i32_add_fast_1
+sub f158 i32_rsub_fast_2
+sub f159 i32_add_fast_2
+sub f15d unk_f15d
+sub f162 unk_f162
+sub f167 unk_f167
+sub f16f unk_f16f
+sub f190 unk_f190
+sub f1dc unk_f1dc
+sub f1ea i48_neg_1
+sub f1f0 i48_add_i32_hi_1
 sub f201 chk_high_rom_present
+sub f20b unk_f20b
+sub f284 i32_add_rshft1
+sub f287 i32_rshft1_1
+sub f28f i32_neg_fast_1
+sub f293 unk_f293
+sub f297 i32_sub_fast
+sub f298 i32_add_fast_3
+sub f29c i32_neg_fast_2
+sub f2a0 i32_rshft1_2
+sub f2a8 i48_add_load32_noinc_x3
+sub f2ad i48_add_load32_noinc_x2
+sub f2b2 i48_add_load32_noinc
+sub f2b7 unk_f2b7
+sub f2be i48_neg_2
+sub f2c8 unk_f2c8
+sub f2cc unk_f2cc
+sub f2c4 i48_rshft1
+sub f2ce i48_add_load32_noinc_rshft1
+sub f2d4 unk_f2d4
+sub f2d8 unk_f2d8
+sub f2dc unk_f2dc
+sub f2e0 unk_f2e0
+sub f2ea i48_add_store48
+sub f300 mem_enough_blks
+sub f37d unk_f37d
+sub f382 unk_f382
+sub f3a3 store32_off
+sub f3a4 store32_noinc
+sub f3a8 memset_off
+sub f3b3 i48_add_i32
+sub f3bb unk_f3bb
 sub f406 chk_are_pages_rom
+sub f458 i32_add_store32
 sub f503 find_slot_from_id
+sub f510 task_inst_alloc_ife
 sub f52b sys_error
 sub f55b reset
 sub f613 i16_fma
@@ -86,7 +195,13 @@ sub f842 i32_lshft
 sub f860 i32_rshft
 sub f86d i32_setcc
 sub f900 get_id_from_slot
-sub fa5f clr_main_loop_var
+sub fa4c taskff_entry
+sub fa53 task_yield
+sub fa5f clr_taskff_var
+sub fa63 int_enable
+sub fa6b int_disable
+sub fa72 task_disable
+sub fa88 taskc0_entry
 sub fb00 mark_slot_ok
 sub fb53 f32_div
 sub fb7b f32_div_fast
@@ -95,11 +210,19 @@ sub fba5 f32_mul
 sub fbce f32_mul_fast
 sub fc07 is_page_rom
 sub fc1c wait_pwr_good
-sub fd34 read8
+sub fc4a call_for_each_inst
+sub fc59 br_r5
+sub fcce i16_div_mod_fast
+sub fd34 rd8_inc
+sub fd41 dll1_arr_index
+sub fd53 dll1_str_lookup
 sub fe03 call_if_exists
+sub fe15 task00_entry
 sub fe78 mem_blk_alloc
 sub fe8d mem_blk_create
 sub fe9d psh_027
+sub fea4 fifo_psh16
+sub feb9 fifo_pop16
 sub ff00 f32_unpack_x2
 sub ff06 i16_to_f32
 sub ff0a i32_to_f32
@@ -115,34 +238,61 @@ table 5f0a 4
 table 5fbb 4
 table 607f 4
 table 667a 4
+table 84c6 4
+table 84cb 4
+table 8718 8
 table a0c0 6
 table a0ce 15
 table a2ec 4
+table ade1 16
+table b05b 8
+table b0dd 16
 table da5d 7
 table f055 9
 table f0c6 8
 
+link 6c06 89fa
+link 6cc7 89f9
 link c94c c953
 link c97a c988
 link d85c d85f
 link d86b d870
+link e605 e608
+link e608 e61e
+link eb9d 6cfe
+link eba2 6cfd
+link ebb1 6cfc
+link ebb4 6cfb
 link f0cf fe15
+link f50e 8afe
+link f511 8afd
 
+# most of these are stupid hacks
+# need to enhance visualize.py to really fix them
+unlink a74f a750
+unlink a755 a756
 unlink d869 d86a
 unlink dead deaf
 unlink deba debc
 unlink dec0 dec2
 unlink dee0 dee2
 unlink dee5 dee7
+unlink f00c f00e
 unlink f02c f02e
 unlink f02e f035
 unlink f0b2 f0b5
 unlink f0b7 f0b9
 unlink f0bb f0be
 unlink f0dc f0de
+unlink fa5a fa5f
 unlink f413 f418
 unlink f713 f717
+unlink fa54 fa58
 unlink fa7c fa7e
+unlink fa8f fa91
+unlink fab1 fab3
+unlink fad8 fada
+unlink fae7 fae9
 unlink fe34 fe36
 unlink fe7d fe7f
 unlink fe81 fe83
@@ -187,11 +337,16 @@ var 00cb slot1b_ok
 var 00cc slot1c_ok
 var 00cd slot1d_ok
 var 00ce slot1e_ok
-var 00cf slot1f_ok
+# highest valid slot number seems to be 1e
+#var 00cf slot1f_ok
 
 # card 0c/28/30
+# upper byte is 1 if any of the 3 was found, else 0
+# lower byte is the slot for card 0c (or 0x1f if not present)
 var 00d0 pp_dci1_slot
 # card 0d/29/31
+# upper byte is 1 if any of the 3 were found, else 0
+# lower byte is the slot for card 0d (or 0x1f if not present)
 var 00d1 pp_dci2_slot
 
 var 00d4 dll0_head
@@ -199,6 +354,7 @@ var 00d5 dll1_head
 var 00d6 dll2_head
 var 00d7 dll3_head
 
+# address of the start of the memory blocks
 var 00de dll3_alloc_end
 
 var 00e9 rsave_r2
@@ -210,90 +366,224 @@ var 00ee rsave_r7
 
 var 00ef heap_end
 
-# initialized to 0x00df
-var 0100 int_save_base
+# this is the address of the current task block
+# initialized to 0x00df at reset
+# after task blocks allocated, set to taskff
+var 0100 curr_task
 
 # allocated starting at 01b2, in increments of 2a
-# the first word contains the slot id in the upper byte and the DCI number in the low byte
-var 0101 dci1_mem_base
-var 0102 dci2_mem_base
+# only allocate if pp_dci(n)_slot(8) set
+# the first word in the allocated region contains the slot id for card 0c/0d in the upper byte and the number (1 or 2) in the low byte
+var 0101 pp_dci1_mem_addr
+var 0102 pp_dci2_mem_addr
 
 var 0103 ram_end
 
 # initialized to 0x0001, set to 0x0000 once reset finishes
-var 0104 reset_in_progress
+var 0104 task_inhibit
 
 # reset initializes all memory from 0105 to heap_end to 0x0000
 
-# initialized to 0x8000
-var 0123 0x0123
+var 0105 int28_task
+var 0106 int27_task
+var 0107 int26_task
+var 0108 int25_task
+var 0109 int24_task
+var 010a int23_task
+var 010b int22_task
+var 010c int21_task
+var 010d int20_task
+var 010e int19_task
+var 010f int18_task
+var 0110 int17_task
+var 0111 int16_task
+var 0112 int15_task
+var 0113 int14_task
+var 0114 int13_task
+var 0115 int12_task
+var 0116 int11_task
+var 0117 int10_task
+var 0118 int09_task
+var 0119 int08_task
+var 011a int07_task
+var 011b int06_task
+var 011c int05_task
+var 011d int04_task
+var 011e int03_task
+var 011f int02_task
+var 0120 int01_task
+var 0121 int00_task
 
-var 0124 inst_mem_end
-var 0125 dll1_arr_len
+var 0122 taskbf
+
+# initialized to 0x8000
+# set to 0x0000 in taskbf_entry
+# int31 checks if bit 15 is zero, if so then sets it and switches to taskbf
+# when taskbf is executed, set to 0x7fff and 'POWER FAILURE' is printed
+var 0123 taskbf_var
+
+var 0124 dll1_arr_base
+var 0125 dll1_arr_max
+
+var 0126 sys_error_saved_r0
+var 0127 sys_error_saved_r1
+var 0128 sys_error_saved_r2
+var 0129 sys_error_saved_r3
+var 012a sys_error_saved_r4
+var 012b sys_error_saved_r5
+var 012c sys_error_saved_r6
+var 012d sys_error_saved_r7
+
+# also sys_error_saved_retaddr
+var 012e task10_saved_r3
+
+var 012f sys_error_saved_di
 
 var 0130 mem32_blks_free
 var 0131 mem32_next_blk
 
-var 0132 dll0_alloc_end
+# value is address of first type 0 task block that was allocated (name would indicate that this has to be the scheduler task?)
+var 0132 sched_task
 
-# set to 0x0000 in each main loop iteration
-var 0133 main_loop_var
+# set to 0 in taskff and set to the z value of the current periodic task by task0c
+var 0133 taskff_var
 
-var 0135 dll0_arr_end
+var 0134 taskc0
+
+# allocated right after all other task blocks allocated
+var 0135 taskff
+
+var 0136 taskc0_mem_off
+
+var 0137 task98
+var 0138 task98_parent
 
 # initialized to 0x0145
-var 0139 card10_ptr2
+var 0139 daq_ptr2
 
 # card 01 in upper byte, card 17 in lower byte
-var 013c card01_slot
+var 013c cards01_17_slots
 
 # initialized to 0x0001
-var 0140 card10_val
+var 0140 daq_val
 # initialized to 0x0145
-var 0141 card10_ptr
+var 0141 daq_ptr
 var 0142 daq_slot
-var 0143 card10_dll_node
+var 0143 daq_task
 
 # initialized to 0x014f
-var 014e card10_ptr3
+var 014e daq_ptr3
 
 # initialized to 0x0145
-var 0158 card10_ptr4
+var 0158 daq_ptr4
 
 var 0159 pp1_slot
 var 015a pp1_rom_addr
 # initialized to 0x0001
 var 015b pp1_val
-var 015c pp1_dll_node
+var 015c pp1_task
 
 var 015d pp2_slot
 var 015e pp2_rom_addr
 # initialized to 0x0001
 var 015f pp2_val
-var 0160 pp2_dll_node
+var 0160 pp2_task
+
+# incremented each time int31 occurs
+var 0163 int31_cnt_hi
+var 0164 int31_cnt_lo
 
 var 015d dll3_arr_base
 
 # initialized to 0xffff
-var 017f 0x017f
+var 017f cards01_17_var1
 # initialized to 0xffff
-var 0180 0x0180
+var 0180 cards01_17_var2
+
+# set by task10 to 0x02 if true
+var 0186 page2c_not_rom
+var 0187 inst0_slot_empty
+var 0188 inst1_slot_empty
+var 0189 inst2_slot_empty
+var 018a inst3_slot_empty
+var 018b card0b_not_present
+var 018c card0a_not_present
+
+var 0198 print_fifo0_tail
+var 0199 print_fifo0_head
+
+var 019a print_fifo1_tail
+var 019b print_fifo1_head
+
+# initialized to 0x0000
+var 019c msal_val
+var 019d msal_blk0
 
 # initialized to 0x4000
-var 019e 0x019e
+var 019e cards01_17_var0
 
-var 019f inst0_mem_base
-var 01a0 inst1_mem_base
-var 01a1 inst2_mem_base
-var 01a2 inst3_mem_base
+var 019f inst0_task_mem
+var 01a0 inst1_task_mem
+var 01a1 inst2_task_mem
+var 01a2 inst3_task_mem
+
+# each block is 254 words in size
+var 01a4 task10_inst0_mem
+var 01a5 task10_inst1_mem
+var 01a6 task10_inst2_mem
+var 01a7 task10_inst3_mem
+
+var 01b0 msal_blk1
+var 01b1 msal_blk2
 
 data 5cc0 3
+data 6530 1
 data 668b 1
+data 6c08 1
+data 6cc8 1
+data 8408 3
+data a74f 1
+data a751 1
+data a753 1
+data a755 1
+data b055 1
 data bdea 1
+data cb94 1
+data d37d 1
+data ddcf 1
+data e205 1
+data e207 1
+data e216 3
+data e606 1
+data e60c 1
+data e638 5
+data e7a0 3
+data e7ac 3
+data e7b8 3
+data e774 2
+data e77f 4
+data e78e 3
+data ea08 1
+data eb75 1
+data eb77 1
+data eba0 1
+data ebaf 1
+data ebb2 1
+data ebb5 1
+data f000 8
+data f0fe 2
+data f1f6 10
 data f202 8
+data f2fc 4
+data f50e 1
+data f511 1
 data f5e9 1
 data f725 1
 data fc3b 1
 
+# math_interpret
 omit a082
+# task_schedule
+omit f0c1
+# sys_error
 omit f52b

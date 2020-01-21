@@ -1,7 +1,7 @@
 J1:
 |  1 | GND                                                                       |
 |  2 | +5L                                                                       |
-|  3 | +5L                                                                       |
+|  3 | +5L (different on Data Acquisition)                                       |
 |  4 | +5L                                                                       |
 |  5 |                                                                           |
 |  6 |                                                                           |
@@ -23,20 +23,20 @@ J1:
 | 22 | SEL15                                                                     |
 | 23 | SEL16                                                                     |
 | 24 | SEL17                                                                     |
-| 25 |                                                                           |
-| 26 |                                                                           |
-| 27 |                                                                           |
-| 28 |                                                                           |
-| 29 |                                                                           |
-| 30 |                                                                           |
+| 25 | power                                                                     |
+| 26 | power, same as 25                                                         |
+| 27 | GND                                                                       |
+| 28 | GND                                                                       |
+| 29 | power                                                                     |
+| 30 | power, same as 29                                                         |
 | 31 | +12                                                                       |
 | 32 | +12                                                                       |
-| 33 |                                                                           |
-| 34 |                                                                           |
-| 35 |                                                                           |
-| 36 |                                                                           |
-| 37 |                                                                           |
-| 38 |                                                                           |
+| 33 | power, same as 31                                                         |
+| 34 | power, same as 31                                                         |
+| 35 | power                                                                     |
+| 36 | power, same as 35                                                         |
+| 37 | power, same as 39                                                         |
+| 38 | power, same as 39                                                         |
 | 39 | -12                                                                       |
 | 40 | -12                                                                       |
 | 41 | +12B                                                                      |

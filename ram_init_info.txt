@@ -1,53 +1,62 @@
 * 5c00
 ** 04b4 (a=1,b=0b4)
-*** 0010
-*** RTN R0
-*** CBR 0x5cbf
+0 - 0010
+1 - RTN R0
+2 - CBR 0x5cbf
+3 - 0000
+4 - 5b09
+5 - 5806
 * 6400
 ** 0409 (a=1,b=009)
 *** 000b
 *** RTN R0
 *** RTN R0
-** 0120 (a=0,b=120)
-*** 00c8
-*** CBR 0xdb07
-*** CBR 0x652c
-** 0126 (a=0,b=126)
-*** 00c9
-*** CBR 0xdb09
-*** CBR 0x652c
+** 0120 (a=0,b=120) (DCI1)
+0 - 00c8
+1 - CBR 0xdb07
+2 - CBR 0x652c
+3 - 0000
+4 - 0091 (xy=00,z=9,w=1)
+** 0126 (a=0,b=126) (DCI2)
+0 - 00c9
+1 - CBR 0xdb09
+2 - CBR 0x652c
+3 - 0000
+4 - 0092 (xy=00,z=9,w=2)
 * 8000
-** 081f (a=2,b=01f)
-*** 0008
-*** CBR 0x8028
-*** CBR 0x8030
-** 0a00 (a=2,b=200)
+** 081f (a=2,b=01f) (DAQ and instrument 0x2d)
+0 - 0008
+1 - CBR 0x8028
+2 - CBR 0x8030
+** 0a00 (a=2,b=200) (DAQ and instrument 0x2c)
 *** 0005
 *** CBR 0x8209
 *** CBR 0x8211
-** 0b00 (a=2,b=300)
+** 0b00 (a=2,b=300) (DAQ and instrument 0x26)
 *** 0006
 *** CBR 0x8309
 *** CBR 0x8311
-** 0913 (a=2,b=113)
+** 0913 (a=2,b=113) (DAQ and instrument 0x11)
 *** 0004
 *** CBR 0x811c
 *** CBR 0x8124
-** 05f4 (a=1,b=1f4)
+** 05f4 (a=1,b=1f4) (DAQ and instrument 0x26)
 *** 0018
 *** CBR 0x8309
 *** RTN R0
-** 04c9 (a=1,b=0c9)
+** 04c9 (a=1,b=0c9) (DAQ and instrument 0x11)
 *** 0019
 *** CBR 0x811c
 *** RTN R0
 * 8400
-** 023b (a=0,b=23b)
-*** 0002
-*** CBR 0x8641
-*** CBR 0x8643
+** 023b (a=0,b=23b) (board 0x0a interrupt handler)
+0 - 0002
+1 - CBR 0x8641
+2 - CBR 0x8643
+3 - 0000
+4 - 1200 (xy=12,z=0,w=0)
 * 8800
-** 0407 (a=1,b=007)
+** 0407 (a=1,b=007) (pages 0xb000 and 0x6400 are ROM)
 *** 000f
 *** CBR 0x893a
 *** RTN R0
@@ -57,149 +66,186 @@
 *** RTN R0
 *** RTN R0
 * 9800
-** 017b (a=0,b=17b)
-*** 0040
-*** CBR 0x99c9
-*** CBR 0x99c6
-** 05cb (a=1,b=1cb)
-*** 200d
-*** CBR 0x99c9
-*** CBR 0x9969
-** 05d6 (a=1,b=1d6)
-*** 300d
-*** CBR 0x99e1
-*** CBR 0x9969
-** 013a (a=0,b=13a)
-*** 00d1
-*** CBR 0x99c9
-*** CBR 0x981c
+** 017b (a=0,b=17b) (microsal interrupt handler)
+0 - 0040
+1 - CBR 0x99c9
+2 - CBR 0x99c6 (R5=300d,R6=0000) (6 before, 13 after)
+3 - 0000
+4 - 0400 (xy=04,z=0,w=0)
+** 05cb (a=1,b=1cb) (microsal)
+0 - 200d
+1 - CBR 0x99c9
+2 - CBR 0x9969
+3 - 0000
+4 - 82be
+5 - 9763
+** 05d6 (a=1,b=1d6) (microsal and taskt1 with ID 15)
+0 - 300d
+1 - CBR 0x99e1
+2 - CBR 0x9969
+3 - 0000
+4 - 81d0
+5 - 9763
+** 013a (a=0,b=13a) (microsal)
+0 - 00d1
+1 - CBR 0x99c9
+2 - CBR 0x981c (R5=300c,R6=0046) (6 before, 12 after, 70 dynamic)
+3 - 0000
+4 - 0000 (xy=00,z=0,w=0)
 * 9c00
-** 0db9 (a=3,b=1b9)
+** 0db9 (a=3,b=1b9) (board 0x20)
 *** 000f
 *** CBR 0x9dc5
 *** CBR 0x9dc9
-** 0dbf (a=3,b=1bf)
+** 0dbf (a=3,b=1bf) (board 0x21)
 *** 0019
 *** CBR 0x9dc7
 *** CBR 0x9dcd
-** 0dd8 (a=3,b=1d8)
+** 0dd8 (a=3,b=1d8) (D/A1)
 *** 0012
 *** CBR 0x9de4
 *** CBR 0x9de8
-** 0dde (a=3,b=1de)
+** 0dde (a=3,b=1de) (D/A2)
 *** 001c
 *** CBR 0x9de6
 *** CBR 0x9dea
-** 068b (a=1,b=28b)
+** 068b (a=1,b=28b) (board 0x17, valve driver?)
 *** 000a
 *** CBR 0x9e96
 *** CBR 0x9e98
 * a800
-** 04c4 (a=1,b=0c4)
+** 04c4 (a=1,b=0c4) (board 0x0a)
 *** 0009
 *** CBR 0xacd5
 *** RTN R0
-** 04cf (a=1,b=0cf)
+** 04cf (a=1,b=0cf) (board 0x0a)
 *** 1403
 *** CBR 0xacd5
 *** RTN R0
-** 062c (a=1,b=22c)
+** 062c (a=1,b=22c) (when page 0xb000 is ROM)
 *** 0a04
 *** CBR 0xaa42
 *** CBR 0xaa44
-** 0637 (a=1,b=237)
+** 0637 (a=1,b=237) (when page 0xb000 is ROM)
 *** 0a03
 *** CBR 0xaa42
 *** RTN R0
 * b400
-** 0c0d (a=3,b=00d)
+** 0c0d (a=3,b=00d) (PP1)
 *** 000c
 *** CBR 0xb81f
 *** CBR 0xb436
-** 0c13 (a=3,b=013)
+** 0c13 (a=3,b=013) (PP2)
 *** 0016
 *** CBR 0xb821
 *** CBR 0xb438
-** 070c (a=1,b=30c)
+** 070c (a=1,b=30c) (when page 0xc000 is ROM)
 *** 0003
 *** CBR 0xb722
 *** RTN R0
-** 0717 (a=1,b=317)
+** 0717 (a=1,b=317) (when page 0xc000 is ROM)
 *** 0005
 *** CBR 0xb722
 *** RTN R0
 * b800
-** 0029 (a=0,b=029)
-*** 0031
-*** CBR 0xb81f
-*** CBR 0xb81c
-** 0023 (a=0,b=023)
-*** 0032
-*** CBR 0xb821
-*** CBR 0xb81c
+** 0029 (a=0,b=029) (PP1 interrupt handler)
+0 - 0031
+1 - CBR 0xb81f
+2 - CBR 0xb81c
+3 - 0000
+4 - 1001 (xy=10,z=0,w=1)
+** 0023 (a=0,b=023) (PP2 interrupt handler)
+0 - 0032
+1 - CBR 0xb821
+2 - CBR 0xb81c
+3 - 0000
+4 - 1102 (xy=11,z=0,w=2)
 * c000
-** 000b (a=0,b=00b)
-*** 0081
-*** CBR 0xc017
-*** CBR 0xc01b
-** 0011 (a=0,b=011)
-*** 0082
-*** CBR 0xc019
-*** CBR 0xc01b
-** 084a (a=2,b=04a)
+** 000b (a=0,b=00b) (PP1)
+0 - 0081
+1 - CBR 0xc017
+2 - CBR 0xc01b
+3 - RTN R0
+4 - 0001 (xy=00,z=0,w=1)
+** 0011 (a=0,b=011) (PP2)
+0 - 0082
+1 - CBR 0xc019
+2 - CBR 0xc01b
+3 - RTN R0
+4 - 0002 (xy=00,z=0,w=2)
+** 084a (a=2,b=04a) (DAQ and instrument 0x3a)
 *** 0002
 *** CBR 0xc053
 *** CBR 0xc05b
 * cc00
-** 0054 (a=0,b=054)
-*** 0010
-*** RTN R0
-*** CBR 0xcc5a
+** 0054 (a=0,b=054) (instrument monitor)
+0 - 0010
+1 - RTN R0
+2 - CBR 0xcc5a
+3 - RTN R0
+4 - 0000 (xy=00,z=0,w=0)
 * d000
-** 0a6d (a=2,b=26d)
+** 0a6d (a=2,b=26d) (DAQ and instrument 0x39)
 *** 0001
 *** CBR 0xd276
 *** CBR 0xd27e
-** 0a10 (a=2,b=210)
+** 0a10 (a=2,b=210) (DAQ and instrument 0x19)
 *** 0003
 *** CBR 0xd219
 *** CBR 0xd221
 * d400
-** 0376 (a=0,b=376)
-*** 00a1
-*** CBR 0xdb07
-*** CBR 0xd773
-** 037c (a=0,b=37c)
-*** 00a2
-*** CBR 0xdb09
-*** CBR 0xd773
-** 0334 (a=0,b=334)
-*** 00c4
-*** CBR 0xdb07
-*** CBR 0xd730
-** 033a (a=0,b=33a)
-*** 00c5
-*** CBR 0xdb09
-*** CBR 0xd730
+** 0376 (a=0,b=376) (DCI1)
+0 - 00a1
+1 - CBR 0xdb07
+2 - CBR 0xd773
+3 - RTN R0
+4 - 0001 (xy=00,z=0,w=1)
+** 037c (a=0,b=37c) (DCI2)
+0 - 00a2
+1 - CBR 0xdb09
+2 - CBR 0xd773
+3 - RTN R0
+4 - 0002 (xy=00,z=0,w=2)
+** 0334 (a=0,b=334) (DCI1)
+0 - 00c4
+1 - CBR 0xdb07
+2 - CBR 0xd730
+3 - 0000
+4 - 0041 (xy=00,z=4,w=1)
+** 033a (a=0,b=33a) (DCI2)
+0 - 00c5
+1 - CBR 0xdb09
+2 - CBR 0xd730
+3 - 0000
+4 - 0042 (xy=00,z=4,w=2)
 * d800
-** 030f (a=0,b=30f)
-*** 00c2
-*** CBR 0xdb07
-*** CBR 0xdb0b
-** 0315 (a=0,b=315)
-*** 00c3
-*** CBR 0xdb09
-*** CBR 0xdb0b
+** 030f (a=0,b=30f) (DCI1)
+0 - 00c2
+1 - CBR 0xdb07
+2 - CBR 0xdb0b
+3 - 0000
+4 - 00f1 (xy=00,z=f,w=1)
+** 0315 (a=0,b=315) (DCI2)
+0 - 00c3
+1 - CBR 0xdb09
+2 - CBR 0xdb0b
+3 - 0000
+4 - 00f2 (xy=00,z=f,w=2)
 * dc00
-** 0262 (a=0,b=262)
-*** 0098
-*** RTN R0
-*** RTN R0
+** 0262 (a=0,b=262) (auxillary task, see task98_entry and run_as_task98)
+0 - 0098
+1 - RTN R0
+2 - RTN R0
+3 - 0000
+4 - 0000 (xy=00,z=0,w=0)
 * e000
 ** 04bf (a=1,b=0bf)
-*** 0000
-*** RTN R0
-*** RTN R0
+0 - 0000
+1 - RTN R0
+2 - RTN R0
+3 - cf7a
+4 - ec65
+5 - c74b
 ** 04ca (a=1,b=0ca)
 *** 0001
 *** RTN R0
@@ -216,14 +262,18 @@
 *** 0008
 *** RTN R0
 *** RTN R0
-** 0224 (a=0,b=224)
-*** 00c6
-*** CBR 0xdb07
-*** CBR 0xe21e
-** 022a (a=0,b=22a)
-*** 00c7
-*** CBR 0xdb09
-*** CBR 0xe21e
+** 0224 (a=0,b=224) (DCI1)
+0 - 00c6
+1 - CBR 0xdb07
+2 - CBR 0xe21e
+3 - RTN R0
+4 - 0091 (xy=00,z=9,w=1)
+** 022a (a=0,b=22a) (DCI2)
+0 - 00c7
+1 - CBR 0xdb09
+2 - CBR 0xe21e
+3 - RTN R0
+4 - 0092 (xy=00,z=9,w=2)
 ** 0c45 (a=3,b=045)
 *** 000b
 *** RTN R0
@@ -233,38 +283,55 @@
 *** RTN R0
 *** CBR 0xe062
 * e800
-** 038d (a=0,b=38d)
-*** 0061
-*** CBR 0xeb99
-*** CBR 0xeb9d
-** 0393 (a=0,b=393)
-*** 0062
-*** CBR 0xeb9b
-*** CBR 0xeb9d
-** 0361 (a=0,b=361)
-*** 00bf
-*** RTN R0
-*** RTN R0
+** 038d (a=0,b=38d) (PP1/DCI1, mutually exclusive)
+0 - 0061
+1 - CBR 0xeb99 (pp_dci1_slot(8) == 1?)
+2 - CBR 0xeb9d
+3 - 0000
+4 - 0001 (xy=00,z=0,w=1)
+** 0393 (a=0,b=393) (PP2/DCI2, mutually exclusive)
+0 - 0062
+1 - CBR 0xeb9b (pp_dci2_slot(8) == 1?)
+2 - CBR 0xeb9d
+3 - 0000
+4 - 0002 (xy=00,z=0,w=2)
+** 0361 (a=0,b=361) (power monitor)
+0 - 00bf
+1 - RTN R0
+2 - RTN R0
+3 - 0000
+4 - 0000 (xy=00,z=0,w=0)
 * ec00
-** 05c2 (a=1,b=1c2)
-*** 0006
-*** CBR 0xedcd
-*** RTN R0
-** 027a (a=0,b=27a)
-*** 00fe
-*** RTN R0
-*** CBR 0xee76
+** 05c2 (a=1,b=1c2) (PP1/PP2)
+0 - 0006
+1 - CBR 0xedcd
+2 - RTN R0
+3 - 0000
+4 - cf04
+5 - 0000
+** 027a (a=0,b=27a) (format string print processor)
+0 - 00fe
+1 - RTN R0
+2 - CBR 0xee76
+3 - RTN R0
+4 - 0000 (xy=00,z=0,w=0)
 * f800
-** 0283 (a=0,b=283)
-*** 00c0
-*** RTN R0
-*** RTN R0
-** 0247 (a=0,b=247)
-*** 00ff
-*** RTN R0
-*** RTN R0
+** 0283 (a=0,b=283) (periodic scheduler)
+0 - 00c0
+1 - RTN R0
+2 - RTN R0
+3 - 0000
+4 - 0000 (xy=00,z=0,w=0)
+** 0247 (a=0,b=247) (idle)
+0 - 00ff
+1 - RTN R0
+2 - RTN R0
+3 - 0000
+4 - 0000 (xy=00,z=0,w=0)
 * fc00
-** 0210 (a=0,b=210)
-*** 0000
-*** RTN R0
-*** RTN R0
+** 0210 (a=0,b=210) (event scheduler)
+0 - 0000
+1 - RTN R0
+2 - RTN R0
+3 - 0000
+4 - 0000 (xy=00,z=0,w=0)
