@@ -250,6 +250,8 @@ The board in a given slot is accessed by executing \texttt{LDRB} with the approp
   011011 (1b) & ??? marked ok in ram\_init \\
   011010 (1e) & 4K RAM (maybe) (2) \\
   011111 (1f) & ??? marked ok in ram\_init \\
+  100000 (20) & ??? has a type 3 object \\
+  100001 (21) & ??? has a type 3 object \\
   100100 (24) & Microsal Control \\
   101000 (28) & Data Communications Interface 1 \\
   101001 (29) & Data Communications Interface 2 \\
@@ -503,7 +505,7 @@ The print specifier is an extra word placed after the instruction when \texttt{E
 % Switch current task to state 3
 
 % Task state bits:
-% 0 - ???
+% 0 - ??? used by task_queue
 % 1 - enable/disable
 % 2 - in progress/waiting
 
@@ -528,7 +530,7 @@ The print specifier is an extra word placed after the instruction when \texttt{E
   a2 & & \\
   bf & & Power monitor \\
   \hline
-  c0 & & Aperiodic task host \\
+  c0 & & Periodic task host \\
   \hline
   c2 & & \\
   c3 & & \\
@@ -566,8 +568,11 @@ The print specifier is an extra word placed after the instruction when \texttt{E
     20 & Scheduler called and it isn't in state 3 or 7 \\
     21 & Tried to schedule task not in state 3 or 1 \\
     22 & Task tried to wait when not in state 7 \\
+    23 & Task tried to queue when not in state 7 \\
+    24 & Queued task not in state 2 or 0 \\
     25 & Task c0 managed task (ID > c0) not in state 5, 1, or 0 \\
     26 & Tried to disable task not in state 7, 3, or 2 \\
+    27 & Task 98 not in state 3 \\
     28 & Stack not empty at task c0 init \\
     2a & Stack underflowed in task c0 managed task (ID > c0) \\
     2b & Stack overflowed in task c0 managed task (ID > c0) \\
@@ -748,6 +753,11 @@ If R3 is positive, shifts R6R7 right R3 times, then sets condition codes.
 \gap
 Adds two signed 32-bit integers, setting condition codes.
 
+\begin{romfunc}{i16\_div\_mod\_fast}{fcce}
+  R5 & uint & Divisor & R6 & uint & Remainder \\
+  R7 & uint & & R7 & & TODO \\
+\end{romfunc}
+
 \subsection{Floating Point}
 
 \begin{romfunc}{f32\_unpack}{ffb6}
@@ -922,9 +932,9 @@ Otherwise, the communication channel number for this task is obtained by calling
 \end{romfunc}
 
 \begin{romfunc}{wait\_pwr\_good}{fc1c}
-  & & R6R7 & uint32 & Count & \\
-  & & R3 & & Zero \\
-  & & R4 & & Zero \\
+  & & & R6R7 & uint32 & Count \\
+  & & & R3 & & Zero \\
+  & & & R4 & & Zero \\
 \end{romfunc}
 
 \gap
@@ -973,6 +983,15 @@ Addresses the power supply controller, then loops while incrementing the counter
   b2d2 & DET 2 OUT OF CONTROL \\
   b2d4 & DET 1 OUT OF CONTROL \\
   b2d6 & OVEN OUT OF CONTROL \\
+  b4d8 & GC TERMINAL \\
+  b7a8 & bcde 5880A \\
+  b7b8 & MANUAL \\
+  b7be & VALVE \# \\
+  b7c4 & (space) \\
+  b7c7 & SAMPLER \\
+  b7cb & COMP \\
+  b7ce & INJECTION @ \\
+  b7d6 &   STREAM \# \\
   e216 & PROGRAM IN PROGRESS \\
   e638 & ON OTHER CHANNEL \\
   e774 & RUN IN PROGRESS \\

@@ -72,7 +72,7 @@ If the lower half of the second word was not zero:
 Set taskff_var to the z value of the task (from above) + 1
 Call task_wait
 ... new task executes, then switches to sys_task, which then switches back to us ...
-Call task_disable to disable the new (now old) task, so we won't run it again until somebody enables it
+Call task_disable to disable the new (now old) task again
 Error if the bottom of the stack is not ff (happens if it underflowed)
 Read the stack back into the task c0 mem for the old task
 Write the new saved stack size into the lower half of the second word

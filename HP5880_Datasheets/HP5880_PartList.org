@@ -95,6 +95,6 @@
 |   1820-2204 | IM6402-1IPL     | [[./Intersil_IM6402_Datasheet.pdf]]     | UART                                                                  |
 |   1820-2206 | SN74LS640N      | [[./TI_SN74LS640_Datasheet.pdf]]        | Octal bus transcievers, inverting three-state outputs                 |
 |   1820-2855 | D8749H          | [[./Intel_D8749H_Datasheet.pdf]]        | Single-component 8-bit microcontroller                                |
-|             | 1AB7-6001       | Not available                       | ??? 20-pin DIP package                                                |
+|             | 1AB7-6001       | Not available                       | Ten inverting 12V to 5V level shifters, 20 DIP                        |
 |   1820-2917 | 1AE8-6202       | Not available                       | Hewlett Packard 48-pin MC5 processor                                  |
 |   1820-5319 | SN74S133N       | [[./TI_SN74S133_Datasheet.pdf]]         | 13-input positive-NAND gate                                           |

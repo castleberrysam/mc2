@@ -1,0 +1,116 @@
+fffa
+- Read by sub b497
+- Written by sub bc31 (floats?)
+fffb
+- Written by sub bc2d
+- Written by sub bc31 (floats?)
+fffc
+- set to dd4c by sub dd6a
+- Written by sub bc31 (floats?)
+fffd
+- modify_saved_values_1 clears bit 11 and sets bit 12
+- modify_saved_values_2 clears bit 11 and clears bit 12
+fffe
+- sub fe51 sets this to zero
+- sub fe5c sets this to curr_task, then calls task_wait
+- fmt_str_process writes final string length here
+ffff
+- dci_queue_print saves R4 here, setting upper byte to zero
+- Both modify_saved_values funcs put R4 in the high byte, leaving the lower alone
+- R4 can be the index passed to dci_queue_print
+0000
+- pp_dci1_mem_addr, changed by str_print4
+- 0000 has slot in upper byte and num (1 or 2) in lower byte
+- 0021 is read by sub d808
+- 0029 + fff7 something? see sub e497
+0001
+- Bit 14 tested by math_fmt_chk_wr8
+- str_wr8_inc checks this against mem32_blks_free first
+- but_alloc also checks the lower byte against against mem32_blks_free
+0002
+- Passed to fifo_psh16, then set to zero
+- buf_alloc_bytes first gets blocks from here before going to the mem allocator
+0003
+- str_wr8_inc passes this to mem32_blk_wr8_inc
+- buf_alloc writes back the free pointer in the chain at 0002 here after allocating
+0004
+- Type 3 ID 02 allocated memory
+- fff1/fff2 is something like fff5
+- fff5/fff6 is something, see sub e497, e4b2
+- fff7/fff8 is a dll element, unlinked by sub bc31
+- fff9/fffa is a dll element
+- fffe read by sub bc2d to task area fffb
+  sub bc31 would indicate this holds the current dci num
+- ffff points to the type 3 rom block
+- 0000/0001 is a fifo, see sub f808
+- 0002/0003 is a fifo of whatever is at offset 0002 above
+- 0004/0005 is a fifo of task areas, used with fffe above
+- 0006/0007 is a fifo of numbers (seen 0x02 0x09)
+- 0008/0009 is a fifo of addresses (?) (seen 0x800f 0x800e 0x8009), also whatever is 0002
+- 000a used the same way as 000b
+- 000b points to a task area, then sub fe5c is called, like with the fifo above
+- 000c is written by sub b497, same type as task area fffa
+- 000d is a task queue
+- 000e is a task queue
+- 000f is used by sub b48a to call modify_saved_values_2, then zeroed
+- 0010 is read by sub dd6a, b470, b4c4, seems to be a ram address
+- 0011 points to this task area
+- 0012 is read into R5 by sub d3b5
+- Allocated with 8813 (17 before, 19 after)
+0006
+- lower nibble holds some value, set to zero during init
+- read by sub bc29
+0007
+- Initialized to 16
+- Seems to be for remembering our interrupt number
+0008
+- Read into R6 by sub b8e8
+- Read into R6 after disabling interrupts by sub b8e7
+- Written from R6 followed by enabling interrupts by sub b8eb
+- Bit 5 set and then cleared by sub b497
+
+R5 = R10
+R3 = R10[15:8]
+If R5(3):
+ Call d365
+ done
+...
+
+d365:
+Clear R3(7)
+R7 = R5
+(R5,R3) = rd8_inc(R4,R3)
+If R7(15) && R5 >= 0x40 & R5 <= 0x5f:
+ Clear R5(6)
+If R5 == 0xfb:
+ R5 = d3b5()
+ If R5 == 0:
+  R5 = 2
+ R6 = b8e8()
+ If R6(3):
+  R6 = b8e7()
+  Clear R6(3)
+  b8eb(R6)
+  R4 = 0x92
+  str_print(R4)
+  R5 = 0x06
+  Push R4
+   R4 = (R2)
+   Call fc9a <----
+  Pop R4
+  Return
+ Else:
+  ...
+ ...
+...
+
+d3b5:
+R5 = 0012(0004(R2))
+R5 == 0
+
+b8e8:
+R6 = 0008(R2)
+
+b8e7:
+Disable interrupts
+R6 = 0008(R2)
